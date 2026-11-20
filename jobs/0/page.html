@@ -1,0 +1,181 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="layout" content="overlay">
+<!-- journey-chapter: 3D camera journey between chapters (alpha overlay, window.setTime(t)).
+     A titanium gate opens in the frame, the camera dollies through it into the obsidian void (full cover = cut),
+     glides past the chapter number + 3D titanium title, then an iris opens in a second gate and the camera
+     pushes through into the next section. Fields CHAPTER 02 PLATFORM DEPENDENCE Android vs iOS market share; colours from transitions.json "vars". -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Geist+Mono:wght@500&display=block">
+<style>
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: transparent; }
+.jc-src { display: none; }
+.jc-eye { position: absolute; transform: translate(-50%, -100%); white-space: nowrap; opacity: 0;
+          font: 500 22px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: 0.42em; text-indent: 0.42em;
+          color: #A1A1A6; }
+.jc-sub { position: absolute; transform: translate(-50%, 0); white-space: nowrap; opacity: 0;
+          font: 500 32px/1.2 Inter, "Segoe UI", sans-serif; letter-spacing: -0.005em; color: #8E8E93; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "ave/": "https://cdn.jsdelivr.net/npm/three@0.187.0/ave/" } }
+</script>
+</head><body>
+<div class="jc-src" id="jc-tag">CHAPTER 02</div>
+<div class="jc-src" id="jc-title">PLATFORM DEPENDENCE</div>
+<div class="jc-src" id="jc-subsrc">Android vs iOS market share</div>
+<div class="jc-eye" id="jc-eye"></div>
+<div class="jc-sub" id="jc-sub"></div>
+<script type="module">
+import * as K from 'ave/kit.js';
+const { THREE } = K;
+const col = s => new THREE.Color(s.trim());
+const BASE = col('#050506'), METAL = col('#BFC3C9'), METAL_DK = col('#6E7279'), FLOOR = col('#0B0C0E');
+
+// ---- text fields: "CHAPTER 03" -> eyebrow "CHAPTER", big number "03"
+const txt = id => document.getElementById(id).textContent.trim();
+const tag = txt('jc-tag'), title = txt('jc-title'), sub = txt('jc-subsrc');
+const num = (tag.match(/\d+/) || [''])[0];
+const eyeEl = document.getElementById('jc-eye'), subEl = document.getElementById('jc-sub');
+eyeEl.textContent = tag.replace(/\d+/g, '').trim();
+subEl.textContent = sub;
+function split(s) {                       // long titles: two lines, broken at the space nearest the middle
+  if (s.length <= 15 || !s.includes(' ')) return [s];
+  let best = -1;
+  for (let i = 0; i < s.length; i++) if (s[i] === ' ' && (best < 0 || Math.abs(i - s.length / 2) < Math.abs(best - s.length / 2))) best = i;
+  return [s.slice(0, best), s.slice(best + 1)];
+}
+
+// ---- world: entry gate at z 0, exit gate at z ZEX, both standing on the floor
+const R = 2.2, TUBE = 0.11, RIN = R - TUBE, CY = 1.6, ZEX = -16, FLOOR_Y = CY - R - TUBE;
+const KV = [[0, 10], [0.30, 30], [0.60, 3.0], [1.05, 1.8], [1.45, 32], [1.80, 46]];   // camera speed (units/s)
+function speed(t) {
+  for (let i = 1; i < KV.length; i++) if (t <= KV[i][0]) {
+    const [a, va] = KV[i - 1], [b, vb] = KV[i], u = (t - a) / (b - a);
+    return va + (vb - va) * u * u * (3 - 2 * u);
+  }
+  return KV[KV.length - 1][1];
+}
+function camZ(t) { const n = 600, h = t / n; let s = 0; for (let i = 0; i < n; i++) s += speed((i + 0.5) * h); return 13 - s * h; }
+const camX = t => (t > 0.45 && t < 1.75) ? 0.12 * Math.sin(Math.PI * (t - 0.45) / 1.3) : 0;   // slow lateral drift (parallax)
+
+// punch: writes rgba 0 + depth (video shows through, void behind it is hidden)
+function punchMat() {
+  const m = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide, fog: false });
+  Object.assign(m, { blending: THREE.CustomBlending, blendEquation: THREE.AddEquation,
+    blendSrc: THREE.ZeroFactor, blendDst: THREE.ZeroFactor, blendSrcAlpha: THREE.ZeroFactor, blendDstAlpha: THREE.ZeroFactor });
+  return m;
+}
+function radialTex(stops) {               // soft radial gradient (halo / haze), drawn locally
+  const c = document.createElement('canvas'); c.width = c.height = 512;
+  const g = c.getContext('2d'), gr = g.createRadialGradient(256, 256, 0, 256, 256, 256);
+  for (const [p, css] of stops) gr.addColorStop(p, css);
+  g.fillStyle = gr; g.fillRect(0, 0, 512, 512);
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; return tx;
+}
+
+window.renderReady = (async () => {
+  await document.fonts.ready;
+  const s = K.stage({ alpha: true, cam: [0, CY, 13], target: [0, CY, -40], fov: 32, shadows: false,
+    exposure: 1.05, env: 0.55, key: 2.0, keyPos: [-5, 7, 6], front: 0.55, rimColor: 0xdfe6f0, rim: 1.1 });
+  s.scene.fog = new THREE.Fog(BASE, 7, 27);
+
+  // obsidian void (opaque backdrop) + soft pool of light behind the composition
+  const back = s.add(new THREE.Mesh(new THREE.SphereGeometry(60, 48, 24),
+    new THREE.MeshBasicMaterial({ color: BASE, side: THREE.BackSide, fog: false, depthWrite: false })));
+  back.position.set(0, CY, -6); back.renderOrder = -2;
+  const haze = s.add(new THREE.Mesh(new THREE.PlaneGeometry(44, 26), new THREE.MeshBasicMaterial({ fog: false, transparent: true,
+    depthWrite: false, map: radialTex([[0, 'rgba(58,61,68,0.55)'], [0.45, 'rgba(32,34,39,0.25)'], [1, 'rgba(5,5,6,0)']]) })));
+  haze.position.set(0, CY + 1.2, -26);
+  const floor = s.add(new THREE.Mesh(new THREE.PlaneGeometry(80, 80),
+    new THREE.MeshLambertMaterial({ color: FLOOR })   // no specular: a quiet floor, no grey sheen at grazing angles));
+  floor.rotation.x = -Math.PI / 2; floor.position.set(0, FLOOR_Y, -40.02);
+
+  // entry gate (z 0): titanium ring + punch annulus outside it + soft contact shade on the video
+  const ringMat = () => K.mat.metal(METAL, { roughness: 0.3 });
+  const gateIn = s.add(K.ring(R, { tube: TUBE, flat: false, material: ringMat() }));
+  gateIn.material.fog = false; gateIn.position.set(0, CY, 0);
+  const punchIn = s.add(new THREE.Mesh(new THREE.RingGeometry(0.001, 90, 160), punchMat()));
+  punchIn.position.set(0, CY, 0); punchIn.renderOrder = -1;
+  const shade = s.add(new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: 0x000000, fog: false,
+    transparent: true, depthWrite: false, map: radialTex([[0, 'rgba(0,0,0,0)'], [0.5, 'rgba(0,0,0,0)'], [0.54, 'rgba(0,0,0,0.34)'],
+      [0.66, 'rgba(0,0,0,0.12)'], [0.85, 'rgba(0,0,0,0.03)'], [1, 'rgba(0,0,0,0)']]) })));
+  shade.position.set(0, CY, 0.03); shade.renderOrder = 1;
+
+  // exit gate (z ZEX): titanium ring + iris punch disc that opens onto the next section
+  const gateOut = s.add(K.ring(R, { tube: TUBE, flat: false, material: ringMat() }));
+  gateOut.position.set(0, CY, ZEX);
+  gateOut.material.transparent = true;
+  const iris = s.add(new THREE.Mesh(new THREE.CircleGeometry(1, 160), punchMat()));
+  iris.position.set(0, CY, ZEX); iris.renderOrder = -1;
+
+  // chapter number (darker titanium, above the camera path) + title (bright titanium, below it)
+  let numObj = null;
+  if (num) {
+    numObj = s.add(await K.text3d(num, { size: 1.2, weight: 700, depth: 0.24, material: K.mat.metal(METAL_DK, { roughness: 0.34 }) }));
+    numObj.position.set(0, CY + 0.13, -7.5);
+  }
+  const lines = split(title), titleG = new THREE.Group(), TS = lines.length > 1 ? 0.42 : 0.5, LH = TS * 1.3;
+  let maxW = 0;
+  for (const [i, ln] of lines.entries()) {
+    const m = await K.text3d(ln, { size: TS, weight: 700, depth: TS * 0.2, material: K.mat.metal(METAL, { roughness: 0.26 }) });
+    m.geometry.computeBoundingBox();
+    maxW = Math.max(maxW, m.geometry.boundingBox.max.x - m.geometry.boundingBox.min.x);
+    m.position.y = -i * LH;
+    titleG.add(m);
+  }
+  const fit = Math.min(1, 5.0 / maxW);
+  titleG.scale.setScalar(fit);
+  const TY = CY - 0.14 - TS * 0.73;
+  titleG.position.set(0, TY, -5.5);               // top line cap 0.14 below the camera path
+  s.add(titleG);
+  const lastY = -(lines.length - 1) * LH;       // local baseline of the last line
+
+  // dust in the void only (behind the entry gate, in front of the exit gate)
+  const dust = K.dust({ count: 170, spread: [9, 4.4, 14], seed: 11, color: 0xa9adb4, size: 0.02, opacity: 0.5 });
+  dust.points.position.set(0, FLOOR_Y + 0.1, -5.6);
+  dust.points.material.fog = true;
+  s.add(dust.points);
+
+  K.run(s, t => {
+    const z = camZ(t), x = camX(t);
+    s.camera.position.set(x, CY, z);
+    s.target.set(x, CY, z - 40);
+
+    // entry gate grows from a point at frame centre
+    const h = K.prog(t, 0, 0.24, K.ease.out);
+    gateIn.scale.setScalar(Math.max(h, 1e-4));
+    punchIn.geometry.dispose();
+    punchIn.geometry = new THREE.RingGeometry(Math.max(h * (RIN + 0.03), 0.001), 90, 160);
+    shade.scale.setScalar(Math.max(h, 1e-4) * R * 3.9);
+    shade.material.opacity = 1 - K.prog(t, 0.36, 0.12, K.ease.linear);
+
+    // exit iris opens onto the next section, then the camera pushes through
+    iris.scale.setScalar(Math.max(K.prog(t, 1.14, 0.3, K.ease.out) * (RIN + 0.03), 1e-4));
+    gateOut.material.opacity = K.prog(t, 0.98, 0.24, K.ease.linear);
+    gateOut.visible = gateOut.material.opacity > 0.001;
+    // the open iris fills the frame: nothing of the void is left on screen, hide it (no void past the gate)
+    const clear = t > 1.45 && (z - ZEX) < 3.3;
+    for (const o of s.scene.children) if (o.isMesh || o.isPoints) o.visible = o === gateOut ? gateOut.visible && !clear : !clear;
+
+    // title settles as it comes into reading distance
+    const land = K.prog(t, 0.3, 0.55, K.ease.out);
+    titleG.position.y = TY - 0.16 * (1 - land);
+    if (numObj) numObj.position.y = CY + 0.13 + 0.1 * (1 - land);
+
+    dust.update(t + 3);
+    dust.points.material.opacity = 0.5 * (1 - K.prog(t, 1.1, 0.3, K.ease.linear));
+    haze.material.opacity = 1 - K.prog(t, 1.3, 0.35, K.ease.linear);
+
+    // HTML eyebrow + sub follow their 3D objects, only while reading
+    const vis = K.prog(t, 0.5, 0.22) * (1 - K.prog(t, 1.08, 0.16, K.ease.linear));
+    const subVis = K.prog(t, 0.6, 0.24) * (1 - K.prog(t, 1.08, 0.16, K.ease.linear));
+    eyeEl.style.opacity = vis.toFixed(3);
+    subEl.style.opacity = subVis.toFixed(3);
+    if (numObj) K.pin(eyeEl, numObj, s, { offset: [0, 0.94, 0], dy: -20 });
+    else K.pin(eyeEl, titleG, s, { offset: [0, 0.62, 0], dy: -22 });
+    K.pin(subEl, titleG, s, { offset: [0, lastY - 0.04, 0], dy: 24 });
+  });
+})();
+</script>
+</body></html>

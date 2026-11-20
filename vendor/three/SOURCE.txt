@@ -1,0 +1,14 @@
+three.js (MIT license, see LICENSE in this folder)
+version: 0.187.0
+source: https://registry.npmjs.org/three/-/three-0.187.0.tgz  (sha1 face29ee2de9bcc31a1b573a76f224e35e0b2894)
+cdn twin: https://cdn.jsdelivr.net/npm/three@0.187.0/
+fonts: examples/fonts/*.typeface.json from https://raw.githubusercontent.com/mrdoob/three.js/r187/examples/fonts/
+       (helvetiker / optimer, license in examples/fonts/LICENSE)
+downloaded: 2026-11-18
+
+Folder layout is the npm package layout (build/, examples/jsm/...), only a subset of files: the addons'
+relative imports resolve. npm 0.187 ships no *.min.js, so build/three.module.js (+ three.core.js) is used.
+
+How pages load it: importmap -> https://cdn.jsdelivr.net/npm/three@0.187.0/... ; editor/html_render.py answers
+those requests from this folder (laptop + cloud, the cloud packer ships it). See graphics_kit/THREE.md.
+To add an addon: copy it (and the files it imports with ./ or ../) from the same npm version, same path.
