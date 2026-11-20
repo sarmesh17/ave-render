@@ -1,0 +1,423 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="layout" content="card">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@400..900&family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=block" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<title>Decision board: market + demand</title>
+<style>
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: Inter, sans-serif; }
+
+
+body { background: #050506; margin: 0; overflow: hidden; }
+#bd-root { position: absolute; inset: 0; pointer-events: none; z-index: 2; color: #F5F5F7;
+  font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+.bd-hud { position: absolute; left: 150px; top: 86px; }
+.bd-eyebrow { font-family: 'Geist Mono', monospace; font-size: 14px; letter-spacing: .2em; text-transform: uppercase;
+  color: #A1A1A6; opacity: 0; }
+.bd-titlerow { display: flex; align-items: center; gap: 18px; margin-top: 12px; }
+.bd-title { font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: 50px; letter-spacing: -0.025em;
+  line-height: 1.05; opacity: 0; }
+.bd-tag { font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: .16em; text-transform: uppercase;
+  color: #D9D9DE; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; padding: 6px 12px 5px; opacity: 0; }
+.bd-pin { position: absolute; left: 0; top: 0; transform-origin: 0 0; white-space: nowrap; opacity: 0;
+  will-change: transform, opacity; }
+.bd-name { font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: -0.01em;
+  text-shadow: 0 1px 2px rgba(0,0,0,.7); }
+.bd-row { display: flex; align-items: baseline; gap: 14px; text-shadow: 0 1px 2px rgba(0,0,0,.65); }
+.bd-idx { font-family: 'Geist Mono', monospace; font-size: 13px; color: #B4B4BA; letter-spacing: .06em; }
+.bd-lab { font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 23px; letter-spacing: -0.015em; }
+.bd-hl { font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 21px; letter-spacing: -0.015em;
+  display: inline-flex; align-items: center; gap: 8px; line-height: 1.2; }
+.bd-mono { font-family: 'Geist Mono', monospace; font-size: 13.5px; color: #D1D1D6; text-shadow: 0 1px 2px rgba(0,0,0,.6); letter-spacing: .02em; margin-top: 3px; }
+.bd-icw { display: inline-flex; line-height: 0; }
+.bd-icw svg { width: 22px; height: 22px; stroke-width: 1.75; }
+.bd-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.bd-pill { font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: -0.005em;
+  background: #0B0C0F; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 7px 14px 7px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45); }
+.bd-dot { color: #8E8E93; margin: 0 4px; }
+
+</style></head>
+<body>
+<link rel="ave-asset" id="bd-logo-android" href="../../assets/095423cd295b.svg">
+<link rel="ave-asset" id="bd-logo-flutter" href="../../assets/002d279fe2cc.svg">
+<link rel="ave-asset" id="bd-logo-kmp" href="../../assets/3d8c078f63c4.svg">
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "ave/": "https://cdn.jsdelivr.net/npm/three@0.187.0/ave/" } }
+</script>
+<script type="module">
+import * as K from 'ave/kit.js';
+// cine3d/board.js: the video's recurring 3D "decision board" (Cine3D palette A, Obsidian + Titanium).
+// One titanium slab grid floating in the obsidian void: 3 columns (Native Android / Flutter / KMP, real logos on
+// black-glass tiles), 5 factor rows. Every visit starts from the SAME camera pose (fly out of fog, then a slow drift),
+// so the 5 graphics read as returning to one place. Verdicts are cumulative: a visit passes 'pre' for rows decided
+// earlier (they arrive with the board) and beat times (local s) for the row decided now.
+// BD_run(K, cfg) -> Promise (window.renderReady). Every frame is a pure function of t. Layout below is reference px
+// at camera pose A (1 world unit = 100 px on the board plane); labels are HTML pinned to 3D anchors.
+const BD_L = {
+  plate: [150, 352, 1190, 984],
+  cols: [[436, 672], [686, 922], [936, 1172]],
+  rows: [[370, 472], [484, 586], [598, 700], [712, 814], [826, 928]],
+  labX: 188, stripX: 168, tileY: 255, nameY: 310,
+  names: ['Native Android', 'Flutter', 'KMP'],
+  labels: ['Job market', 'Demand', 'Entry barrier', 'Package', 'Companies'],
+  logos: ['bd-logo-android', 'bd-logo-flutter', 'bd-logo-kmp'],
+  brand: [['#3DDC84'], ['#54C5F8', '#027DFD'], ['#7F52FF', '#C711E1', '#E44857']],
+  cap: ['#3DDC84', '#54C5F8', '#A64BF4'],
+  ink: ['#9CF0C2', '#A9E2FC', '#D2B8FF'],
+  silver: ['#E4E9F2'],
+  camS: [3.6, 7.6, 27], camA: [0.9, 5.7, 16.6], drift: [-0.07, -0.028, -0.02], target: [0, 4.8, 0],
+  fog: [19, 38], zHide: -0.12, zCell: 0.21, zFace: 0.27, zPlate: 0.145,
+};
+const BD_x = px => (px - 670) / 100, BD_y = py => 4.8 - (py - 600) / 100;
+const BD_TXT = 0.4;
+
+function BD_canvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; }
+function BD_tex(THREE, c) { const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; }
+function BD_hgrad(g, w, stops) {
+  const h = g.createLinearGradient(0, 0, w, 0);
+  if (stops.length === 1) { h.addColorStop(0, stops[0]); h.addColorStop(1, stops[0]); }
+  else stops.forEach((c, i) => h.addColorStop(i / (stops.length - 1), c));
+  return h;
+}
+function BD_rr(g, x, y, w, h, r) {
+  g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+}
+// light texture: colour = brand gradient left->right, alpha = shape (face spill from the top edge, hairline, up, right)
+function BD_light(THREE, stops, kind, aspect = 4, radius = 0) {
+  const W = 512, H = Math.max(8, Math.round(W / aspect));
+  const [c, g] = BD_canvas(W, H);
+  g.fillStyle = BD_hgrad(g, W, stops); g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'destination-in';
+  let a = 'rgba(0,0,0,1)';
+  if (kind === 'face') {
+    a = g.createLinearGradient(0, 0, 0, H);
+    a.addColorStop(0, 'rgba(0,0,0,1)'); a.addColorStop(0.3, 'rgba(0,0,0,.4)'); a.addColorStop(1, 'rgba(0,0,0,.14)');
+  } else if (kind === 'line') {
+    a = g.createLinearGradient(0, 0, W, 0);
+    a.addColorStop(0, 'rgba(0,0,0,0)'); a.addColorStop(0.14, 'rgba(0,0,0,1)'); a.addColorStop(0.86, 'rgba(0,0,0,1)'); a.addColorStop(1, 'rgba(0,0,0,0)');
+  } else if (kind === 'up') {
+    a = g.createLinearGradient(0, H, 0, 0); a.addColorStop(0, 'rgba(0,0,0,.9)'); a.addColorStop(1, 'rgba(0,0,0,0)');
+  } else if (kind === 'right') {
+    a = g.createLinearGradient(0, 0, W, 0); a.addColorStop(0, 'rgba(0,0,0,1)'); a.addColorStop(0.5, 'rgba(0,0,0,.75)'); a.addColorStop(1, 'rgba(0,0,0,0)');
+  } else if (kind === 'dot') {
+    a = g.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W / 2); a.addColorStop(0, 'rgba(0,0,0,1)'); a.addColorStop(1, 'rgba(0,0,0,0)');
+  }
+  g.fillStyle = a;
+  if (radius > 0) { BD_rr(g, 0, 0, W, H, Math.min(radius * W, H / 2)); g.fill(); } else g.fillRect(0, 0, W, H);
+  return BD_tex(THREE, c);
+}
+function BD_radial(THREE, inner) {
+  const [c, g] = BD_canvas(256, 256), r = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  r.addColorStop(0, inner); r.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = r; g.fillRect(0, 0, 256, 256);
+  return BD_tex(THREE, c);
+}
+const BD_add = (THREE, map, gain = 1, fog = true) => new THREE.MeshBasicMaterial({ map, color: new THREE.Color(gain, gain, gain),
+  transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, fog });
+
+const BD_ROBOT = s => s.replace(/#a4c639/gi, '#3DDC84').replace(/"#FFF"/gi, '"#121317"');
+async function BD_logo(THREE, id, recolor) {   // <link rel="ave-asset"> SVG -> crisp 512 px CanvasTexture
+  const el = document.getElementById(id), href = el && (el.href || el.getAttribute('href'));
+  if (!href) { console.warn('board: asset link missing', id); return null; }
+  const txt = await new Promise(res => {
+    try { const x = new XMLHttpRequest(); x.open('GET', href); x.onload = () => res(x.responseText || null); x.onerror = () => res(null); x.send(); }
+    catch (e) { res(null); }
+  });
+  if (!txt || !/<svg/i.test(txt)) { console.warn('board: logo not loaded', id); return null; }
+  let svg = recolor ? recolor(txt) : txt;
+  const vb = /viewBox\s*=\s*["']\s*([-\d.]+)[\s,]+([-\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(svg);
+  const wm = /<svg[^>]*?\swidth\s*=\s*["']([\d.]+)/i.exec(svg), hm = /<svg[^>]*?\sheight\s*=\s*["']([\d.]+)/i.exec(svg);
+  let vw = 100, vh = 100;
+  if (vb) { vw = +vb[3]; vh = +vb[4]; } else if (wm && hm) { vw = +wm[1]; vh = +hm[1]; svg = svg.replace(/<svg/i, `<svg viewBox="0 0 ${vw} ${vh}"`); }
+  svg = svg.replace(/(<svg[^>]*?)\swidth\s*=\s*["'][^"']*["']/i, '$1').replace(/(<svg[^>]*?)\sheight\s*=\s*["'][^"']*["']/i, '$1');
+  const sc = Math.min(440 / vw, 440 / vh), dw = Math.round(vw * sc), dh = Math.round(vh * sc);
+  svg = svg.replace(/<svg/i, `<svg width="${dw}" height="${dh}"`);
+  const im = new Image(); im.src = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  try { await im.decode(); } catch (e) { console.warn('board: logo decode failed', id); return null; }
+  const [c, g] = BD_canvas(512, 512);
+  g.drawImage(im, 256 - dw / 2, 256 - dh / 2, dw, dh);
+  return BD_tex(THREE, c);
+}
+
+async function BD_run(K, cfg) {
+  const THREE = K.THREE, L = BD_L, E = K.ease, P = K.prog, c01 = K.clamp01;
+  const fly = cfg.fly ?? 2.0;
+  const s = K.stage({ cam: L.camS, target: L.target, fov: 36, bg: '#050506', fogNear: L.fog[0], fogFar: L.fog[1],
+    floorColor: 0x0a0a0c, bloomStrength: 0.3, env: 0.55, key: 2.1, keyPos: [-8, 14, 3], front: 0.45, rim: 1.0,
+    rimColor: 0xcfd8ff, shadowBox: 9 });
+  s.camera.setViewOffset(1920, 1080, 290, -60, 1920, 1080);          // lens shift: board centre at (670, 600) px
+  s.lights.key.target.position.set(0, 4.4, 0); s.scene.add(s.lights.key.target);
+  if (s.floor) Object.assign(s.floor.material, { roughness: 0.62, metalness: 0.1, envMapIntensity: 0.12 });
+
+  // ---- world: soft haze behind, light pool on the floor, fine dust
+  const haze = new THREE.Mesh(new THREE.PlaneGeometry(44, 24), BD_add(THREE, BD_radial(THREE, 'rgba(150,162,186,1)'), 1, false));
+  haze.position.set(0, 5.5, -9); haze.material.opacity = 0.075; s.add(haze);
+  const pool = new THREE.Mesh(new THREE.PlaneGeometry(18, 12), BD_add(THREE, BD_radial(THREE, 'rgba(200,210,230,1)')));
+  pool.rotation.x = -Math.PI / 2; pool.position.set(0, 0.01, -0.5); pool.material.opacity = 0.06; s.add(pool);
+  const dust = K.dust({ count: 220, spread: [26, 11, 18], color: 0xdfe6f5, size: 0.028, opacity: 0.2, seed: 11 });
+  s.add(dust.points);
+
+  // ---- titanium plate + black-glass logo tiles
+  const [px0, py0, px1, py1] = L.plate;
+  const plate = K.slab((px1 - px0) / 100, (py1 - py0) / 100, { depth: 0.28, radius: 0.22,
+    material: K.mat.metal(0x4a4d53, { roughness: 0.42 }) });
+  plate.position.set(BD_x((px0 + px1) / 2), BD_y((py0 + py1) / 2), 0); s.add(plate);
+  const colX = L.cols.map(([a, b]) => (a + b) / 2);
+  const tiles = [];
+  for (let c = 0; c < 3; c++) {
+    const g = new THREE.Group(); g.position.set(BD_x(colX[c]), BD_y(L.tileY), 0.05);
+    g.add(K.slab(0.84, 0.84, { depth: 0.18, radius: 0.2, material: Object.assign(K.mat.ink(0x121317, { roughness: 0.3 }), { envMapIntensity: 0.3 }) }));
+    const tex = await BD_logo(THREE, L.logos[c], c === 0 ? BD_ROBOT : null);
+    if (tex) {
+      const lg = new THREE.Mesh(new THREE.PlaneGeometry(0.56, 0.56), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false }));
+      lg.position.z = 0.095; g.add(lg);
+    }
+    s.add(g); tiles.push(g);
+  }
+
+  // ---- cells (black glass slabs that push out of the plate) + their light fills
+  const cellAt = (x0, x1, y0, y1) => {
+    const w = (x1 - x0) / 100, h = (y1 - y0) / 100;
+    const m = K.slab(w, h, { depth: 0.12, radius: 0.12, material: Object.assign(K.mat.ink(0x0b0c0f, { roughness: 0.32 }), { envMapIntensity: 0.45 }) });
+    m.position.set(BD_x((x0 + x1) / 2), BD_y((y0 + y1) / 2), L.zHide); s.add(m);
+    return { m, w, h, x0, x1, y0, y1, fills: {} };
+  };
+  const fillOf = (cell, key, stops) => {
+    if (cell.fills[key]) return cell.fills[key];
+    const g = new THREE.Group(); g.position.z = 0.063;
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(cell.w - 0.05, cell.h - 0.05),
+      BD_add(THREE, BD_light(THREE, stops, 'face', (cell.w - 0.05) / (cell.h - 0.05), 0.1 / (cell.w - 0.05))));
+    const line = new THREE.Mesh(new THREE.PlaneGeometry(cell.w - 0.44, 0.014), BD_add(THREE, BD_light(THREE, stops, 'line', 40), 2.4));
+    line.position.set(0, cell.h / 2 - 0.065, 0.002);
+    g.add(face, line); cell.m.add(g);
+    return (cell.fills[key] = k => { face.material.opacity = 0.2 * k; line.material.opacity = k; g.visible = k > 0.002; });
+  };
+  const cells = L.rows.map(([y0, y1]) => L.cols.map(([x0, x1]) => cellAt(x0, x1, y0, y1)));
+  const cellIn = (r, c) => t => P(t, 0.3 + r * 0.05 + c * 0.04, 0.55, E.out);
+  const setZ = (cell, k) => { cell.m.position.z = L.zHide + (L.zCell - L.zHide) * k; cell.m.visible = k > 0.001; };
+
+  // ---- HTML layer: HUD (static) + labels pinned to 3D anchors
+  const root = document.createElement('div'); root.id = 'bd-root'; document.body.appendChild(root);
+  const hud = document.createElement('div'); hud.className = 'bd-hud';
+  hud.innerHTML = `<div class="bd-eyebrow">${cfg.eyebrow}</div><div class="bd-titlerow"><div class="bd-title">${cfg.title}</div>`
+    + (cfg.tag ? `<div class="bd-tag">${cfg.tag.text}</div>` : '') + '</div>';
+  root.appendChild(hud);
+  const [hEye, hTitle] = [hud.querySelector('.bd-eyebrow'), hud.querySelector('.bd-title')], hTag = hud.querySelector('.bd-tag');
+  const pins = [], camA = new THREE.Vector3(...L.camA);
+  const pin = (html, px, py, o = {}) => {
+    const el = document.createElement('div'); el.className = 'bd-pin ' + (o.cls || ''); el.innerHTML = html; root.appendChild(el);
+    const p = new THREE.Vector3(BD_x(px), BD_y(py), o.z ?? L.zFace);
+    const it = { el, p, ax: o.ax ?? 0, ay: o.ay ?? 0, k: o.k || (() => 1), dim: o.dim || (() => 1), rise: o.rise ?? 10, dref: camA.distanceTo(p) };
+    pins.push(it); return it;
+  };
+  const tk = a => t => P(t, a, BD_TXT, E.out);
+
+  // row focus: active rows stay bright, the others dim; allOn brings every row back for the final hold
+  const act = new Set(cfg.active || []);
+  const dimK = t => P(t, cfg.activeAt ?? 1e9, 0.6, E.inOut) * (1 - P(t, cfg.allOn ?? 1e9, 0.8, E.inOut));
+  const rowDim = r => t => (act.size && !act.has(r) ? 1 - 0.55 * dimK(t) : 1);
+
+  L.names.forEach((n, c) => pin(`<span class="bd-name">${n}</span>`, colX[c], L.nameY, { ax: 0.5, z: 0.14, k: t => P(t, 0.5 + c * 0.08, 0.45, E.out) }));
+  L.rows.forEach(([y0, y1], r) => {
+    const a = cfg.rows ? cfg.rows[r] - 0.45 : 0.55 + r * 0.06;
+    pin(`<span class="bd-idx">0${r + 1}</span><span class="bd-lab">${L.labels[r]}</span>`, L.labX, (y0 + y1) / 2,
+      { cls: 'bd-row', ay: 0.5, z: L.zPlate, k: t => P(t, a, 0.45, E.out), dim: rowDim(r) });
+  });
+
+  // focus strip: a thin light line left of the focused row(s); factor-board: it walks down row by row
+  const strip = new THREE.Mesh(new THREE.PlaneGeometry(0.03, 1), BD_add(THREE, BD_light(THREE, L.silver, 'solid', 1), 1.6));
+  strip.position.set(BD_x(L.stripX), 0, L.zPlate + 0.004); s.add(strip);
+  const rowC = r => (L.rows[r][0] + L.rows[r][1]) / 2;
+  const stripAt = t => {
+    if (cfg.rows) {
+      let y = rowC(0);
+      for (let r = 1; r < 5; r++) y += (rowC(r) - rowC(r - 1)) * P(t, cfg.rows[r] - 0.45, 0.45, E.inOut);
+      return { y, h: 0.66, k: P(t, cfg.rows[0] - 0.45, 0.4, E.out) };
+    }
+    if (!act.size) return { y: 0, h: 0, k: 0 };
+    const rs = [...act], top = L.rows[Math.min(...rs)][0], bot = L.rows[Math.max(...rs)][1];
+    return { y: (top + bot) / 2, h: (bot - top) / 100 - 0.36, k: P(t, cfg.activeAt ?? 0.9, 0.5, E.out) * (1 - P(t, cfg.allOn ?? 1e9, 0.8, E.inOut)) };
+  };
+
+  const updates = [];
+  const pre = (spec, def) => (spec === 'pre' ? { ...def, pre: true } : spec);
+
+  // ---- factor-board: each row's cells catch a soft light sweep on its word, then go back to empty
+  if (cfg.rows) {
+    updates.push(t => {
+      for (let r = 0; r < 5; r++) for (let c = 0; c < 3; c++) {
+        const u = t - (cfg.rows[r] - 0.45) - 0.09 * c;
+        const k = u < 0 ? 0 : u < 0.3 ? E.out(u / 0.3) : Math.exp(-(u - 0.3) / 0.45);
+        fillOf(cells[r][c], 'sweep', L.silver)(k * 0.8);
+      }
+    });
+  }
+
+  // ---- verdict 1: market + demand (rows 1-2 merge into one tall cell per column; bars grow)
+  let tall = null;
+  if (cfg.demand) {
+    const D = pre(cfg.demand, { merge: -10, nBar: [0.7, 0.8], fBar: [0.78, 0.8], kBar: [0.86, 0.8], nText: 0.95, nSub: 1.0, fText: 1.0, kText: 1.05, kGrow: 1.05 });
+    tall = L.cols.map(([x0, x1]) => cellAt(x0, x1, L.rows[0][0], L.rows[1][1]));
+    const H = [1.06, 0.8, 0.46], baseY = BD_y(566), barW = 0.46;
+    const bars = H.map((h, c) => {
+      const g = new THREE.Group(); g.position.set(BD_x(colX[c]), baseY, L.zFace + 0.07); s.add(g);
+      const bar = K.box(barW, h, 0.14, { radius: 0.035, material: K.mat.metal(0x7a7f88, { roughness: 0.36 }) });
+      bar.position.y = h / 2; g.add(bar);
+      const cap = new THREE.Mesh(new THREE.BoxGeometry(barW - 0.01, 0.026, 0.145), new THREE.MeshBasicMaterial({ color: new THREE.Color(L.cap[c]).multiplyScalar(2.4), toneMapped: false, transparent: true }));
+      s.add(cap);
+      return { g, bar, cap, h };
+    });
+    const ghost = new THREE.Mesh(new THREE.PlaneGeometry(barW, 0.36), BD_add(THREE, BD_light(THREE, L.brand[2], 'up', barW / 0.36), 1.2));
+    ghost.position.set(BD_x(colX[2]), baseY + H[2] + 0.18, L.zFace + 0.07); s.add(ghost);
+    const pulse = new THREE.Mesh(new THREE.PlaneGeometry(barW, 0.05), BD_add(THREE, BD_light(THREE, ['#E9DDFF'], 'line', 9), 2.0));
+    pulse.position.set(BD_x(colX[2]), 0, L.zFace + 0.072); s.add(pulse);
+    const bk = [D.nBar, D.fBar, D.kBar];
+    const txt = [['Slightly higher', D.nText], ['Ahead of KMP', D.fText],
+      [`Growing fast <span class="bd-icw" style="color:${L.ink[2]}"><i data-lucide="trending-up"></i></span>`, D.kText]];
+    txt.forEach(([h, a], c) => pin(`<div class="bd-hl">${h}</div>`, L.cols[c][0] + 18, L.rows[0][0] + 16, { k: tk(a), dim: rowDim(0) }));
+    pin('<div class="bd-mono">vs cross-platform</div>', L.cols[0][0] + 18, L.rows[0][0] + 47, { k: tk(D.nSub), dim: rowDim(0) });
+    updates.push(t => {
+      const out = P(t, D.merge, 0.45, E.inOut), up = D.pre ? cellIn(0, 0)(t) : P(t, D.merge + 0.3, 0.6, E.out), dm = rowDim(0)(t);
+      for (let c = 0; c < 3; c++) {
+        for (const r of [0, 1]) { const k = D.pre ? 0 : cellIn(r, c)(t) * (1 - out); setZ(cells[r][c], k); }
+        setZ(tall[c], D.pre ? cellIn(0, c)(t) : up);
+        const [a, d] = bk[c], kb = P(t, a, d, E.inOut), b = bars[c];
+        b.g.visible = kb > 0.001; b.g.scale.y = Math.max(kb, 0.001);
+        b.g.position.z = L.zFace + 0.07 + (L.zCell - (tall[c].m.position.z)) * -1;
+        b.cap.visible = kb > 0.001; b.cap.position.set(b.g.position.x, baseY + b.h * kb, b.g.position.z);
+        b.cap.material.opacity = Math.min(1, kb * 3) * (0.45 + 0.55 * dm);
+        fillOf(tall[c], 'brand', L.brand[c])(P(t, a, 0.6, E.out) * dm);
+      }
+      const kg = P(t, D.kGrow, 0.8, E.out) * dm;
+      ghost.material.opacity = 0.35 * kg; ghost.visible = kg > 0.002;
+      const u = ((t - D.kGrow) / 1.6) % 1;
+      pulse.visible = kg > 0.002 && t > D.kGrow;
+      pulse.position.y = baseY + H[2] + u * 0.34; pulse.material.opacity = Math.sin(Math.PI * u) * kg;
+    });
+  }
+
+  // ---- verdict 2: entry barrier (row 3: five-step meter per cell)
+  if (cfg.barrier) {
+    const B = pre(cfg.barrier, { on: [0.8, 0.85, 0.9], text: [1.0, 1.05, 1.1], fill: [1.0, 1.05, 1.1] });
+    const lvl = [2, 2, 3], words = ['Low', 'Low', 'A bit higher'], r = 2;
+    const caps = [0, 1, 2].map(c => [0, 1, 2, 3, 4].map(i => {
+      const m = K.slab(0.3, 0.09, { depth: 0.05, radius: 0.045, material: K.mat.ink(0x1d1e22, { roughness: 0.4 }) });
+      const col = L.brand[c].length === 1 ? L.brand[c][0] : (L.brand[c][Math.min(L.brand[c].length - 1, Math.round(i / 4 * (L.brand[c].length - 1)))]);
+      m.material.emissive = new THREE.Color(col);
+      m.position.set(BD_x(L.cols[c][0] + 18 + 15 + i * 37), BD_y(L.rows[r][1] - 26), 0.025); cells[r][c].m.add(m);
+      m.position.z = 0.06 + 0.025;
+      return m;
+    }));
+    words.forEach((w, c) => pin(`<div class="bd-hl">${w}</div>`, L.cols[c][0] + 18, L.rows[r][0] + 16, { k: tk(B.text[c]), dim: rowDim(r) }));
+    // cap positions are cell-local: convert from world once
+    caps.forEach((row, c) => row.forEach(m => { m.position.x -= cells[r][c].m.position.x; m.position.y -= cells[r][c].m.position.y; }));
+    updates.push(t => {
+      const dm = rowDim(r)(t);
+      for (let c = 0; c < 3; c++) {
+        fillOf(cells[r][c], 'brand', L.brand[c])(P(t, B.on[c], 0.35, E.out) * dm);
+        caps[c].forEach((m, i) => {
+          const ks = P(t, B.on[c] + i * 0.04, 0.3, E.out); m.visible = ks > 0.001; m.scale.setScalar(Math.max(ks, 0.001));
+          m.material.emissiveIntensity = i < lvl[c] ? 1.6 * P(t, B.fill[c] + i * 0.08, 0.3, E.out) * (0.4 + 0.6 * dm) : 0;
+        });
+      }
+    });
+  }
+
+  // ---- verdict 3: companies (row 5) + a bracket joining Native and KMP
+  if (cfg.companies) {
+    const C = pre(cfg.companies, { xp: [-10, -10], on: [0.8, 0.85, 0.9], text: [1.0, 1.05, 1.1], bracket: 1.0, pill: 1.2 });
+    const r = 4, icons = ['building-2', 'rocket', 'building-2'], words = ['Product companies', 'Startups', 'Product companies'];
+    words.forEach((w, c) => pin(`<span class="bd-icw" style="color:${L.ink[c]}"><i data-lucide="${icons[c]}"></i></span><div class="bd-hl">${w}</div>`,
+      L.cols[c][0] + 18, L.rows[r][0] + 14, { cls: 'bd-cell', k: tk(C.text[c]), dim: rowDim(r) }));
+    const yB = 952, yT = L.rows[r][1] + 6, th = 0.022, z = L.zPlate + 0.006;
+    const vL = new THREE.Mesh(new THREE.PlaneGeometry(th, (yB - yT) / 100), BD_add(THREE, BD_light(THREE, [L.brand[0][0]], 'solid', 1), 1.8));
+    const vR = new THREE.Mesh(new THREE.PlaneGeometry(th, (yB - yT) / 100), BD_add(THREE, BD_light(THREE, [L.brand[2][0]], 'solid', 1), 1.8));
+    const hW = (colX[2] - colX[0]) / 100;
+    const hz = new THREE.Mesh(new THREE.PlaneGeometry(hW, th), BD_add(THREE, BD_light(THREE, [L.brand[0][0], L.brand[2][0]], 'solid', 40), 1.8));
+    vL.geometry.translate(0, -(yB - yT) / 200, 0); vR.geometry.translate(0, (yB - yT) / 200, 0); hz.geometry.translate(hW / 2, 0, 0);
+    vL.position.set(BD_x(colX[0]), BD_y(yT), z); vR.position.set(BD_x(colX[2]), BD_y(yB), z); hz.position.set(BD_x(colX[0]), BD_y(yB), z);
+    s.add(vL, vR, hz);
+    pin('<div class="bd-pill">Native + KMP <span class="bd-dot">&middot;</span> strong combo</div>', (colX[0] + colX[2]) / 2, yB,
+      { ax: 0.5, ay: 0.5, z: L.zPlate + 0.01, k: tk(C.pill), dim: rowDim(r), rise: 6 });
+    updates.push(t => {
+      const dm = rowDim(r)(t), xp = P(t, C.xp[0], 0.4, E.out) * (1 - P(t, C.xp[1], 0.4, E.inOut)) * 0.35;
+      for (let c = 0; c < 3; c++) fillOf(cells[r][c], 'brand', L.brand[c])(Math.max(P(t, C.on[c], 0.35, E.out), c ? xp : 0) * dm);
+      const a = P(t, C.bracket, 0.14, E.inOut), b = P(t, C.bracket + 0.12, 0.26, E.inOut), d = P(t, C.bracket + 0.34, 0.14, E.inOut);
+      const op = 0.4 + 0.6 * dm;
+      vL.scale.y = Math.max(a, 0.001); hz.scale.x = Math.max(b, 0.001); vR.scale.y = Math.max(d, 0.001);
+      vL.material.opacity = (a > 0.001) * op; hz.material.opacity = (b > 0.001) * op; vR.material.opacity = (d > 0.001) * op;
+    });
+  }
+
+  // ---- verdict 4: package (row 4 merges into one wide cell: decided by you, no upper limit)
+  if (cfg.package) {
+    const G = pre(cfg.package, { merge: -10, field: 1.0, you: 1.05, limit: 1.1, bar: 1.0, cap: 1.15 });
+    const r = 3, [x0, x1] = [L.cols[0][0], L.cols[2][1]], [y0, y1] = L.rows[r], mid = 790;
+    const wide = cellAt(x0, x1, y0, y1);
+    const div = new THREE.Mesh(new THREE.PlaneGeometry(0.012, 0.62), new THREE.MeshBasicMaterial({ color: 0x8e8e93, transparent: true, opacity: 0 }));
+    div.position.set(BD_x(mid) - wide.m.position.x, BD_y((y0 + y1) / 2) - wide.m.position.y, 0.064); wide.m.add(div);
+    const bW = (x1 - 14 - 812) / 100;
+    const open = new THREE.Mesh(new THREE.PlaneGeometry(bW, 0.024), BD_add(THREE, BD_light(THREE, L.silver, 'right', 60), 1.7));
+    open.geometry.translate(bW / 2, 0, 0); open.position.set(BD_x(812) - wide.m.position.x, BD_y(y1 - 20) - wide.m.position.y, 0.066); wide.m.add(open);
+    const dot = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.16), BD_add(THREE, BD_light(THREE, ['#FFFFFF'], 'dot', 1), 2.2));
+    dot.position.set(0, open.position.y, 0.068); wide.m.add(dot);
+    pin('<div class="bd-hl">Decided by you</div>', 454, y0 + 16, { k: tk(G.you), dim: rowDim(r) });
+    pin('<div class="bd-mono">less by the field</div>', 454, y0 + 47, { k: tk(G.field), dim: rowDim(r) });
+    pin('<div class="bd-hl">No upper limit</div>', 812, y0 + 16, { k: tk(G.limit), dim: rowDim(r) });
+    pin('<div class="bd-mono">depends on your capabilities</div>', 812, y0 + 47, { k: tk(G.cap), dim: rowDim(r) });
+    updates.push(t => {
+      const out = P(t, G.merge, 0.45, E.inOut), dm = rowDim(r)(t);
+      for (let c = 0; c < 3; c++) setZ(cells[r][c], G.pre ? 0 : cellIn(r, c)(t) * (1 - out));
+      setZ(wide, G.pre ? cellIn(r, 0)(t) : P(t, G.merge + 0.3, 0.6, E.out));
+      fillOf(wide, 'brand', L.silver)(P(t, G.pre ? 0.8 : G.merge + 0.5, 0.6, E.out) * 0.6 * dm);
+      div.material.opacity = 0.45 * P(t, G.pre ? 0.9 : G.merge + 0.7, 0.5, E.out) * dm;
+      const kb = P(t, G.bar, 1.0, E.inOut);
+      open.scale.x = Math.max(kb, 0.001); open.material.opacity = (kb > 0.001) * (0.5 + 0.5 * dm);
+      const u = ((t - G.bar - 1.0) / 1.8) % 1, on = t > G.bar + 1.0;
+      dot.visible = on; dot.position.x = open.position.x + u * bW; dot.material.opacity = on ? Math.sin(Math.PI * u) * 0.8 * dm : 0;
+    });
+  }
+
+  // cells that no verdict owns: push out with the board; demand / package handle their own rows
+  const owned = new Set([...(cfg.demand ? ['0', '1'] : []), ...(cfg.package ? ['3'] : [])]);
+  window.lucide && window.lucide.createIcons();
+  await document.fonts.ready;
+
+  const v = new THREE.Vector3();
+  const camAt = t => { const k = E.out(c01(t / fly)), d = Math.min(t, 16); return L.camS.map((p, i) => p + (L.camA[i] - p) * k + L.drift[i] * d); };
+  K.run(s, t => {
+    s.camera.position.set(...camAt(t)); s.camera.lookAt(s.target); s.camera.updateMatrixWorld();
+    dust.update(t);
+    tiles.forEach((g, c) => { K.enter(g, P(t, 0.2 + c * 0.08, 0.7, E.out), { y: -0.35, scale: 0.92 }); g.position.y += Math.sin(t * 0.9 + c * 1.7) * 0.012; });
+    for (let r = 0; r < 5; r++) if (!owned.has(String(r))) for (let c = 0; c < 3; c++) setZ(cells[r][c], cellIn(r, c)(t));
+    const st = stripAt(t);
+    strip.visible = st.k > 0.002; strip.position.y = BD_y(st.y); strip.scale.y = Math.max(st.h, 0.001); strip.material.opacity = st.k;
+    for (const u of updates) u(t);
+    // HUD
+    const ke = P(t, 0.1, 0.5, E.out), kt = P(t, 0.2, 0.55, E.out);
+    hEye.style.opacity = ke; hEye.style.transform = `translateY(${(1 - ke) * 8}px)`;
+    hTitle.style.opacity = kt; hTitle.style.transform = `translateY(${(1 - kt) * 12}px)`;
+    if (hTag) { const kg = P(t, cfg.tag.at, BD_TXT, E.out); hTag.style.opacity = kg; hTag.style.transform = `translateY(${(1 - kg) * 8}px)`; }
+    // pinned labels follow the board (scale with distance, fade with the fog)
+    for (const it of pins) {
+      const k = it.k(t), o = k * it.dim(t);
+      if (o < 0.002) { it.el.style.opacity = '0'; continue; }
+      v.copy(it.p).project(s.camera);
+      const x = (v.x + 1) / 2 * s.W, y = (1 - v.y) / 2 * s.H, d = s.camera.position.distanceTo(it.p);
+      const sc = it.dref / d, fog = c01((d - L.fog[0]) / (L.fog[1] - L.fog[0]));
+      it.el.style.opacity = (o * (1 - fog)).toFixed(3);
+      it.el.style.transform = `translate(${x.toFixed(2)}px, ${(y + (1 - k) * it.rise * sc).toFixed(2)}px) scale(${sc.toFixed(4)}) translate(${-it.ax * 100}%, ${-it.ay * 100}%)`;
+    }
+  });
+}
+
+window.renderReady = BD_run(K, { eyebrow: 'Decision board · Conclusion', title: 'Market + demand', fly: 2.0, tag: { text: 'India', at: 2.300 }, active: [0, 1], activeAt: 1.0, demand: { merge: 1.300, nBar: [4.100, 1.3], nText: 5.550, nSub: 7.400, fBar: [10.633, 0.9], kBar: [11.083, 0.7], fText: 11.433, kText: 13.883, kGrow: 13.333 } });
+</script>
+
+<script>lucide.createIcons();</script>
+<script></script>
+</body></html>
