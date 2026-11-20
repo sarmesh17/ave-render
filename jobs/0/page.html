@@ -1,0 +1,688 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="layout" content="full">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@400..900&family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=block" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<title>Entry barrier: your laptop</title>
+<style>
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: Inter, sans-serif; }
+
+
+body { background: #050506; margin: 0; }
+.lb-eye { position: absolute; left: 120px; top: 100px; font: 500 18px/1 'Geist Mono', monospace; letter-spacing: .2em;
+  color: #A1A1A6; white-space: nowrap; }
+.lb-title { position: absolute; left: 120px; top: 134px; font: 700 76px/1.04 'Inter Tight', sans-serif;
+  letter-spacing: -.03em; color: #F5F5F7; white-space: nowrap; }
+.lb-title span { display: inline-block; }
+.lb-sub { position: absolute; left: 120px; top: 230px; font: 500 32px/1.2 'Inter', sans-serif; color: #8E8E93;
+  white-space: nowrap; letter-spacing: -.005em; }
+.lb-sub b { color: #F5F5F7; font-weight: 600; }
+.lb-lab { position: absolute; transform: translateX(-50%); font: 600 24px/1 'Inter Tight', sans-serif;
+  letter-spacing: -.01em; color: #F5F5F7; white-space: nowrap; padding: 9px 16px; border-radius: 999px;
+  background: rgba(10,10,12,.8); border: 1px solid rgba(255,255,255,.09); display: flex; align-items: center; gap: 10px; }
+.lb-up { transform: translate(-50%, -100%); }
+.lb-lab i { width: 9px; height: 9px; border-radius: 50%; background: #3DDC84; }
+.lb-lab em { font: 500 15px/1 'Geist Mono', monospace; letter-spacing: .14em; font-style: normal; }
+.lb-spec { position: absolute; transform: translateX(-50%); text-align: center; padding: 13px 22px 14px;
+  border-radius: 16px; background: rgba(12,13,16,.82); border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 14px 34px rgba(0,0,0,.45); white-space: nowrap; }
+.lb-spec b { display: block; font: 700 36px/1.05 'Inter Tight', sans-serif; letter-spacing: -.02em; color: #F5F5F7; }
+.lb-spec span { display: block; margin-top: 8px; font: 500 14px/1 'Geist Mono', monospace; letter-spacing: .2em;
+  color: #8E8E93; }
+.lb-tg { position: absolute; transform: translate(-50%, -100%); display: flex; align-items: center; gap: 9px;
+  padding: 9px 15px 9px 12px; border-radius: 999px; background: rgba(18,19,22,.88); border: 1px solid rgba(255,255,255,.16);
+  box-shadow: 0 10px 28px rgba(0,0,0,.5); font: 500 16px/1 'Geist Mono', monospace; letter-spacing: .08em;
+  color: #F5F5F7; white-space: nowrap; }
+.lb-tg i { width: 8px; height: 8px; border-radius: 50%; background: #3DDC84; }
+.lb-cross { position: absolute; transform: translateX(-50%); display: flex; align-items: center; gap: 14px;
+  white-space: nowrap; }
+.lb-cross .lb-cl { font: 600 26px/1 'Inter Tight', sans-serif; color: #F5F5F7; letter-spacing: -.01em; }
+.lb-cross .lb-ct { display: flex; align-items: center; gap: 9px; padding: 9px 15px 9px 12px; border-radius: 999px;
+  background: rgba(18,19,22,.88); border: 1px solid rgba(255,255,255,.16); font: 500 16px/1 'Geist Mono', monospace;
+  letter-spacing: .08em; color: #F5F5F7; }
+.lb-cross .lb-ct i { width: 8px; height: 8px; border-radius: 50%; background: #FF9F0A; }
+
+</style></head>
+<body>
+<link rel="ave-asset" id="lb-studio" href="../../assets/e9897aa30b42.svg">
+<link rel="ave-asset" id="lb-apple" href="../../assets/6b23fb4d9f79.svg">
+<div class="lb-eye" id="lb-eye">ENTRY BARRIER</div>
+<div class="lb-title" id="lb-t1">Your laptop</div>
+<div class="lb-title" id="lb-t2">Flutter: same laptop</div>
+<div class="lb-title" id="lb-t3">Extra barrier<span id="lb-t3b">: iOS</span></div>
+<div class="lb-title" id="lb-t4">Higher entry cost</div>
+<div class="lb-title" id="lb-t5">One Windows laptop</div>
+<div class="lb-sub" id="lb-s1">Android Studio: <b>heavy software</b></div>
+<div class="lb-sub" id="lb-s2">Emulator: <b>eats RAM</b></div>
+<div class="lb-sub" id="lb-s3">Recommended <b>specs</b></div>
+<div class="lb-sub" id="lb-s4">A <b>comfortable</b> setup</div>
+<div class="lb-sub" id="lb-s5">Flutter needs the <b>Android SDK</b></div>
+<div class="lb-sub" id="lb-s6">Requirement: <b>about the same</b></div>
+<div class="lb-sub" id="lb-s7">Only for <b>cross-platform</b></div>
+<div class="lb-sub" id="lb-s8">iOS build + test: <b>Mac + Xcode</b></div>
+<div class="lb-sub" id="lb-s9">Windows + Mac for <b>cross-platform</b></div>
+<div class="lb-sub" id="lb-s10">Native Android: <b>all on Windows</b></div>
+<div class="lb-lab" id="lb-emu">Emulator</div>
+<div class="lb-lab" id="lb-met">RAM use <em id="lb-metv" style="color:#FF9F0A">HIGH</em></div>
+<div class="lb-spec" id="lb-cpu"><b>i5 / Ryzen 5</b><span>PROCESSOR</span></div>
+<div class="lb-spec" id="lb-ram"><b id="lb-ramv">32 GB</b><span>RAM</span></div>
+<div class="lb-lab" id="lb-pill1"><i></i>Comfortable setup</div>
+<div class="lb-lab" id="lb-pill2"><i></i>Same for Flutter</div>
+<div class="lb-lab" id="lb-flt">Flutter</div>
+<div class="lb-tg" id="lb-sdk"><i></i>ANDROID SDK</div>
+<div class="lb-lab lb-up" id="lb-ios">iOS</div>
+<div class="lb-lab" id="lb-mac">Mac + Xcode</div>
+<div class="lb-cross" id="lb-cross"><span class="lb-cl">Cross-platform</span><span class="lb-ct"><i></i>HIGHER ENTRY COST</span></div>
+<div class="lb-lab" id="lb-nat"><i></i>Native Android</div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "ave/": "https://cdn.jsdelivr.net/npm/three@0.187.0/ave/" } }
+</script>
+<script type="module">
+import * as K from 'ave/kit.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
+const THREE = K.THREE;
+// obs_world.js: shared parts of google-ecosystem, laptop-barrier, resources (cine3d CONTRACT, palette A
+// "Obsidian + Titanium"). Inlined into each spec's module (the spec strips `export`). Needs K, THREE, Reflector,
+// SVGLoader, toCreasedNormals in scope. Every frame is a pure function of t (no clock, no unseeded random).
+// Premium look: softbox studio reflections (own PMREM scene, no neon), glossy dark floor with real reflections,
+// low bloom, brand colour only in the logos and as soft light.
+
+const OB = { android: 0x3DDC84, kotlin: 0x7F52FF, flutter: 0x54C5F8, flutterDeep: 0x027DFD,
+  kmp: [0x7F52FF, 0xC711E1, 0xE44857], silver: 0xC7C7CC, white: 0xF5F5F7,
+  google: [0x4285F4, 0xEA4335, 0xFBBC05, 0x34A853] };
+
+// ---- world: obsidian void, softbox reflections, glossy dark titanium floor, dust, haze. o.view = [dx, dy] px
+// shifts the picture (card layout: scene centre moved left into x 120-1220)
+function obWorld(o = {}) {
+  const s = K.stage({ bg: '#050506', fov: o.fov ?? 34, cam: o.cam, target: o.target, floor: false,
+    fogNear: o.fogNear ?? 11, fogFar: o.fogFar ?? 36, bloomStrength: o.bloom ?? 0.3, env: 1,
+    keyPos: [-7, 10, 6], key: o.key ?? 2.1, front: o.front ?? 0.35, rim: o.rim ?? 0.8, rimColor: 0xc8d8ff,
+    shadowBox: o.shadowBox ?? 10 });
+  const c = o.center ?? [0, 0, 0];
+  s.lights.key.position.set(c[0] - 7, 10, c[2] + 6);
+  s.lights.key.target.position.set(...c);
+  s.scene.add(s.lights.key.target);
+  s.lights.rim.position.set(c[0] + 5, 9, c[2] - 6);
+  // studio softboxes for the reflections (long soft highlights on titanium, not a busy room)
+  const es = new THREE.Scene();
+  es.background = new THREE.Color(0x040405);
+  const box = (w, h, p, col, k) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({
+      color: new THREE.Color(col).multiplyScalar(k), side: THREE.DoubleSide }));
+    m.position.set(...p); m.lookAt(0, 1, 0); es.add(m);
+  };
+  box(7, 4.5, [-7, 8, 6], 0xffffff, 1.25);      // key softbox, top-left front
+  box(1.3, 9, [8, 3, -6], 0xcfdcff, 0.75);      // cool rim strip, back right
+  box(12, 1.3, [0, 10, -3], 0xffffff, 0.55);    // overhead strip
+  box(1.0, 7, [-9, 3, -5], 0xffffff, 0.35);     // left back strip
+  box(16, 1.0, [0, 0.5, 10], 0xffffff, 0.14);  // low front bounce
+  const pm = new THREE.PMREMGenerator(s.renderer);
+  s.scene.environment = pm.fromScene(es, 0.02).texture;
+  s.scene.environmentIntensity = o.env ?? 1.0;
+  if (o.view) s.camera.setViewOffset(s.W, s.H, o.view[0], o.view[1], s.W, s.H);
+  const mirror = new Reflector(new THREE.PlaneGeometry(2000, 2000), {
+    textureWidth: 960, textureHeight: 540, color: 0xb8b9bd, multisample: 0 });
+  mirror.rotation.x = -Math.PI / 2;
+  mirror.position.y = -0.003;
+  const skin = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshStandardMaterial({
+    color: 0x0b0c0f, roughness: 0.5, metalness: 0.5, transparent: true, opacity: o.gloss ?? 0.84, envMapIntensity: 0.06 }));
+  skin.rotation.x = -Math.PI / 2;
+  skin.receiveShadow = true;
+  s.scene.add(mirror, skin);
+  const dust = K.dust({ count: o.dust ?? 360, spread: [30, 7, 30], color: 0xdfe3ea, size: 0.02, opacity: 0.26, seed: 23 });
+  dust.points.position.set(c[0], 0, c[2]);
+  s.scene.add(dust.points);
+  const haze = (o.haze ?? []).map(([x, y, z, r, a]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(r, r), new THREE.MeshBasicMaterial({ map: obRadial(),
+      color: 0xb8c4d8, transparent: true, opacity: a, blending: THREE.AdditiveBlending, depthWrite: false }));
+    m.position.set(x, y, z); m.renderOrder = 5;
+    s.scene.add(m);
+    return m;
+  });
+  return { s, dust, update(t) {
+    dust.update(t);
+    for (const h of haze) h.quaternion.copy(s.camera.quaternion);
+  } };
+}
+
+let obRadialTex = null;
+function obRadial() {
+  return obRadialTex ??= obCanvasTex(256, 256, x => {
+    const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+    g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(255,255,255,.45)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  });
+}
+function obCanvasTex(w, h, draw) {
+  const cv = document.createElement('canvas');
+  cv.width = w; cv.height = h;
+  draw(cv.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  t.userData.canvas = cv;
+  return t;
+}
+function obRR(x, X, Y, w, h, r) {
+  x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r);
+  x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath();
+}
+
+// ---- materials (a new one per call so opacity can differ)
+const obMat = {
+  ti: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x9a9da3, metalness: 1, roughness: o.roughness ?? 0.3,
+    anisotropy: 0.6, envMapIntensity: o.env ?? 1.0 }),
+  tiDark: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x2c2e33, metalness: 0.9, roughness: o.roughness ?? 0.34,
+    anisotropy: 0.5, envMapIntensity: o.env ?? 0.9 }),
+  alu: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0xc6c9ce, metalness: 1, roughness: o.roughness ?? 0.38,
+    envMapIntensity: o.env ?? 1.0 }),
+  glass: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x141518, metalness: 0.3, roughness: 0.2, clearcoat: 1,
+    clearcoatRoughness: 0.06, envMapIntensity: 0.8 }),
+  glow: (c, k = 2) => new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), transparent: true }),
+  // glossy enamel logo; vertex colours also drive a soft self-light so the brand colour reads as light
+  enamel: (c, o = {}) => {
+    const m = new THREE.MeshPhysicalMaterial({ color: o.vertex ? 0xffffff : c, vertexColors: !!o.vertex, metalness: 0.05,
+      roughness: 0.38, clearcoat: 0.5, clearcoatRoughness: 0.12, envMapIntensity: 0.8,
+      emissive: o.vertex ? 0xffffff : c, emissiveIntensity: o.glow ?? 0.3 });
+    if (o.vertex) m.onBeforeCompile = sh => { sh.fragmentShader = sh.fragmentShader.replace('#include emissivemap_fragment',
+      '#include emissivemap_fragment\n totalEmissiveRadiance *= vColor.rgb;'); };
+    return m;
+  },
+};
+
+// ---- floor light pool (brand colour as light only)
+function obPool(color, r) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(r * 2, r * 2), new THREE.MeshBasicMaterial({ map: obRadial(), color,
+    transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2;
+  m.position.y = 0.006;
+  return m;
+}
+
+// ---- assets: SVG text (XHR, works on file:// with the render flag) and an untainted Image for canvas drawing
+function obSvgText(id) {
+  const el = document.getElementById(id), href = el && (el.href || el.getAttribute('href') || el.src);
+  return new Promise(res => { try { const x = new XMLHttpRequest(); x.open('GET', href); x.onload = () => res(x.responseText || '');
+    x.onerror = () => res(''); x.send(); } catch (e) { res(''); } });
+}
+async function obImg(id) {
+  let txt = await obSvgText(id);
+  const vb = /viewBox\s*=\s*["']\s*([-\d.]+)[\s,]+([-\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(txt);
+  if (vb && !/<svg[^>]*\swidth\s*=/i.test(txt)) txt = txt.replace(/<svg/i, `<svg width="${vb[3]}" height="${vb[4]}"`);
+  const im = new Image();
+  im.src = URL.createObjectURL(new Blob([txt], { type: 'image/svg+xml' }));
+  await im.decode();
+  return im;
+}
+
+// ---- extruded SVG logo (real brand mark, bevelled, glossy). o.size = longest side, o.grad(x, y) -> THREE.Color in
+// SVG units for a gradient, else each path keeps its own fill colour. Centred, facing +z.
+function obLogo(svg, o = {}) {
+  const data = new SVGLoader().parse(svg), parts = [];
+  for (const p of data.paths) {
+    const fill = p.userData && p.userData.style && p.userData.style.fill;
+    if (fill === 'none' || (fill === undefined && !o.grad)) continue;
+    for (const sh of SVGLoader.createShapes(p)) parts.push({ sh, color: p.color.clone() });
+  }
+  const bb = new THREE.Box2();
+  for (const { sh } of parts) for (const v of sh.getPoints(16)) bb.expandByPoint(v);
+  const w = bb.max.x - bb.min.x, h = bb.max.y - bb.min.y, L = Math.max(w, h), sc = (o.size ?? 1) / L;
+  const cx = (bb.min.x + bb.max.x) / 2, cy = (bb.min.y + bb.max.y) / 2, d = L * (o.depth ?? 0.09), bev = L * (o.bevel ?? 0.018);
+  const grp = new THREE.Group();
+  for (const { sh, color } of parts) {
+    let g = new THREE.ExtrudeGeometry(sh, { depth: d, curveSegments: 28, bevelEnabled: true, bevelThickness: bev,
+      bevelSize: bev * 0.85, bevelSegments: 5 });
+    g.translate(-cx, -cy, -d / 2);
+    if (o.grad) {
+      const pos = g.attributes.position, col = new Float32Array(pos.count * 3);
+      for (let i = 0; i < pos.count; i++) o.grad(pos.getX(i) + cx, pos.getY(i) + cy).toArray(col, i * 3);
+      g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    }
+    g.rotateX(Math.PI);
+    g.scale(sc, sc, sc);
+    g = toCreasedNormals(g, Math.PI / 5);
+    const m = new THREE.Mesh(g, o.material ? o.material() : obMat.enamel(color, { vertex: !!o.grad, glow: o.glow }));
+    m.castShadow = true; m.receiveShadow = true;
+    grp.add(m);
+  }
+  grp.userData.half = (d / 2 + bev) * sc;
+  grp.userData.w = w * sc; grp.userData.h = h * sc;
+  return grp;
+}
+
+// ---- tile: titanium frame + dark glass face + the logo floating just in front (o.size, o.logoScale)
+function obTile(logo, o = {}) {
+  const sz = o.size ?? 1, d = sz * 0.16, g = new THREE.Group();
+  g.add(K.slab(sz, sz, { depth: d, radius: sz * 0.24, material: obMat.ti({ roughness: 0.26, color: 0x8d9097 }) }));
+  const face = K.slab(sz * 0.9, sz * 0.9, { depth: d * 0.5, radius: sz * 0.2, material: obMat.glass() });
+  face.position.z = d / 2 - d * 0.2;
+  g.add(face);
+  if (logo) { logo.position.z = d / 2 + d * 0.05 + (logo.userData.half ?? 0.03) + sz * 0.02; g.add(logo); }
+  g.userData.front = d / 2;
+  return g;
+}
+
+// ---- tube that draws itself along a path: set(k) 0..1 (from the start), glow(intensity, opacity)
+function obTube(pts, o = {}) {
+  const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)), !!o.closed, 'centripetal');
+  const seg = o.seg ?? Math.max(64, pts.length * 24), rad = o.radial ?? 8;
+  const g = new THREE.TubeGeometry(curve, seg, o.width ?? 0.012, rad, !!o.closed);
+  if (o.colors) {   // colour along the path: list of hex, evenly spread
+    const list = o.colors.map(c => new THREE.Color(c)), pos = g.attributes.position, col = new Float32Array(pos.count * 3);
+    const cc = new THREE.Color();
+    for (let i = 0; i < pos.count; i++) {
+      const f = (Math.floor(i / (rad + 1)) / seg) * list.length, a = Math.min(Math.floor(f), list.length - 1);
+      const b = o.closed ? (a + 1) % list.length : Math.min(a + 1, list.length - 1), u = o.hard ? 0 : f - Math.floor(f);
+      cc.copy(list[a]).lerp(list[b], Math.min(u, 1)).toArray(col, i * 3);
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  }
+  const base = new THREE.Color(o.colors ? 0xffffff : (o.color ?? 0xffffff));
+  const m = o.material ?? new THREE.MeshBasicMaterial({ color: base.clone().multiplyScalar(o.intensity ?? 2),
+    vertexColors: !!o.colors, transparent: true });
+  const mesh = new THREE.Mesh(g, m);
+  return { mesh, curve,
+    set(k, from = 0) {
+      const a = Math.floor(K.clamp01(from) * seg), b = Math.floor(K.clamp01(k) * seg);
+      g.setDrawRange(a * rad * 6, Math.max(0, b - a) * rad * 6); mesh.visible = b > a;
+    },
+    glow(i, op = 1) { if (!o.material) { m.color.copy(base).multiplyScalar(i); m.opacity = op; } } };
+}
+// points on a flat circle arc (angles in degrees, a: x = R cos a, z = R sin a, so 90 = front)
+function obArc(R, y, a0, a1, n = 48) {
+  const out = [];
+  for (let i = 0; i <= n; i++) { const a = THREE.MathUtils.degToRad(a0 + (a1 - a0) * i / n); out.push([R * Math.cos(a), y, R * Math.sin(a)]); }
+  return out;
+}
+
+// ---- smooth camera path in time (cubic Hermite, Catmull-Rom tangents): keys [t, px,py,pz, tx,ty,tz]
+function obCamPath(keys) {
+  const n = keys.length;
+  const tan = (i, c) => (i === 0 || i === n - 1) ? 0 : (keys[i + 1][c] - keys[i - 1][c]) / (keys[i + 1][0] - keys[i - 1][0]);
+  return (s, t) => {
+    let i = 0;
+    while (i < n - 2 && t > keys[i + 1][0]) i++;
+    const a = keys[i], b = keys[i + 1], dt = b[0] - a[0], u = K.clamp01((t - a[0]) / dt);
+    const h00 = 2 * u ** 3 - 3 * u ** 2 + 1, h10 = u ** 3 - 2 * u ** 2 + u, h01 = -2 * u ** 3 + 3 * u ** 2, h11 = u ** 3 - u ** 2;
+    const v = c => h00 * a[c] + h10 * dt * tan(i, c) + h01 * b[c] + h11 * dt * tan(i + 1, c);
+    s.camera.position.set(v(1), v(2), v(3));
+    s.target.set(v(4), v(5), v(6));
+  };
+}
+
+// ---- HTML: fade + rise by k; k of an element that appears at a and leaves at b (b optional)
+function obShow(el, k, rise = 14) {
+  el.style.opacity = k.toFixed(3);
+  el.style.visibility = k > 0.001 ? 'visible' : 'hidden';
+  el.style.translate = `0 ${((1 - k) * rise).toFixed(1)}px`;
+}
+function obK(t, a, b, din = 0.5, dout = 0.4) {
+  return K.prog(t, a, din) * (b == null ? 1 : 1 - K.prog(t, b, dout, K.ease.inOut));
+}
+function obPin(el, obj, s, o) { K.pin(el, obj, s, o); }
+
+// ---- laptop: rounded base with keys + trackpad, lid on a hinge, live screen (canvas). o.material (body),
+// o.draw(ctx, w, h, state) paints the screen; call lap.screen(state) every frame (repaints only on change).
+function obLaptop(o = {}) {
+  const W = o.w ?? 3.2, D = o.d ?? 2.15, T = o.t ?? 0.11, H = W * 0.64, bodyMat = o.material ?? (() => obMat.tiDark());
+  const grp = new THREE.Group();
+  const base = K.box(W, T, D, { radius: T * 0.45, material: bodyMat() });
+  base.position.y = T / 2;
+  grp.add(base);
+  const deck = obCanvasTex(1024, 688, (x, w, h) => {   // keyboard well + keys + trackpad, matte
+    x.fillStyle = o.deck ?? '#1b1c20'; x.fillRect(0, 0, w, h);
+    const kx = 70, ky = 46, kw = w - 140, rows = 5, cols = 14, gap = 7, cw = (kw - gap * (cols - 1)) / cols, ch = 44;
+    x.fillStyle = o.well ?? '#0e0f12'; obRR(x, kx - 12, ky - 12, kw + 24, rows * (ch + gap) + 18, 14); x.fill();
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      x.fillStyle = o.key ?? '#24262b'; obRR(x, kx + c * (cw + gap), ky + r * (ch + gap), cw, ch, 7); x.fill();
+    }
+    x.fillStyle = o.key ?? '#24262b'; obRR(x, kx + 3 * (cw + gap), ky + rows * (ch + gap) + 4, 7 * cw, 34, 7); x.fill();
+    const tw = 330, th = 200;
+    x.fillStyle = o.pad ?? '#202226'; obRR(x, (w - tw) / 2, h - th - 40, tw, th, 18); x.fill();
+    x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2; x.stroke();
+  });
+  const top = new THREE.Mesh(new THREE.PlaneGeometry(W * 0.94, D * 0.92), new THREE.MeshStandardMaterial({ map: deck,
+    roughness: 0.6, metalness: 0.2, transparent: true }));
+  top.rotation.x = -Math.PI / 2;
+  top.position.set(0, T + 0.002, 0.02);
+  top.receiveShadow = true;
+  grp.add(top);
+  const hinge = new THREE.Group();
+  hinge.position.set(0, T, -D / 2 + 0.04);
+  grp.add(hinge);
+  const lid = K.box(W, H, 0.07, { radius: 0.03, material: bodyMat() });
+  lid.position.set(0, H / 2, -0.035);
+  hinge.add(lid);
+  const bez = new THREE.Mesh(new THREE.PlaneGeometry(W * 0.97, H * 0.955), new THREE.MeshPhysicalMaterial({ color: 0x050506,
+    roughness: 0.12, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.04, transparent: true }));
+  bez.position.set(0, H / 2, 0.0005);
+  hinge.add(bez);
+  const SW = 1024, SH = Math.round(1024 * (H * 0.86) / (W * 0.92));
+  const tex = obCanvasTex(SW, SH, x => { x.fillStyle = '#000'; x.fillRect(0, 0, SW, SH); });
+  const scr = new THREE.Mesh(new THREE.PlaneGeometry(W * 0.92, H * 0.86), new THREE.MeshBasicMaterial({ map: tex,
+    transparent: true, toneMapped: false, color: new THREE.Color(0.92, 0.92, 0.92) }));
+  scr.position.set(0, H / 2 + H * 0.01, 0.001);
+  hinge.add(scr);
+  let last = null;
+  return { group: grp, hinge, lid, base, scr, W, D, H, T,
+    open(k) { hinge.rotation.x = THREE.MathUtils.lerp(Math.PI / 2 - 0.02, -0.3, k); },
+    screen(state, bright = 1) {
+      scr.material.color.setScalar(0.92 * bright);
+      const key = JSON.stringify(state);
+      if (key === last) return;
+      last = key;
+      const x = tex.userData.canvas.getContext('2d');
+      x.save(); x.fillStyle = '#000'; x.fillRect(0, 0, SW, SH);
+      if (o.draw) o.draw(x, SW, SH, state);
+      x.restore();
+      tex.needsUpdate = true;
+    } };
+}
+
+const FLUTTER_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">'
+  + '<path d="M639.9 20.7h319.5l-679 679.1L120.6 540z" fill="#54C5F8"/>'
+  + '<path d="M360.3 779.7L520 939.5 959.4 500H639.9z" fill="#54C5F8"/>'
+  + '<path d="M520 939.5l119.9 119.8h319.5L679.8 779.7z" fill="#01579B"/></svg>';
+
+// ---- 2D helpers for the live screens
+function svgImg(txt) {
+  const im = new Image();
+  im.src = URL.createObjectURL(new Blob([txt], { type: 'image/svg+xml' }));
+  return im.decode().then(() => im);
+}
+function fit(x, im, cx, cy, size) {
+  const r = Math.min(size / im.width, size / im.height);
+  x.drawImage(im, cx - im.width * r / 2, cy - im.height * r / 2, im.width * r, im.height * r);
+}
+function tinted(im, color, size) {
+  const c = document.createElement('canvas'), r = size / Math.max(im.width, im.height);
+  c.width = Math.ceil(im.width * r); c.height = Math.ceil(im.height * r);
+  const x = c.getContext('2d');
+  x.drawImage(im, 0, 0, c.width, c.height);
+  x.globalCompositeOperation = 'source-in'; x.fillStyle = color; x.fillRect(0, 0, c.width, c.height);
+  return c;
+}
+function droid(x, cx, cy, r, col) {          // modern Android head
+  x.fillStyle = col; x.beginPath(); x.arc(cx, cy, r, Math.PI, 0); x.closePath(); x.fill();
+  x.strokeStyle = col; x.lineWidth = r * 0.09; x.lineCap = 'round';
+  for (const sg of [-1, 1]) { x.beginPath(); x.moveTo(cx + sg * r * 0.5, cy - r * 0.8); x.lineTo(cx + sg * r * 0.72, cy - r * 1.16); x.stroke(); }
+  x.fillStyle = '#0b0c0f';
+  for (const sg of [-1, 1]) { x.beginPath(); x.arc(cx + sg * r * 0.42, cy - r * 0.45, r * 0.09, 0, 7); x.fill(); }
+}
+function winLogo(x, cx, cy, S) {             // Windows 11 mark, four panes
+  const g = S * 0.06, q = (S - g) / 2, gr = x.createLinearGradient(cx - S / 2, cy - S / 2, cx + S / 2, cy + S / 2);
+  gr.addColorStop(0, '#7cd1ff'); gr.addColorStop(1, '#1477e6');
+  x.fillStyle = gr;
+  for (const [i, j] of [[0, 0], [1, 0], [0, 1], [1, 1]]) x.fillRect(cx - S / 2 + i * (q + g), cy - S / 2 + j * (q + g), q, q);
+}
+function bgGrad(x, w, h, a, b) {
+  const g = x.createRadialGradient(w / 2, h * 0.42, 0, w / 2, h * 0.42, w * 0.75);
+  g.addColorStop(0, a); g.addColorStop(1, b);
+  x.fillStyle = g; x.fillRect(0, 0, w, h);
+}
+function txt(x, s, cx, cy, px, col, wt = 600) {
+  x.font = `${wt} ${px}px "Inter Tight", Inter, sans-serif`;
+  x.fillStyle = col; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(s, cx, cy);
+}
+
+window.renderReady = (async () => {
+  await document.fonts.ready;
+  const T = { p0: 1.800, p1: 2.700, p2: 6.200, p3: 9.700, p4: 12.000, p5: 13.300, p6: 15.333, p7: 17.633,
+              p8: 21.433, p9: 27.333, p10: 29.533, p11: 35.633, p12: 40.667, p13: 43.967, p14: 45.767, end: 48.067 };
+  const RAMW = T.p2 + 1.4;                 // "... bahut RAM khata hai"
+  const X3 = T.p9 - 1.3;                   // act 1-2 objects leave before the iOS act
+  const X0 = T.p14 + 0.1;                  // exit push starts
+  const MX = 4.7;                          // the Mac slot
+  const W = obWorld({ cam: [0, 3.2, 30], target: [0, 1.0, 0], fov: 34, view: [0, -70], center: [2.0, 0, 0],
+    shadowBox: 12, haze: [[0.5, 2.4, -6, 16, 0.05], [MX, 2.2, -6.5, 13, 0.035]], dust: 380 });
+  const s = W.s, io = K.ease.inOut;
+  const IM = { studio: await obImg('lb-studio'), apple: await obImg('lb-apple'), flutter: await svgImg(FLUTTER_SVG) };
+  const APPLE_W = tinted(IM.apple, '#f2f2f4', 150), APPLE_S = tinted(IM.apple, '#f2f2f4', 66);
+
+  // ---- Windows laptop (dark titanium), live screen
+  const lap = obLaptop({ draw: (x, w, h, st) => {
+    bgGrad(x, w, h, '#15171c', '#050607');
+    if (st.v === 'win') winLogo(x, w / 2, h / 2, 150);
+    else if (st.v === 'studio') { fit(x, IM.studio, w / 2, h * 0.42, 210); txt(x, 'Android Studio', w / 2, h * 0.78, 46, '#F5F5F7'); }
+    else if (st.v === 'emu') {
+      x.fillStyle = '#0d0e11'; x.fillRect(0, 0, w, 44); x.fillStyle = '#101115'; x.fillRect(0, 44, 170, h - 44);
+      fit(x, IM.studio, 28, 22, 28);
+      const cols = ['#3a3d45', '#4b3f73', '#2f5a43', '#3a3d45', '#5b4a2f'];
+      for (let i = 0; i < 13; i++) {
+        const y = 78 + i * 38, ind = [0, 1, 1, 2, 2, 2, 1, 2, 3, 3, 2, 1, 0][i], ww = 100 + ((i * 137) % 200);
+        x.fillStyle = cols[i % 5]; obRR(x, 205 + ind * 34, y, ww, 14, 7); x.fill();
+        x.fillStyle = '#2a2c32'; obRR(x, 205 + ind * 34 + ww + 14, y, 40 + (i * 53) % 90, 14, 7); x.fill();
+      }
+      x.strokeStyle = 'rgba(255,255,255,.14)'; x.lineWidth = 3; obRR(x, w - 236, 70, 186, h - 110, 26); x.stroke();
+    } else if (st.v === 'sdk') {
+      fit(x, IM.flutter, w / 2 - 125, h * 0.42, 170); droid(x, w / 2 + 125, h * 0.5, 92, '#3DDC84');
+      txt(x, 'Android SDK', w / 2, h * 0.79, 46, '#F5F5F7');
+    }
+  } });
+  s.add(lap.group);
+
+  // ---- emulator phone that slides out of the screen
+  const phone = new THREE.Group();
+  phone.add(K.slab(0.66, 1.34, { depth: 0.07, radius: 0.1, material: obMat.tiDark() }));
+  const phTex = obCanvasTex(360, 740, (x, w, h) => {
+    x.clearRect(0, 0, w, h); obRR(x, 0, 0, w, h, 44); x.save(); x.clip();
+    bgGrad(x, w, h, '#14241a', '#050706'); droid(x, w / 2, h * 0.52, 74, '#3DDC84');
+    x.fillStyle = 'rgba(255,255,255,.45)'; obRR(x, w / 2 - 44, h - 30, 88, 7, 3.5); x.fill();
+    x.restore();
+  });
+  const phScr = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 1.24), new THREE.MeshBasicMaterial({ map: phTex,
+    transparent: true, toneMapped: false, color: new THREE.Color(0.9, 0.9, 0.9) }));
+  phScr.position.z = 0.037;
+  phone.add(phScr);
+  phone.position.set(2.3, 1.05, 0.75); phone.rotation.y = -0.3;
+  s.add(phone);
+
+  // ---- glass RAM meter
+  const meter = new THREE.Group();
+  const mBase = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.32, 0.08, 64), obMat.ti({ roughness: 0.3 }));
+  mBase.position.y = 0.04;
+  const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 1.8, 48, 1, true), new THREE.MeshPhysicalMaterial({
+    color: 0xffffff, metalness: 0, roughness: 0.06, clearcoat: 1, transparent: true, opacity: 0.16, envMapIntensity: 1.4,
+    depthWrite: false, side: THREE.DoubleSide }));
+  tube.position.y = 0.98;
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 0.05, 48), obMat.ti({ roughness: 0.3 }));
+  cap.position.y = 1.905;
+  const fill = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1, 32), new THREE.MeshBasicMaterial({ transparent: true }));
+  meter.add(mBase, tube, cap, fill);
+  meter.position.set(3.9, 0, 0.1);
+  s.add(meter);
+  const AMBER = new THREE.Color(0xFF9F0A), WHITE = new THREE.Color(0xc9ccd2);
+
+  // ---- CPU chip + RAM stick (exploded view)
+  const cpu = new THREE.Group();
+  cpu.add(K.box(0.9, 0.05, 0.9, { radius: 0.015, material: obMat.tiDark({ color: 0x17191d }) }));
+  const ihs = K.box(0.64, 0.07, 0.64, { radius: 0.05, material: obMat.ti({ roughness: 0.52, color: 0x7a7d83 }) });
+  ihs.position.y = 0.06;
+  cpu.add(ihs);
+  cpu.position.set(-2.45, 1.3, 0.8); cpu.rotation.set(0.95, 0.25, 0.08);
+  s.add(cpu);
+  const ram = new THREE.Group();
+  ram.add(K.box(1.8, 0.46, 0.06, { radius: 0.02, material: obMat.tiDark({ color: 0x3a3d43 }) }));
+  const pins = K.box(1.62, 0.07, 0.065, { radius: 0.01, material: obMat.alu({ color: 0xc9ccd1 }) });
+  pins.position.y = -0.255;
+  const line = K.box(1.6, 0.012, 0.064, { radius: 0.004, material: obMat.tiDark({ color: 0x1b1d21 }) });
+  line.position.y = 0.1;
+  ram.add(pins, line);
+  ram.position.set(2.45, 1.4, 0.8); ram.rotation.set(0.12, -0.3, 0.04);
+  s.add(ram);
+  const leadC = obTube([[-0.75, 0.13, 0.35], [-1.45, 0.62, 0.7], [-2.02, 1.18, 0.82]], { width: 0.0045, intensity: 1.0, seg: 64 });
+  const leadR = obTube([[0.85, 0.13, 0.35], [1.4, 0.7, 0.7], [1.62, 1.3, 0.82]], { width: 0.0045, intensity: 1.0, seg: 64 });
+  s.add(leadC.mesh, leadR.mesh);
+
+  // ---- Flutter tile + SDK trace
+  const flTile = obTile(obLogo(FLUTTER_SVG, { size: 0.5, depth: 0.1, glow: 0.34 }), { size: 0.95 });
+  flTile.position.set(3.9, 0.55, 0.3); flTile.rotation.y = -0.3;
+  s.add(flTile);
+  const sdk = obTube([[3.75, 0.012, 0.85], [2.8, 0.012, 1.15], [1.7, 0.012, 0.8]], { width: 0.009,
+    colors: [OB.flutter, OB.android], intensity: 1.5, seg: 64 });
+  s.add(sdk.mesh);
+
+  // ---- iOS slot, Apple mark, aluminium MacBook
+  const slot = obTube(obArc(1.95, 0.012, -90, 270, 120), { width: 0.006, color: 0xdfe3ea, intensity: 1.2, seg: 240 });
+  slot.mesh.position.set(MX, 0, -0.1);
+  s.add(slot.mesh);
+  const appleL = obLogo(await obSvgText('lb-apple'), { size: 0.85, depth: 0.12, grad: () => new THREE.Color(1, 1, 1),
+    material: () => obMat.alu({ roughness: 0.22, color: 0xd5d8dc }) });
+  appleL.position.set(MX, 1.15, -0.1);
+  s.add(appleL);
+  const mac = obLaptop({ w: 3.05, material: () => obMat.alu(), deck: '#8f9196', well: '#6c6e73', key: '#0d0e10',
+    pad: '#9a9ca1', draw: (x, w, h, st) => {
+      if (st.v === 'apple') { x.fillStyle = '#000'; x.fillRect(0, 0, w, h); x.drawImage(APPLE_W, w / 2 - APPLE_W.width / 2, h / 2 - APPLE_W.height / 2); }
+      else {
+        bgGrad(x, w, h, '#1b2433', '#07090c');
+        x.drawImage(APPLE_S, w / 2 - APPLE_S.width / 2, h * 0.3 - APPLE_S.height / 2);
+        txt(x, 'Xcode', w / 2, h * 0.57, 84, '#F5F5F7', 700);
+        txt(x, 'iOS build + test', w / 2, h * 0.73, 30, '#8E8E93', 500);
+      }
+    } });
+  mac.group.position.set(MX, 0, -0.1); mac.group.rotation.y = -0.12;
+  s.add(mac.group);
+
+  // ---- floor brackets + light pools
+  const brk = (x0, x1, z) => [[x0, 0.012, z - 0.45], [x0, 0.012, z - 0.08], [x0 + 0.08, 0.012, z], [x1 - 0.08, 0.012, z],
+    [x1, 0.012, z - 0.08], [x1, 0.012, z - 0.45]];
+  const cross = obTube(brk(-1.75, MX + 1.65, 1.7), { width: 0.006, color: 0xe6e8ec, intensity: 1.3, seg: 160 });
+  const nat = obTube(brk(-1.75, 1.75, 1.78), { width: 0.008, color: OB.android, intensity: 1.6, seg: 120 });
+  s.add(cross.mesh, nat.mesh);
+  const poolA = obPool(OB.android, 2.6), poolF = obPool(OB.flutter, 1.2), poolM = obPool(0xdfe6f2, 2.2);
+  poolF.position.set(3.9, 0.006, 0.3); poolM.position.set(MX, 0.006, -0.1);
+  s.add(poolA, poolF, poolM);
+
+  // ---- camera: fly out of fog -> path on the words -> push into the Windows screen
+  const camPath = obCamPath([
+    [T.p0, 0.35, 2.75, 9.6, 0.1, 1.0, 0],
+    [T.p2, 0.9, 2.6, 9.0, 0.45, 1.05, 0],
+    [T.p3, -0.3, 2.9, 10.0, 0.1, 1.15, 0],
+    [T.p5, 0.3, 3.0, 10.2, 0.25, 1.15, 0],
+    [T.p6, 0.7, 2.9, 10.3, 0.6, 1.1, 0],
+    [T.p8, 0.1, 3.2, 10.6, 0.35, 1.1, 0],
+    [T.p9, 2.4, 3.2, 11.6, 2.6, 1.0, 0],
+    [T.p10, 2.9, 3.1, 11.0, 3.0, 1.0, 0],
+    [T.p11, 3.6, 2.9, 9.8, 3.75, 1.05, 0],
+    [T.p12, 2.35, 3.4, 11.6, 2.35, 0.9, 0],
+    [T.p13, 1.2, 3.2, 11.0, 1.0, 1.0, 0],
+    [T.p14, 0.3, 2.4, 7.6, 0.1, 1.1, -0.5],
+  ]);
+  const FAR_P = new THREE.Vector3(0, 3.2, 30), FAR_T = new THREE.Vector3(0, 1.0, 0);
+  const IN_P = new THREE.Vector3(0, 1.1, -0.95), IN_T = new THREE.Vector3(0, 1.09, -3);
+  const _p = new THREE.Vector3(), _t = new THREE.Vector3();
+  function cam(t) {
+    camPath(s, K.clamp01((t - T.p0) / (T.p14 - T.p0)) * (T.p14 - T.p0) + T.p0);
+    if (t < T.p0) {
+      const k = K.ease.out(K.clamp01(t / T.p0));
+      _p.copy(s.camera.position); _t.copy(s.target);
+      s.camera.position.lerpVectors(FAR_P, _p, k); s.target.lerpVectors(FAR_T, _t, k);
+    } else if (t > X0) {
+      const u = K.clamp01((t - X0) / (T.end - X0)), k = u * u * (3 - 2 * u) * u;
+      s.camera.position.lerp(IN_P, k); s.target.lerp(IN_T, k);
+    }
+  }
+
+  const dip = (t, list) => K.clamp01(list.reduce((m, ts) => Math.max(m, 1 - Math.abs(t - ts) / 0.16), 0));
+  const WSW = [T.p1 - 0.25, T.p2 - 0.35, T.p3 - 0.25, T.p7 - 0.3, X3];
+  const winState = t => t < WSW[0] ? 'win' : t < WSW[1] ? 'studio' : t < WSW[2] ? 'emu' : t < WSW[3] ? 'win'
+    : t < WSW[4] ? 'sdk' : 'win';
+  const MSW = T.p11 + 0.45;
+
+  const el = id => document.getElementById(id);
+  const ids = ['eye', 't1', 't2', 't3', 't3b', 't4', 't5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 'emu',
+    'met', 'metv', 'cpu', 'ram', 'ramv', 'pill1', 'pill2', 'flt', 'sdk', 'ios', 'mac', 'cross', 'nat'];
+  const H = Object.fromEntries(ids.map(k => [k, el('lb-' + k)]));
+  const anchor = new THREE.Object3D();
+  s.scene.add(anchor);
+  const pinAt = (e, x, y, z, dy = 0) => { anchor.position.set(x, y, z); anchor.updateMatrixWorld(); obPin(e, anchor, s, { dy }); };
+
+  K.run(s, t => {
+    cam(t);
+    W.update(t);
+    const out = 1 - K.prog(t, T.end - 0.75, 0.5, io);          // HTML leaves as we enter the screen
+    const kX3 = K.prog(t, X3, 0.6, io);                         // act 1-2 objects leave
+    // Windows laptop: opens as the camera arrives, live screen
+    lap.open(K.prog(t, T.p0 - 0.9, 0.9, io));
+    lap.screen({ v: winState(t) }, K.prog(t, T.p0 - 0.5, 0.6) * (1 - 0.85 * dip(t, WSW)) * (1 - K.prog(t, T.end - 0.35, 0.33)));
+    // emulator phone: out of the screen, back before the specs
+    const kPh = K.prog(t, T.p2 - 0.55, 0.55) * (1 - K.prog(t, T.p3 - 0.65, 0.45, io));
+    K.enter(phone, kPh, { x: -1.9, y: 0.1, z: -1.9, scale: 0.4, rotY: 0.4 });
+    // RAM meter: fills amber on "RAM", drops back on "32 GB"
+    const kMe = K.prog(t, T.p2 - 0.6, 0.6) * (1 - K.prog(t, T.p6 - 0.9, 0.5, io));
+    K.enter(meter, kMe, { x: 0.6, y: 0, scale: 0.92 });
+    const f = 0.1 + 0.78 * K.prog(t, T.p2 - 0.1, RAMW - T.p2 + 0.1, io) - 0.46 * K.prog(t, T.p4 + 0.15, 0.9, io);
+    const hot = K.prog(t, RAMW - 0.7, 0.7) * (1 - K.prog(t, T.p4 + 0.15, 0.8));
+    fill.scale.y = Math.max(0.001, 1.72 * f); fill.position.y = 0.1 + 0.86 * f;
+    fill.material.color.copy(WHITE).lerp(AMBER, hot).multiplyScalar(0.78);
+    fill.material.opacity = kMe;
+    H.metv.textContent = hot > 0.5 ? 'HIGH' : (t > T.p4 ? 'OK' : 'LOW');
+    H.metv.style.color = hot > 0.5 ? '#FF9F0A' : (t > T.p4 ? '#3DDC84' : '#A1A1A6');
+    // CPU + RAM stick eject from the deck
+    const kC = K.prog(t, T.p3 - 0.75, 0.75) * (1 - kX3), kR = K.prog(t, T.p4 - 0.75, 0.75) * (1 - kX3);
+    K.enter(cpu, kC, { x: 1.9, y: -1.1, z: -0.5, scale: 0.5, rotX: -0.9 });
+    K.enter(ram, kR, { x: -1.9, y: -1.2, z: -0.6, scale: 0.5, rotX: -1.0 });
+    if (kC > 0.999) K.float(cpu, t, { amp: 0.03, speed: 1.0 });
+    if (kR > 0.999) K.float(ram, t, { amp: 0.03, speed: 0.9, phase: 1.3 });
+    const same = K.prog(t, T.p8 - 0.2, 0.3) * (1 - K.prog(t, T.p8 + 0.3, 0.9, io));
+    leadC.set(K.prog(t, T.p3 - 0.35, 0.6, io)); leadC.glow(1.0 + 1.4 * same, 0.6 * (1 - kX3));
+    leadR.set(K.prog(t, T.p4 - 0.35, 0.6, io)); leadR.glow(1.0 + 1.4 * same, 0.6 * (1 - kX3));
+    // Flutter tile + SDK trace
+    const kF = K.prog(t, T.p6 - 0.8, 0.8) * (1 - kX3);
+    K.enter(flTile, kF, { y: 1.6, scale: 0.9, rotY: 0.6 });
+    sdk.set(K.prog(t, T.p7 - 0.55, 0.55, io)); sdk.glow(1.5, 1 - kX3);
+    // iOS slot, Apple mark, Mac
+    const kRet = K.prog(t, T.p13 - 0.4, 1.4, io);               // Mac recedes for "Native Android"
+    slot.set(K.prog(t, T.p9 - 0.7, 0.7, io)); slot.glow(1.2, 1 - kRet);
+    const kAp = K.prog(t, T.p10 - 0.5, 0.5) * (1 - K.prog(t, T.p11 - 1.3, 0.5, io));
+    K.enter(appleL, kAp, { y: -0.45, scale: 0.6, rotY: 0.8 });
+    if (kAp > 0.001) appleL.rotation.y = Math.sin(t * 0.7) * 0.25;
+    const kM = K.prog(t, T.p11 - 1.4, 0.8, io);
+    K.enter(mac.group, kM, { x: 3.5, scale: 0.96 });
+    mac.group.position.z -= 4.5 * kRet; mac.group.position.x += 0.6 * kRet;
+    mac.open(K.prog(t, T.p11 - 0.6, 0.6, io));
+    mac.screen({ v: t < MSW ? 'apple' : 'xcode' }, K.prog(t, T.p11 - 0.45, 0.4) * (1 - 0.85 * dip(t, [MSW])) * (1 - 0.7 * kRet));
+    // brackets + pools
+    cross.set(K.prog(t, T.p12 - 0.7, 0.7, io)); cross.glow(1.3, 1 - K.prog(t, T.p13 - 0.5, 0.4));
+    nat.set(K.prog(t, T.p13 - 0.6, 0.6, io)); nat.glow(1.6, 1 - K.prog(t, T.end - 0.6, 0.4));
+    poolA.material.opacity = 0.14 * K.prog(t, T.p1 - 0.4, 0.6) * (1 - kX3) + 0.12 * K.prog(t, T.p13 - 0.5, 0.5);
+    poolF.material.opacity = 0.2 * kF;
+    poolM.material.opacity = 0.12 * K.prog(t, T.p10 - 0.45, 0.45) * (1 - kRet);
+    // HTML: titles + one subtitle at a time
+    obShow(H.eye, obK(t, 0.6, null) * out);
+    obShow(H.t1, obK(t, T.p0 - 0.5, T.p6 - 0.6));
+    obShow(H.t2, obK(t, T.p6 - 0.35, T.p9 - 0.7));
+    obShow(H.t3, obK(t, T.p9 - 0.45, T.p12 - 0.6));
+    obShow(H.t3b, K.prog(t, T.p10 - 0.35, 0.35), 6);
+    obShow(H.t4, obK(t, T.p12 - 0.4, T.p14 - 0.55));
+    obShow(H.t5, obK(t, T.p14 - 0.3, null) * out);
+    const subs = [[T.p1, T.p2], [T.p2, T.p3], [T.p3, T.p5], [T.p5, T.p6], [T.p6, T.p8], [T.p8, T.p9], [T.p9, T.p11],
+      [T.p11, T.p12], [T.p12, T.p13], [T.p13, null]];
+    subs.forEach(([a, b], i) => obShow(H['s' + (i + 1)], obK(t, a - 0.35, b == null ? null : b - 0.6) * out));
+    // pinned labels
+    s.camera.updateMatrixWorld();
+    pinAt(H.emu, 2.3, 0.3, 0.75, 8); obShow(H.emu, K.prog(t, T.p2 - 0.25, 0.35) * (1 - K.prog(t, T.p3 - 0.8, 0.3)), 8);
+    pinAt(H.met, 3.9, 0, 0.45, 14); obShow(H.met, K.prog(t, T.p2 - 0.3, 0.4) * (1 - K.prog(t, T.p6 - 1.0, 0.35)), 8);
+    pinAt(H.cpu, -2.45, 0.78, 0.8, 8); obShow(H.cpu, K.prog(t, T.p3 - 0.3, 0.4) * (1 - kX3), 10);
+    pinAt(H.ram, 2.45, 1.02, 0.8, 8); obShow(H.ram, K.prog(t, T.p4 - 0.3, 0.4) * (1 - kX3), 10);
+    H.ramv.textContent = `${Math.round(32 * K.prog(t, T.p4 - 0.3, 0.7))} GB`;
+    pinAt(H.pill1, 0, 0, 1.25, 16); obShow(H.pill1, K.prog(t, T.p5 - 0.4, 0.4) * (1 - K.prog(t, T.p8 - 0.5, 0.3)), 8);
+    pinAt(H.pill2, 0, 0, 1.25, 16); obShow(H.pill2, K.prog(t, T.p8 - 0.25, 0.3) * (1 - kX3), 8);
+    pinAt(H.flt, 3.9, 0, 0.65, 14); obShow(H.flt, K.prog(t, T.p6 - 0.3, 0.35) * (1 - kX3), 8);
+    pinAt(H.sdk, 3.9, 1.12, 0.3, -12); obShow(H.sdk, K.prog(t, T.p7 - 0.4, 0.4) * (1 - kX3), 8);
+    pinAt(H.ios, MX, 1.85, -0.1, -6); obShow(H.ios, K.prog(t, T.p10 - 0.3, 0.35) * (1 - K.prog(t, T.p12 - 0.5, 0.35)), 8);
+    pinAt(H.mac, MX, 0, 1.25, 16); obShow(H.mac, K.prog(t, T.p11 - 0.3, 0.35) * (1 - K.prog(t, T.p12 - 0.5, 0.35)), 8);
+    pinAt(H.cross, MX / 2 - 0.05, 0, 1.7, 22); obShow(H.cross, K.prog(t, T.p12 - 0.3, 0.35) * (1 - K.prog(t, T.p13 - 0.45, 0.3)), 8);
+    pinAt(H.nat, 0, 0, 1.78, 22); obShow(H.nat, K.prog(t, T.p13 - 0.3, 0.35) * out, 8);
+  });
+})();
+</script>
+
+<script>lucide.createIcons();</script>
+<script></script>
+</body></html>
