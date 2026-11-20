@@ -1,0 +1,393 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="layout" content="card">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@400..900&family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=block" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<title>What raises your package: city, projects, skill combo</title>
+<style>
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: Inter, sans-serif; }
+
+
+body { background: #050506; }
+.pk-vig { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 90% at 35% 50%, transparent 55%, rgba(0,0,0,.5) 100%); }
+.pk-head { position: absolute; left: 120px; top: 100px; opacity: 0; will-change: transform, opacity, filter; }
+.pk-eye { font: 500 18px/1 "Geist Mono", monospace; letter-spacing: .2em; text-transform: uppercase; color: #A1A1A6; }
+.pk-title { margin-top: 18px; font: 700 60px/1.04 "Inter Tight", Inter, sans-serif; letter-spacing: -.028em;
+  color: #F5F5F7; white-space: nowrap; }
+.pk-subl { margin-top: 14px; font: 400 28px/1.2 Inter, sans-serif; color: #8E8E93; white-space: nowrap; opacity: 0; }
+.pk-tag { position: absolute; left: -999px; top: -999px; display: flex; align-items: center; gap: 11px;
+  padding: 10px 18px 10px 15px; border-radius: 999px; white-space: nowrap; opacity: 0;
+  background: rgba(17,18,21,.76); border: 1px solid rgba(255,255,255,.13); backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
+  color: #F5F5F7; font: 500 24px/1 Inter, sans-serif; letter-spacing: -.005em; --k: 0; }
+.pk-up { transform: translate(-50%, calc(-100% - 38px + (1 - var(--k)) * 12px)); }
+.pk-dn { transform: translate(-50%, calc(38px + (var(--k) - 1) * 12px)); }
+.pk-l { transform: translate(calc(-100% - 38px + (1 - var(--k)) * 12px), -50%); }
+.pk-r { transform: translate(calc(38px + (var(--k) - 1) * 12px), -50%); }
+.pk-tag::after { content: ''; position: absolute; }
+.pk-up::after { left: 50%; top: 100%; width: 1px; height: 38px; background: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,.08)); }
+.pk-dn::after { left: 50%; bottom: 100%; width: 1px; height: 38px; background: linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.4)); }
+.pk-l::after { left: 100%; top: 50%; height: 1px; width: 38px; background: linear-gradient(90deg, rgba(255,255,255,.4), rgba(255,255,255,.08)); }
+.pk-r::after { right: 100%; top: 50%; height: 1px; width: 38px; background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.4)); }
+.pk-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.pk-both { position: absolute; left: 120px; top: 846px; display: flex; align-items: center; gap: 14px; opacity: 0; }
+.pk-mono { font: 500 16px/1 "Geist Mono", monospace; letter-spacing: .18em; text-transform: uppercase; color: #8E8E93;
+  margin-right: 6px; }
+.pk-pill { display: flex; align-items: center; gap: 10px; padding: 11px 20px 11px 16px; border-radius: 999px;
+  background: rgba(17,18,21,.76); border: 1px solid rgba(255,255,255,.13); color: #F5F5F7;
+  font: 500 24px/1 Inter, sans-serif; opacity: 0; }
+.pk-route { position: absolute; left: 120px; top: 940px; display: flex; align-items: center; gap: 16px;
+  font: 500 15px/1 "Geist Mono", monospace; letter-spacing: .18em; text-transform: uppercase; color: #5d5d62; opacity: 0; }
+.pk-route i { display: block; width: 56px; height: 1px; background: rgba(255,255,255,.14); position: relative; }
+.pk-route i b { position: absolute; left: 0; top: 0; height: 1px; width: 0; background: #F5F5F7; }
+
+</style></head>
+<body>
+
+<link rel="ave-asset" id="pk-play" href="../../assets/4a10d30772e6.svg">
+<link rel="ave-asset" id="pk-kmpimg" href="../../assets/3d8c078f63c4.svg">
+
+<div class="pk-head" id="pk-h0"><div class="pk-eye">01 · City</div><div class="pk-title">Your city</div><div class="pk-subl" id="pk-s0">Tech hubs pay more</div></div>
+<div class="pk-head" id="pk-h1"><div class="pk-eye">02 · Projects</div><div class="pk-title">Your projects</div><div class="pk-subl" id="pk-s1">A live app takes you ahead</div></div>
+<div class="pk-head" id="pk-h2"><div class="pk-eye">03 · Skills</div><div class="pk-title">Your skill combo</div><div class="pk-subl" id="pk-s2">Native + KMP: more value</div></div>
+<div class="pk-head" id="pk-h3"><div class="pk-eye">Bottom line</div><div class="pk-title">Every field can grow</div><div class="pk-subl" id="pk-s3">Two sides to every coin</div></div>
+<div class="pk-tag pk-up" id="pk-t-gur"><span class="pk-dot" style="--c:#F5F5F7"></span><span>Gurgaon</span></div>
+<div class="pk-tag pk-l" id="pk-t-blr"><span class="pk-dot" style="--c:#F5F5F7"></span><span>Bengaluru</span></div>
+<div class="pk-tag pk-r" id="pk-t-hyd"><span class="pk-dot" style="--c:#F5F5F7"></span><span>Hyderabad</span></div>
+<div class="pk-tag pk-dn" id="pk-t-town"><span class="pk-dot" style="--c:#6E6E73"></span><span>Small town</span></div>
+<div class="pk-tag pk-dn" id="pk-t-live"><span class="pk-dot" style="--c:#3DDC84"></span><span>Live on Play Store</span></div>
+<div class="pk-tag pk-r" id="pk-t-users"><span class="pk-dot" style="--c:#E8E8ED"></span><span>Real users</span></div>
+<div class="pk-tag pk-up" id="pk-t-ahead"><span class="pk-dot" style="--c:#F5F5F7"></span><span>Ahead of others</span></div>
+<div class="pk-tag pk-up" id="pk-t-intern"><span class="pk-dot" style="--c:#F5F5F7"></span><span>Internship</span></div>
+<div class="pk-tag pk-up" id="pk-t-and"><span class="pk-dot" style="--c:#3DDC84"></span><span>Native Android</span></div>
+<div class="pk-tag pk-up" id="pk-t-kmp"><span class="pk-dot" style="--c:#C711E1"></span><span>KMP</span></div>
+<div class="pk-tag pk-up" id="pk-t-ios"><span class="pk-dot" style="--c:#E8E8ED"></span><span>Shared logic with iOS</span></div>
+<div class="pk-tag pk-dn" id="pk-t-value"><span class="pk-dot" style="--c:#F5F5F7"></span><span>More market value</span></div>
+<div class="pk-tag pk-dn" id="pk-t-one"><span class="pk-dot" style="--c:#6E6E73"></span><span>Only one skill</span></div>
+<div class="pk-both" id="pk-both"><span class="pk-mono">Same for</span>
+<div class="pk-pill" id="pk-b0"><span class="pk-dot" style="--c:#3DDC84"></span>Native</div>
+<div class="pk-pill" id="pk-b1"><span class="pk-dot" style="--c:#54C5F8"></span>Cross-platform</div></div>
+<div class="pk-route" id="pk-route"><span id="pk-r0">City</span><i><b id="pk-rb0"></b></i>
+<span id="pk-r1">Projects</span><i><b id="pk-rb1"></b></i><span id="pk-r2">Skills</span></div>
+<div class="pk-vig"></div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "ave/": "https://cdn.jsdelivr.net/npm/three@0.187.0/ave/" } }
+</script>
+<script type="module">
+import * as K from 'ave/kit.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+const { THREE } = K;
+const P = [0.500, 1.060, 1.580, 2.680, 5.400, 7.920, 10.920, 16.080, 20.000, 21.400, 24.640, 27.840, 30.167, 33.547, 35.507, 36.267, 39.273, 42.093, 46.360, 49.720], E = 50.800, DOTS = [[-0.605,1.903],[-0.534,1.903],[-0.641,1.837],[-0.570,1.837],[-0.498,1.837],[-0.677,1.770],[-0.605,1.770],[-0.534,1.770],[-0.462,1.770],[-0.713,1.703],[-0.641,1.703],[-0.570,1.703],[-0.498,1.703],[-0.426,1.703],[-0.749,1.637],[-0.677,1.637],[-0.605,1.637],[-0.534,1.637],[-0.462,1.637],[-0.391,1.637],[-0.784,1.570],[-0.713,1.570],[-0.641,1.570],[-0.570,1.570],[-0.498,1.570],[-0.426,1.570],[-0.355,1.570],[-0.283,1.570],[1.364,1.570],[-0.749,1.503],[-0.677,1.503],[-0.605,1.503],[-0.534,1.503],[-0.462,1.503],[-0.391,1.503],[-0.319,1.503],[-0.784,1.436],[-0.713,1.436],[-0.641,1.436],[-0.570,1.436],[-0.498,1.436],[-0.426,1.436],[-0.355,1.436],[-0.892,1.370],[-0.820,1.370],[-0.749,1.370],[-0.677,1.370],[-0.605,1.370],[-0.534,1.370],[-0.462,1.370],[-0.391,1.370],[-0.319,1.370],[-0.856,1.303],[-0.784,1.303],[-0.713,1.303],[-0.641,1.303],[-0.570,1.303],[-0.498,1.303],[-0.426,1.303],[-0.355,1.303],[-0.283,1.303],[-0.892,1.236],[-0.820,1.236],[-0.749,1.236],[-0.677,1.236],[-0.605,1.236],[-0.534,1.236],[-0.462,1.236],[-0.391,1.236],[-0.319,1.236],[-0.247,1.236],[-0.928,1.170],[-0.856,1.170],[-0.784,1.170],[-0.713,1.170],[-0.641,1.170],[-0.570,1.170],[-0.498,1.170],[-0.426,1.170],[-0.355,1.170],[-0.283,1.170],[-0.963,1.103],[-0.892,1.103],[-0.820,1.103],[-0.749,1.103],[-0.677,1.103],[-0.605,1.103],[-0.534,1.103],[-0.462,1.103],[-0.391,1.103],[-0.319,1.103],[-0.247,1.103],[-0.999,1.036],[-0.928,1.036],[-0.856,1.036],[-0.784,1.036],[-0.713,1.036],[-0.641,1.036],[-0.570,1.036],[-0.498,1.036],[-0.426,1.036],[-0.355,1.036],[-0.283,1.036],[-1.035,0.970],[-0.963,0.970],[-0.892,0.970],[-0.820,0.970],[-0.749,0.970],[-0.677,0.970],[-0.605,0.970],[-0.534,0.970],[-0.462,0.970],[-0.391,0.970],[-0.319,0.970],[-0.999,0.903],[-0.928,0.903],[-0.856,0.903],[-0.784,0.903],[-0.713,0.903],[-0.641,0.903],[-0.570,0.903],[-0.498,0.903],[-0.426,0.903],[-0.355,0.903],[-0.283,0.903],[-1.107,0.836],[-1.035,0.836],[-0.963,0.836],[-0.892,0.836],[-0.820,0.836],[-0.749,0.836],[-0.677,0.836],[-0.605,0.836],[-0.534,0.836],[-0.462,0.836],[-0.391,0.836],[-0.319,0.836],[-0.247,0.836],[-0.176,0.836],[-1.071,0.770],[-0.999,0.770],[-0.928,0.770],[-0.856,0.770],[-0.784,0.770],[-0.713,0.770],[-0.641,0.770],[-0.570,0.770],[-0.498,0.770],[-0.426,0.770],[-0.355,0.770],[-0.283,0.770],[-0.212,0.770],[-0.140,0.770],[-0.068,0.770],[0.003,0.770],[-1.107,0.703],[-1.035,0.703],[-0.963,0.703],[-0.892,0.703],[-0.820,0.703],[-0.749,0.703],[-0.677,0.703],[-0.605,0.703],[-0.534,0.703],[-0.462,0.703],[-0.391,0.703],[-0.319,0.703],[-0.247,0.703],[-0.176,0.703],[-0.104,0.703],[-0.033,0.703],[-1.143,0.636],[-1.071,0.636],[-0.999,0.636],[-0.928,0.636],[-0.856,0.636],[-0.784,0.636],[-0.713,0.636],[-0.641,0.636],[-0.570,0.636],[-0.498,0.636],[-0.426,0.636],[-0.355,0.636],[-0.283,0.636],[-0.212,0.636],[-0.140,0.636],[-0.068,0.636],[0.003,0.636],[0.075,0.636],[-1.107,0.570],[-1.035,0.570],[-0.963,0.570],[-0.892,0.570],[-0.820,0.570],[-0.749,0.570],[-0.677,0.570],[-0.605,0.570],[-0.534,0.570],[-0.462,0.570],[-0.391,0.570],[-0.319,0.570],[-0.247,0.570],[-0.176,0.570],[-0.104,0.570],[-0.033,0.570],[0.039,0.570],[0.111,0.570],[0.182,0.570],[-1.143,0.503],[-1.071,0.503],[-0.999,0.503],[-0.928,0.503],[-0.856,0.503],[-0.784,0.503],[-0.713,0.503],[-0.641,0.503],[-0.570,0.503],[-0.498,0.503],[-0.426,0.503],[-0.355,0.503],[-0.283,0.503],[-0.212,0.503],[-0.140,0.503],[-0.068,0.503],[0.003,0.503],[0.075,0.503],[0.146,0.503],[0.218,0.503],[-1.107,0.436],[-1.035,0.436],[-0.963,0.436],[-0.892,0.436],[-0.820,0.436],[-0.749,0.436],[-0.677,0.436],[-0.605,0.436],[-0.534,0.436],[-0.462,0.436],[-0.391,0.436],[-0.319,0.436],[-0.247,0.436],[-0.176,0.436],[-0.104,0.436],[-0.033,0.436],[0.039,0.436],[0.111,0.436],[0.182,0.436],[0.254,0.436],[0.325,0.436],[-1.143,0.370],[-1.071,0.370],[-0.999,0.370],[-0.928,0.370],[-0.856,0.370],[-0.784,0.370],[-0.713,0.370],[-0.641,0.370],[-0.570,0.370],[-0.498,0.370],[-0.426,0.370],[-0.355,0.370],[-0.283,0.370],[-0.212,0.370],[-0.140,0.370],[-0.068,0.370],[0.003,0.370],[0.075,0.370],[0.146,0.370],[0.218,0.370],[0.290,0.370],[0.361,0.370],[-1.178,0.303],[-1.107,0.303],[-1.035,0.303],[-0.963,0.303],[-0.892,0.303],[-0.820,0.303],[-0.749,0.303],[-0.677,0.303],[-0.605,0.303],[-0.534,0.303],[-0.462,0.303],[-0.391,0.303],[-0.319,0.303],[-0.247,0.303],[-0.176,0.303],[-0.104,0.303],[-0.033,0.303],[0.039,0.303],[0.111,0.303],[0.182,0.303],[0.254,0.303],[0.325,0.303],[0.397,0.303],[0.469,0.303],[-1.143,0.236],[-1.071,0.236],[-0.999,0.236],[-0.928,0.236],[-0.856,0.236],[-0.784,0.236],[-0.713,0.236],[-0.641,0.236],[-0.570,0.236],[-0.498,0.236],[-0.426,0.236],[-0.355,0.236],[-0.283,0.236],[-0.212,0.236],[-0.140,0.236],[-0.068,0.236],[0.003,0.236],[0.075,0.236],[0.146,0.236],[0.218,0.236],[0.290,0.236],[0.361,0.236],[0.433,0.236],[0.505,0.236],[0.576,0.236],[-1.465,0.170],[-1.178,0.170],[-1.107,0.170],[-1.035,0.170],[-0.963,0.170],[-0.892,0.170],[-0.820,0.170],[-0.749,0.170],[-0.677,0.170],[-0.605,0.170],[-0.534,0.170],[-0.462,0.170],[-0.391,0.170],[-0.319,0.170],[-0.247,0.170],[-0.176,0.170],[-0.104,0.170],[-0.033,0.170],[0.039,0.170],[0.111,0.170],[0.182,0.170],[0.254,0.170],[0.325,0.170],[0.397,0.170],[0.469,0.170],[0.540,0.170],[0.612,0.170],[-1.501,0.103],[-1.429,0.103],[-1.357,0.103],[-1.214,0.103],[-1.143,0.103],[-1.071,0.103],[-0.999,0.103],[-0.928,0.103],[-0.856,0.103],[-0.784,0.103],[-0.713,0.103],[-0.641,0.103],[-0.570,0.103],[-0.498,0.103],[-0.426,0.103],[-0.355,0.103],[-0.283,0.103],[-0.212,0.103],[-0.140,0.103],[-0.068,0.103],[0.003,0.103],[0.075,0.103],[0.146,0.103],[0.218,0.103],[0.290,0.103],[0.361,0.103],[0.433,0.103],[0.505,0.103],[0.576,0.103],[-1.608,0.036],[-1.536,0.036],[-1.465,0.036],[-1.393,0.036],[-1.322,0.036],[-1.178,0.036],[-1.107,0.036],[-1.035,0.036],[-0.963,0.036],[-0.892,0.036],[-0.820,0.036],[-0.749,0.036],[-0.677,0.036],[-0.605,0.036],[-0.534,0.036],[-0.462,0.036],[-0.391,0.036],[-0.319,0.036],[-0.247,0.036],[-0.176,0.036],[-0.104,0.036],[-0.033,0.036],[0.039,0.036],[0.111,0.036],[0.182,0.036],[0.254,0.036],[0.325,0.036],[0.397,0.036],[0.469,0.036],[0.540,0.036],[0.612,0.036],[0.684,0.036],[0.755,0.036],[0.827,0.036],[0.898,0.036],[-1.644,-0.031],[-1.572,-0.031],[-1.501,-0.031],[-1.429,-0.031],[-1.357,-0.031],[-1.286,-0.031],[-1.143,-0.031],[-1.071,-0.031],[-0.999,-0.031],[-0.928,-0.031],[-0.856,-0.031],[-0.784,-0.031],[-0.713,-0.031],[-0.641,-0.031],[-0.570,-0.031],[-0.498,-0.031],[-0.426,-0.031],[-0.355,-0.031],[-0.283,-0.031],[-0.212,-0.031],[-0.140,-0.031],[-0.068,-0.031],[0.003,-0.031],[0.075,-0.031],[0.146,-0.031],[0.218,-0.031],[0.290,-0.031],[0.361,-0.031],[0.433,-0.031],[0.505,-0.031],[0.576,-0.031],[0.648,-0.031],[0.719,-0.031],[0.863,-0.031],[1.435,-0.031],[-1.465,-0.097],[-1.393,-0.097],[-1.322,-0.097],[-1.250,-0.097],[-1.178,-0.097],[-1.107,-0.097],[-1.035,-0.097],[-0.963,-0.097],[-0.892,-0.097],[-0.820,-0.097],[-0.749,-0.097],[-0.677,-0.097],[-0.605,-0.097],[-0.534,-0.097],[-0.462,-0.097],[-0.391,-0.097],[-0.319,-0.097],[-0.247,-0.097],[-0.176,-0.097],[-0.104,-0.097],[-0.033,-0.097],[0.039,-0.097],[0.111,-0.097],[0.182,-0.097],[0.254,-0.097],[0.325,-0.097],[0.397,-0.097],[0.469,-0.097],[0.540,-0.097],[0.612,-0.097],[0.684,-0.097],[0.755,-0.097],[0.827,-0.097],[0.898,-0.097],[1.400,-0.097],[-1.715,-0.164],[-1.644,-0.164],[-1.572,-0.164],[-1.501,-0.164],[-1.429,-0.164],[-1.357,-0.164],[-1.286,-0.164],[-1.214,-0.164],[-1.143,-0.164],[-1.071,-0.164],[-0.999,-0.164],[-0.928,-0.164],[-0.856,-0.164],[-0.784,-0.164],[-0.713,-0.164],[-0.641,-0.164],[-0.570,-0.164],[-0.498,-0.164],[-0.426,-0.164],[-0.355,-0.164],[-0.283,-0.164],[-0.212,-0.164],[-0.140,-0.164],[-0.068,-0.164],[0.003,-0.164],[0.075,-0.164],[0.146,-0.164],[0.218,-0.164],[0.290,-0.164],[0.361,-0.164],[0.433,-0.164],[0.505,-0.164],[0.576,-0.164],[0.648,-0.164],[0.719,-0.164],[0.791,-0.164],[0.863,-0.164],[1.364,-0.164],[1.435,-0.164],[-1.751,-0.231],[-1.680,-0.231],[-1.608,-0.231],[-1.536,-0.231],[-1.465,-0.231],[-1.393,-0.231],[-1.322,-0.231],[-1.250,-0.231],[-1.178,-0.231],[-1.107,-0.231],[-1.035,-0.231],[-0.963,-0.231],[-0.892,-0.231],[-0.820,-0.231],[-0.749,-0.231],[-0.677,-0.231],[-0.605,-0.231],[-0.534,-0.231],[-0.462,-0.231],[-0.391,-0.231],[-0.319,-0.231],[-0.247,-0.231],[-0.176,-0.231],[-0.104,-0.231],[-0.033,-0.231],[0.039,-0.231],[0.111,-0.231],[0.182,-0.231],[0.254,-0.231],[0.325,-0.231],[0.397,-0.231],[0.469,-0.231],[0.540,-0.231],[0.612,-0.231],[0.684,-0.231],[0.755,-0.231],[0.827,-0.231],[1.256,-0.231],[1.400,-0.231],[1.471,-0.231],[-1.715,-0.297],[-1.644,-0.297],[-1.572,-0.297],[-1.501,-0.297],[-1.429,-0.297],[-1.357,-0.297],[-1.286,-0.297],[-1.214,-0.297],[-1.143,-0.297],[-1.071,-0.297],[-0.999,-0.297],[-0.928,-0.297],[-0.856,-0.297],[-0.784,-0.297],[-0.713,-0.297],[-0.641,-0.297],[-0.570,-0.297],[-0.498,-0.297],[-0.426,-0.297],[-0.355,-0.297],[-0.283,-0.297],[-0.212,-0.297],[-0.140,-0.297],[-0.068,-0.297],[0.003,-0.297],[0.075,-0.297],[0.146,-0.297],[0.218,-0.297],[0.290,-0.297],[0.361,-0.297],[0.433,-0.297],[0.505,-0.297],[0.576,-0.297],[0.648,-0.297],[0.719,-0.297],[0.791,-0.297],[0.863,-0.297],[1.292,-0.297],[1.364,-0.297],[1.435,-0.297],[1.507,-0.297],[1.579,-0.297],[-1.393,-0.364],[-1.322,-0.364],[-1.250,-0.364],[-1.178,-0.364],[-1.107,-0.364],[-1.035,-0.364],[-0.963,-0.364],[-0.892,-0.364],[-0.820,-0.364],[-0.749,-0.364],[-0.677,-0.364],[-0.605,-0.364],[-0.534,-0.364],[-0.462,-0.364],[-0.391,-0.364],[-0.319,-0.364],[-0.247,-0.364],[-0.176,-0.364],[-0.104,-0.364],[-0.033,-0.364],[0.039,-0.364],[0.111,-0.364],[0.182,-0.364],[0.254,-0.364],[0.325,-0.364],[0.397,-0.364],[0.469,-0.364],[0.540,-0.364],[0.612,-0.364],[0.684,-0.364],[0.755,-0.364],[1.328,-0.364],[1.400,-0.364],[1.471,-0.364],[1.543,-0.364],[1.614,-0.364],[-1.429,-0.431],[-1.357,-0.431],[-1.286,-0.431],[-1.214,-0.431],[-1.143,-0.431],[-1.071,-0.431],[-0.999,-0.431],[-0.928,-0.431],[-0.856,-0.431],[-0.784,-0.431],[-0.713,-0.431],[-0.641,-0.431],[-0.570,-0.431],[-0.498,-0.431],[-0.426,-0.431],[-0.355,-0.431],[-0.283,-0.431],[-0.212,-0.431],[-0.140,-0.431],[-0.068,-0.431],[0.003,-0.431],[0.075,-0.431],[0.146,-0.431],[0.218,-0.431],[0.290,-0.431],[0.361,-0.431],[0.433,-0.431],[0.505,-0.431],[0.576,-0.431],[0.648,-0.431],[0.719,-0.431],[0.791,-0.431],[1.364,-0.431],[1.435,-0.431],[1.507,-0.431],[1.579,-0.431],[1.650,-0.431],[-1.465,-0.497],[-1.393,-0.497],[-1.322,-0.497],[-1.250,-0.497],[-1.178,-0.497],[-1.107,-0.497],[-1.035,-0.497],[-0.963,-0.497],[-0.892,-0.497],[-0.820,-0.497],[-0.749,-0.497],[-0.677,-0.497],[-0.605,-0.497],[-0.534,-0.497],[-0.462,-0.497],[-0.391,-0.497],[-0.319,-0.497],[-0.247,-0.497],[-0.176,-0.497],[-0.104,-0.497],[-0.033,-0.497],[0.039,-0.497],[0.111,-0.497],[0.182,-0.497],[0.254,-0.497],[0.325,-0.497],[0.397,-0.497],[0.469,-0.497],[0.540,-0.497],[0.612,-0.497],[0.684,-0.497],[0.755,-0.497],[0.827,-0.497],[1.042,-0.497],[1.113,-0.497],[1.185,-0.497],[1.256,-0.497],[1.328,-0.497],[1.400,-0.497],[1.471,-0.497],[1.543,-0.497],[1.614,-0.497],[-1.501,-0.564],[-1.429,-0.564],[-1.357,-0.564],[-1.286,-0.564],[-1.214,-0.564],[-1.143,-0.564],[-1.071,-0.564],[-0.999,-0.564],[-0.928,-0.564],[-0.856,-0.564],[-0.784,-0.564],[-0.713,-0.564],[-0.641,-0.564],[-0.570,-0.564],[-0.498,-0.564],[-0.426,-0.564],[-0.355,-0.564],[-0.283,-0.564],[-0.212,-0.564],[-0.140,-0.564],[-0.068,-0.564],[0.003,-0.564],[0.075,-0.564],[0.146,-0.564],[0.218,-0.564],[0.290,-0.564],[0.361,-0.564],[0.433,-0.564],[0.505,-0.564],[0.576,-0.564],[0.648,-0.564],[0.719,-0.564],[0.791,-0.564],[1.077,-0.564],[1.149,-0.564],[1.221,-0.564],[1.292,-0.564],[1.364,-0.564],[1.435,-0.564],[1.507,-0.564],[1.579,-0.564],[1.650,-0.564],[-1.536,-0.631],[-1.465,-0.631],[-1.393,-0.631],[-1.322,-0.631],[-1.250,-0.631],[-1.178,-0.631],[-1.107,-0.631],[-1.035,-0.631],[-0.963,-0.631],[-0.892,-0.631],[-0.820,-0.631],[-0.749,-0.631],[-0.677,-0.631],[-0.605,-0.631],[-0.534,-0.631],[-0.462,-0.631],[-0.391,-0.631],[-0.319,-0.631],[-0.247,-0.631],[-0.176,-0.631],[-0.104,-0.631],[-0.033,-0.631],[0.039,-0.631],[0.111,-0.631],[0.182,-0.631],[0.254,-0.631],[0.325,-0.631],[0.397,-0.631],[0.469,-0.631],[0.540,-0.631],[0.898,-0.631],[0.970,-0.631],[1.042,-0.631],[1.113,-0.631],[1.185,-0.631],[1.256,-0.631],[1.328,-0.631],[1.400,-0.631],[1.471,-0.631],[1.543,-0.631],[1.614,-0.631],[1.686,-0.631],[-1.572,-0.697],[-1.501,-0.697],[-1.429,-0.697],[-1.357,-0.697],[-1.286,-0.697],[-1.214,-0.697],[-1.143,-0.697],[-1.071,-0.697],[-0.999,-0.697],[-0.928,-0.697],[-0.856,-0.697],[-0.784,-0.697],[-0.713,-0.697],[-0.641,-0.697],[-0.570,-0.697],[-0.498,-0.697],[-0.426,-0.697],[-0.355,-0.697],[-0.283,-0.697],[-0.212,-0.697],[-0.140,-0.697],[-0.068,-0.697],[0.003,-0.697],[0.075,-0.697],[0.146,-0.697],[0.218,-0.697],[0.290,-0.697],[0.361,-0.697],[0.791,-0.697],[0.863,-0.697],[1.364,-0.697],[1.435,-0.697],[1.507,-0.697],[1.579,-0.697],[1.650,-0.697],[1.722,-0.697],[1.794,-0.697],[-1.536,-0.764],[-1.465,-0.764],[-1.393,-0.764],[-1.322,-0.764],[-1.250,-0.764],[-1.178,-0.764],[-1.107,-0.764],[-1.035,-0.764],[-0.963,-0.764],[-0.892,-0.764],[-0.820,-0.764],[-0.749,-0.764],[-0.677,-0.764],[-0.605,-0.764],[-0.534,-0.764],[-0.462,-0.764],[-0.391,-0.764],[-0.319,-0.764],[-0.247,-0.764],[-0.176,-0.764],[-0.104,-0.764],[-0.033,-0.764],[0.039,-0.764],[0.111,-0.764],[0.827,-0.764],[1.328,-0.764],[1.400,-0.764],[1.471,-0.764],[1.543,-0.764],[1.614,-0.764],[1.686,-0.764],[1.758,-0.764],[1.829,-0.764],[1.901,-0.764],[-1.501,-0.831],[-1.286,-0.831],[-1.214,-0.831],[-1.143,-0.831],[-1.071,-0.831],[-0.999,-0.831],[-0.928,-0.831],[-0.856,-0.831],[-0.784,-0.831],[-0.713,-0.831],[-0.641,-0.831],[-0.570,-0.831],[-0.498,-0.831],[-0.426,-0.831],[-0.355,-0.831],[-0.283,-0.831],[-0.212,-0.831],[-0.140,-0.831],[-0.068,-0.831],[0.863,-0.831],[1.435,-0.831],[1.507,-0.831],[1.579,-0.831],[1.650,-0.831],[1.722,-0.831],[1.794,-0.831],[1.865,-0.831],[1.937,-0.831],[-1.250,-0.897],[-1.178,-0.897],[-1.107,-0.897],[-1.035,-0.897],[-0.963,-0.897],[-0.892,-0.897],[-0.820,-0.897],[-0.749,-0.897],[-0.677,-0.897],[-0.605,-0.897],[-0.534,-0.897],[-0.462,-0.897],[-0.391,-0.897],[-0.319,-0.897],[-0.247,-0.897],[-0.176,-0.897],[1.471,-0.897],[1.543,-0.897],[1.614,-0.897],[1.686,-0.897],[1.758,-0.897],[1.829,-0.897],[1.901,-0.897],[-1.214,-0.964],[-1.143,-0.964],[-1.071,-0.964],[-0.999,-0.964],[-0.928,-0.964],[-0.856,-0.964],[-0.784,-0.964],[-0.713,-0.964],[-0.641,-0.964],[-0.570,-0.964],[-0.498,-0.964],[-0.426,-0.964],[-0.355,-0.964],[-0.283,-0.964],[1.579,-0.964],[1.650,-0.964],[1.722,-0.964],[1.794,-0.964],[1.865,-0.964],[-1.107,-1.031],[-1.035,-1.031],[-0.963,-1.031],[-0.892,-1.031],[-0.820,-1.031],[-0.749,-1.031],[-0.677,-1.031],[-0.605,-1.031],[-0.534,-1.031],[-0.462,-1.031],[-0.391,-1.031],[-0.319,-1.031],[-0.247,-1.031],[1.829,-1.031],[-1.071,-1.097],[-0.999,-1.097],[-0.928,-1.097],[-0.856,-1.097],[-0.784,-1.097],[-0.713,-1.097],[-0.641,-1.097],[-0.570,-1.097],[-0.498,-1.097],[-0.426,-1.097],[-0.355,-1.097],[-0.283,-1.097],[-0.212,-1.097],[-1.035,-1.164],[-0.963,-1.164],[-0.892,-1.164],[-0.820,-1.164],[-0.749,-1.164],[-0.677,-1.164],[-0.605,-1.164],[-0.534,-1.164],[-0.462,-1.164],[-0.391,-1.164],[-0.319,-1.164],[-0.247,-1.164],[-0.176,-1.164],[-0.999,-1.231],[-0.928,-1.231],[-0.856,-1.231],[-0.784,-1.231],[-0.713,-1.231],[-0.641,-1.231],[-0.570,-1.231],[-0.498,-1.231],[-0.426,-1.231],[-0.355,-1.231],[-0.283,-1.231],[-0.963,-1.297],[-0.892,-1.297],[-0.820,-1.297],[-0.749,-1.297],[-0.677,-1.297],[-0.605,-1.297],[-0.534,-1.297],[-0.462,-1.297],[-0.391,-1.297],[-0.928,-1.364],[-0.856,-1.364],[-0.784,-1.364],[-0.713,-1.364],[-0.641,-1.364],[-0.570,-1.364],[-0.498,-1.364],[-0.820,-1.431],[-0.749,-1.431],[-0.677,-1.431],[-0.605,-1.431],[-0.534,-1.431],[-0.462,-1.431],[-0.999,-1.498],[-0.928,-1.498],[-0.856,-1.498],[-0.784,-1.498],[-0.713,-1.498],[-0.641,-1.498],[-0.570,-1.498],[-0.498,-1.498],[-0.426,-1.498],[-1.035,-1.564],[-0.963,-1.564],[-0.892,-1.564],[-0.820,-1.564],[-0.749,-1.564],[-0.677,-1.564],[-0.605,-1.564],[-0.534,-1.564],[-0.462,-1.564],[-0.391,-1.564],[-1.071,-1.631],[-0.999,-1.631],[-0.928,-1.631],[-0.856,-1.631],[-0.784,-1.631],[-0.713,-1.631],[-0.641,-1.631],[-0.570,-1.631],[-0.498,-1.631],[-0.426,-1.631],[-0.355,-1.631],[-1.035,-1.698],[-0.963,-1.698],[-0.892,-1.698],[-0.820,-1.698],[-0.749,-1.698],[-0.677,-1.698],[-0.605,-1.698],[-0.534,-1.698],[-0.462,-1.698],[-0.391,-1.698],[-0.319,-1.698],[-1.071,-1.764],[-0.999,-1.764],[-0.928,-1.764],[-0.856,-1.764],[-0.784,-1.764],[-0.713,-1.764],[-0.641,-1.764],[-0.570,-1.764],[-0.498,-1.764],[-0.426,-1.764],[-0.355,-1.764],[-0.283,-1.764],[-1.107,-1.831],[-1.035,-1.831],[-0.963,-1.831],[-0.892,-1.831],[-0.820,-1.831],[-0.749,-1.831],[-0.677,-1.831],[-0.605,-1.831],[-0.534,-1.831],[-0.462,-1.831],[-0.391,-1.831],[-0.319,-1.831],[-0.247,-1.831],[-1.214,-1.898],[-1.143,-1.898],[-1.071,-1.898],[-0.999,-1.898],[-0.928,-1.898],[-0.856,-1.898],[-0.784,-1.898],[-0.713,-1.898],[-0.641,-1.898],[-0.570,-1.898],[-0.498,-1.898],[-0.426,-1.898],[-0.355,-1.898],[-0.283,-1.898],[-1.178,-1.964],[-1.107,-1.964],[-1.035,-1.964],[-0.963,-1.964],[-0.892,-1.964],[-0.820,-1.964],[-0.749,-1.964],[-0.677,-1.964],[-1.143,-2.031],[-1.071,-2.031],[-0.999,-2.031],[-0.928,-2.031],[-0.856,-2.031],[-0.784,-2.031],[-0.963,-2.098]];
+const AN = 0x3DDC84, SILVER = 0xE8E8ED, MAG = 0xC711E1;
+const pr = (t, a, d = 0.6, e = K.ease.out) => K.prog(t, a, d, e);
+const env = (t, a, b, fi = 0.5, fo = 0.4) => Math.min(pr(t, a, fi), 1 - pr(t, b, fo, K.ease.inOut));
+const $ = id => document.getElementById(id);
+const bob = (o, t, amp = 0.03, ph = 0) => { o.position.y += Math.sin(t * 1.1 + ph) * amp; };
+async function img(id) {
+  const href = $(id).href;
+  let src = href;
+  const txt = await new Promise(res => { try { const x = new XMLHttpRequest(); x.open('GET', href);
+    x.onload = () => res(x.responseText || null); x.onerror = () => res(null); x.send(); } catch (e) { res(null); } });
+  if (txt && /<svg/i.test(txt)) {
+    const vb = /viewBox\s*=\s*["']\s*([-\d.]+)[\s,]+([-\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(txt);
+    const svg = vb && !/<svg[^>]*\swidth\s*=/i.test(txt) ? txt.replace(/<svg/i, `<svg width="${vb[3]}" height="${vb[4]}"`) : txt;
+    src = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  }
+  const im = new Image(); im.src = src; await im.decode(); return im;
+}
+function decal(im, size, glow = 1) {
+  const c = document.createElement('canvas'); c.width = c.height = 512;
+  const g = c.getContext('2d'), ar = (im.naturalWidth || 1) / (im.naturalHeight || 1);
+  const w = ar >= 1 ? 440 : 440 * ar, h = ar >= 1 ? 440 / ar : 440;
+  g.drawImage(im, (512 - w) / 2, (512 - h) / 2, w, h);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const m = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }); m.color.setScalar(glow);
+  return new THREE.Mesh(new THREE.PlaneGeometry(size, size), m);
+}
+function pchip(keys, t, f) {
+  const n = keys.length;
+  if (t <= keys[0].t) return keys[0][f].slice();
+  if (t >= keys[n - 1].t) return keys[n - 1][f].slice();
+  let i = 0; while (i < n - 2 && t > keys[i + 1].t) i++;
+  const T = keys.map(k => k.t), out = [];
+  for (let c = 0; c < 3; c++) {
+    const Y = keys.map(k => k[f][c]);
+    const h = j => T[j + 1] - T[j], d = j => (Y[j + 1] - Y[j]) / h(j);
+    const m = j => {
+      if (j === 0 || j === n - 1) return 0;
+      const d0 = d(j - 1), d1 = d(j);
+      if (d0 * d1 <= 0) return 0;
+      const w1 = 2 * h(j) + h(j - 1), w2 = h(j) + 2 * h(j - 1);
+      return (w1 + w2) / (w1 / d0 + w2 / d1);
+    };
+    const hh = h(i), u = (t - T[i]) / hh, u2 = u * u, u3 = u2 * u;
+    out.push((2 * u3 - 3 * u2 + 1) * Y[i] + (u3 - 2 * u2 + u) * hh * m(i) + (-2 * u3 + 3 * u2) * Y[i + 1]
+             + (u3 - u2) * hh * m(i + 1));
+  }
+  return out;
+}
+function tube(pts, color, width = 0.008, intensity = 1.5) {
+  const m = K.line(pts, { color, width, intensity });
+  m.userData.count = m.geometry.index.count; m.geometry.setDrawRange(0, 0);
+  m.userData.curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
+  return m;
+}
+function draw(m, k) { m.visible = k > 0.002; m.geometry.setDrawRange(0, Math.floor(m.userData.count * k / 6) * 6); }
+const bead = (color, r = 0.03, i = 2.0) => new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), K.mat.glow(color, { intensity: i }));
+const anchor = (parent, x, y, z) => { const o = new THREE.Object3D(); o.position.set(x, y, z); parent.add(o); return o; };
+const ti = (c = 0x4a4d53, r = 0.42) => new THREE.MeshPhysicalMaterial({ color: c, metalness: 0.9, roughness: r });
+const ink = () => new THREE.MeshPhysicalMaterial({ color: 0x141518, metalness: 0.4, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.14 });
+
+window.renderReady = (async () => {
+  const s = K.stage({ cam: [0.2, 7.8, 8.4], target: [0.05, 0.35, 0.25], fov: 35, bg: 0x050506, floor: false,
+    fogNear: 9, fogFar: 26, bloomStrength: 0.3, rimColor: 0xbfd0ff, rim: 0.7, key: 1.9, front: 0.5, env: 0.5,
+    shadowBox: 5, dof: { focus: 10, aperture: 0.0006, maxblur: 0.003 } });
+  s.scene.fog.color.set(0x08090b);
+  s.camera.setViewOffset(s.W, s.H, 290, -30, s.W, s.H);          // subject centred in the card area (x 120-1220)
+  s.add(s.lights.key.target);
+  const [imPlay, imK] = await Promise.all([img('pk-play'), img('pk-kmpimg')]);
+
+  const refl = new Reflector(new THREE.PlaneGeometry(200, 200), { textureWidth: 960, textureHeight: 540,
+    color: 0x5c5f65, clipBias: 0.003 });
+  refl.rotation.x = -Math.PI / 2; refl.position.set(14, -0.004, 0); s.add(refl);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshStandardMaterial({
+    color: 0x0b0c0f, roughness: 0.6, metalness: 0.3, transparent: true, opacity: 0.86, envMapIntensity: 0.2 }));
+  floor.rotation.x = -Math.PI / 2; floor.position.set(14, 0, 0); floor.receiveShadow = true; s.add(floor);
+  const dust = K.dust({ count: 900, spread: [44, 6, 16], seed: 9, color: 0xcfd3da, size: 0.026, opacity: 0.3 });
+  dust.points.position.set(14, 0, 0); s.add(dust.points);
+
+  // ================= 01 City: India dot-map + titanium pins =================
+  const M = s.add(new THREE.Group());
+  const N = DOTS.length, dm = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.03, 0.03, 0.022, 14),
+    new THREE.MeshStandardMaterial({ color: 0x9a9da4, metalness: 0.85, roughness: 0.32, emissive: 0xdfe3ea,
+      emissiveIntensity: 0.16 }), N);
+  dm.receiveShadow = true; M.add(dm);
+  const dmx = new THREE.Matrix4(), dq = new THREE.Quaternion(), ds = new THREE.Vector3(), dp = new THREE.Vector3();
+  const geo = (lat, lon) => [(lon - 82) * 0.14 * 0.93, -(lat - 22) * 0.14];
+  const pinMat = new THREE.MeshStandardMaterial({ color: 0xc9ccd2, metalness: 1, roughness: 0.22 });
+  function mkPin(lat, lon, dim) {
+    const [x, z] = geo(lat, lon), g = new THREE.Group(); g.position.set(x, 0, z); M.add(g);
+    const needle = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 1, 12).translate(0, 0.5, 0),
+      dim ? ti(0x5e6168, 0.5) : pinMat);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.075, 32, 24), dim ? ti(0x6a6d74, 0.45) :
+      new THREE.MeshPhysicalMaterial({ color: 0xe3e5ea, metalness: 1, roughness: 0.16, clearcoat: 1 }));
+    needle.castShadow = head.castShadow = true;
+    const ring = K.ring(0.15, { tube: 0.006, material: K.mat.glow(dim ? 0x8e9198 : 0xe8ecf3, { intensity: dim ? 0.8 : 1.6 }) });
+    ring.position.y = 0.02; g.add(needle, head, ring);
+    return { g, needle, head, ring, x, z };
+  }
+  const pins = [mkPin(28.46, 77.03), mkPin(12.97, 77.59), mkPin(17.39, 78.49)];   // Gurgaon, Bengaluru, Hyderabad
+  const town = mkPin(25.3, 86.0, true);
+  const arcs = [[0, 2], [2, 1]].map(([a, b]) => {
+    const A = pins[a], B = pins[b], mx = (A.x + B.x) / 2 + 0.25, mz = (A.z + B.z) / 2;
+    return tube([[A.x, 0.03, A.z], [mx, 0.42, mz], [B.x, 0.03, B.z]], 0xe8ecf3, 0.006, 1.3);
+  });
+  M.add(...arcs);
+  const arcBeads = arcs.map(() => M.add(bead(0xf2f4f8, 0.022)) && M.children.at(-1));
+
+  // ================= 02 Projects: phone, users, resumes, internship =================
+  const S2 = s.add(new THREE.Group()); S2.position.set(14, 0, 0);
+  const phone = new THREE.Group(); phone.position.set(-0.8, 1.22, 0); phone.rotation.y = 0.2; S2.add(phone);
+  phone.add(K.slab(1.12, 2.3, { depth: 0.11, radius: 0.17, material: ti(0x8a8d94, 0.3) }));
+  const sc = document.createElement('canvas'); sc.width = 400; sc.height = 864;
+  const sg = sc.getContext('2d'), stex = new THREE.CanvasTexture(sc); stex.colorSpace = THREE.SRGBColorSpace; stex.anisotropy = 8;
+  let lastK = -1, lastL = -1;
+  function paint(live, k) {
+    if (Math.abs(live - lastL) < 0.004 && Math.abs(k - lastK) < 0.004) return;
+    lastL = live; lastK = k;
+    const g = sg, gr = g.createLinearGradient(0, 0, 0, 864); gr.addColorStop(0, '#111216'); gr.addColorStop(1, '#0a0b0d');
+    g.fillStyle = gr; g.fillRect(0, 0, 400, 864);
+    g.globalAlpha = 1; g.fillStyle = '#2a2c31'; g.beginPath(); g.roundRect(150, 26, 100, 22, 11); g.fill();
+    g.globalAlpha = 0.25 + 0.75 * live;
+    const L = 150, x0 = 200 - L / 2, y0 = 120;
+    g.drawImage(imPlay, x0, y0, L, L);
+    g.globalAlpha = 1; g.fillStyle = '#3a3c42';
+    g.beginPath(); g.roundRect(80, 310, 240, 18, 9); g.fill();
+    g.beginPath(); g.roundRect(120, 344, 160, 14, 7); g.fill();
+    g.fillStyle = `rgba(61,220,132,${0.2 + 0.8 * live})`; g.beginPath(); g.roundRect(150, 384, 100, 34, 17); g.fill();
+    g.fillStyle = '#1b1d21'; g.beginPath(); g.roundRect(36, 470, 328, 330, 26); g.fill();
+    if (k > 0.001) {                       // rising usage curve (shape only, no numbers)
+      const pts = []; for (let i = 0; i <= 60 * k; i++) { const u = i / 60; pts.push([60 + u * 280, 760 - (Math.pow(u, 1.7) * 230 + Math.sin(u * 9) * 10 * u)]); }
+      const fg = g.createLinearGradient(0, 520, 0, 760); fg.addColorStop(0, 'rgba(232,236,243,.28)'); fg.addColorStop(1, 'rgba(232,236,243,0)');
+      g.fillStyle = fg; g.beginPath(); g.moveTo(pts[0][0], 760); pts.forEach(p => g.lineTo(...p)); g.lineTo(pts.at(-1)[0], 760); g.fill();
+      g.strokeStyle = '#eef1f6'; g.lineWidth = 4; g.lineJoin = 'round'; g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(...p) : g.moveTo(...p)); g.stroke();
+      g.fillStyle = '#ffffff'; g.beginPath(); g.arc(...pts.at(-1), 7, 0, 7); g.fill();
+    }
+    stex.needsUpdate = true;
+  }
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 2.16), new THREE.MeshBasicMaterial({ map: stex, transparent: true }));
+  screen.material.color.setScalar(0.95); screen.position.z = 0.057; phone.add(screen);
+  const aLive = anchor(phone, 0, -1.2, 0.06), aUsers = anchor(phone, 0.56, 0.35, 0.06);
+  const NB = 26, ub = [], rb = K.rng(7);
+  for (let i = 0; i < NB; i++) {
+    const b = bead(0xf2f4f8, 0.028, 1.8); S2.add(b);
+    b.userData.s = new THREE.Vector3(-0.8 + 1.4 + rb() * 1.4, 0.6 + rb() * 2.0, -1.4 - rb() * 1.6);
+    b.userData.c = new THREE.Vector3(-0.8 + 0.9 + rb() * 0.6, 2.6 + rb() * 0.6, -0.4); ub.push(b);
+  }
+  const phoneScreenW = new THREE.Vector3();
+  const cards = [], CX = [0.55, 1.2, 1.85, 2.5];
+  for (const [i, x] of CX.entries()) {
+    const g = new THREE.Group(); g.position.set(x, 0.42, -0.25); g.rotation.y = -0.12; S2.add(g);
+    g.add(K.slab(0.5, 0.7, { depth: 0.035, radius: 0.05, material: ink() }));
+    const lm = c => new THREE.MeshBasicMaterial({ color: c, transparent: true });
+    const av = new THREE.Mesh(new THREE.CircleGeometry(0.06, 24), lm(i === 1 ? 0xe8ecf3 : 0x6a6d74)); av.position.set(-0.13, 0.22, 0.02); g.add(av);
+    [[0.04, 0.24, 0.2], [0.04, 0.16, 0.15], [0, 0.04, 0.36], [0, -0.06, 0.3], [0, -0.16, 0.34], [0, -0.26, 0.22]].forEach(([dx, y, w], j) => {
+      const ln = new THREE.Mesh(new THREE.PlaneGeometry(w, j < 2 ? 0.03 : 0.022), lm(j < 2 && i === 1 ? 0xc9ccd2 : 0x45484e));
+      ln.position.set(dx + (j < 2 ? 0.02 : -0.18 + w / 2), y, 0.02); g.add(ln);
+    });
+    const edge = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(0.5, 0.7)),
+      new THREE.LineBasicMaterial({ color: new THREE.Color(0xffffff).multiplyScalar(1.4), transparent: true, opacity: 0, toneMapped: false }));
+    edge.position.z = 0.019; g.add(edge); g.userData.edge = edge;
+    cards.push(g);
+  }
+  const mine = cards[1];
+  const brief = await K.iconTile('briefcase', { size: 0.46, color: 0xd9dbe0, halo: false });
+  brief.position.set(1.62, 1.12, 0.75); S2.add(brief);
+
+  // ================= 03 Skills: Native Android + KMP -> iOS, value plinth, one-skill tile =================
+  const S3 = s.add(new THREE.Group()); S3.position.set(28, 0, 0);
+  const trio = new THREE.Group(); S3.add(trio);
+  const tAnd = await K.iconTile('android-logo', { size: 0.78, color: AN, halo: false }); tAnd.position.set(-1.4, 1.25, 0);
+  const tK = new THREE.Group(); tK.position.set(0.1, 1.25, 0);
+  tK.add(K.slab(0.78, 0.78, { depth: 0.14, radius: 0.19, material: ink() }));
+  const kd = decal(imK, 0.44, 1.05); kd.position.z = 0.075; tK.add(kd);
+  const tI = await K.iconTile('apple-logo', { size: 0.78, color: SILVER, halo: false }); tI.position.set(1.55, 1.25, 0);
+  const plus = new THREE.Group(); plus.position.set(-0.65, 1.25, 0);
+  plus.add(K.box(0.26, 0.04, 0.04, { radius: 0.015, material: ti(0xc9ccd2, 0.25) }), K.box(0.04, 0.26, 0.04, { radius: 0.015, material: ti(0xc9ccd2, 0.25) }));
+  trio.add(tAnd, tK, tI, plus);
+  const link = tube([[0.52, 1.25, 0], [0.82, 1.3, 0.05], [1.13, 1.25, 0]], MAG, 0.012, 1.6); trio.add(link);
+  const lb = [bead(0xd9b6ff, 0.03), bead(0xffb3c7, 0.03)]; trio.add(...lb);
+  const ped = K.box(3.9, 0.36, 1.1, { radius: 0.05, material: ti(0x4a4d53, 0.44) }); ped.position.set(0.05, -0.2, 0); S3.add(ped);
+  const pedEdge = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(3.9 * 1.003, 0.36, 1.1 * 1.003)),
+    new THREE.LineBasicMaterial({ color: new THREE.Color(0xffffff).multiplyScalar(1.5), transparent: true, opacity: 0, toneMapped: false }));
+  ped.add(pedEdge);
+  const lone = new THREE.Group(); lone.position.set(2.75, 0, 0.55); S3.add(lone);
+  const lped = K.box(0.86, 0.1, 0.86, { radius: 0.03, material: ti(0x3e4146, 0.5) }); lped.position.y = 0.05; lone.add(lped);
+  const lt = await K.iconTile('android-logo', { size: 0.56, color: 0x8e9198, halo: false }); lt.position.y = 0.62; lone.add(lt);
+  const aVal = anchor(ped, 0, -0.18, 0.56), aOne = anchor(lone, 0, 0.0, 0.43);
+
+  // ================= camera =================
+  const KEYS = [
+    { t: 0, p: [0.35, 8.4, 9.0], q: [0.05, 0.35, 0.25] },
+    { t: P[5] + 1.2, p: [0.1, 7.3, 7.9], q: [0.05, 0.4, 0.25] },
+    { t: P[7] - 1.7, p: [-0.1, 7.0, 7.6], q: [0.05, 0.45, 0.25] },
+    { t: P[7] + 0.3, p: [14.7, 2.9, 7.9], q: [14.5, 1.15, 0] },
+    { t: P[12] - 0.55, p: [14.3, 2.7, 7.3], q: [14.5, 1.1, 0] },
+    { t: P[12] + 1.2, p: [28.8, 2.9, 9.1], q: [28.6, 1.05, 0] },
+    { t: P[17] + 0.6, p: [28.6, 2.9, 9.6], q: [28.6, 1.05, 0] },
+    { t: E, p: [28.5, 3.3, 10.3], q: [28.6, 1.1, 0] },
+  ];
+  const TAG = {
+    gur: [pins[0].head, [0, 0.1, 0], P[0] - 0.05, P[7] - 1.9], blr: [pins[1].head, [-0.09, 0, 0], P[1] - 0.05, P[7] - 1.9],
+    hyd: [pins[2].head, [0.09, 0, 0], P[2] - 0.05, P[7] - 1.9], town: [town.g, [0, 0, 0.18], P[5] - 0.05, P[7] - 1.9],
+    live: [aLive, [0, 0, 0], P[8], P[12] - 0.6], users: [aUsers, [0, 0, 0], P[9], P[10] - 0.3],
+    ahead: [mine, [0, 0.36, 0], P[10] - 0.05, P[11] - 0.4], intern: [brief, [0, 0.3, 0], P[11], P[12] - 0.6],
+    and: [tAnd, [0, 0.42, 0], P[13], P[18] - 0.4], kmp: [tK, [0, 0.42, 0], P[14], P[18] - 0.4],
+    ios: [tI, [0, 0.42, 0], P[15], P[18] - 0.4], value: [aVal, [0, 0, 0], P[16], E], one: [aOne, [0, 0, 0], P[17], E],
+  };
+  const tagEl = Object.fromEntries(Object.keys(TAG).map(k => [k, $('pk-t-' + k)]));
+  const HEAD = [[0.0, P[7] - 1.5, P[4]], [P[7] - 0.7, P[12] - 0.7, P[10]], [P[12] - 0.4, P[18] - 0.75, P[16]], [P[18] - 0.5, E + 9, P[19]]];
+  const heads = [0, 1, 2, 3].map(k => [$('pk-h' + k), $('pk-s' + k)]);
+  const both = $('pk-both'), bp = [$('pk-b0'), $('pk-b1')], route = $('pk-route');
+  const rs = [0, 1, 2].map(k => $('pk-r' + k)), rbar = [$('pk-rb0'), $('pk-rb1')];
+  const F = new THREE.Vector3();
+
+  K.run(s, t => {
+    s.camera.position.set(...pchip(KEYS, t, 'p')); s.target.set(...pchip(KEYS, t, 'q'));
+    F.set(s.target.x, 0, s.target.z);
+    s.lights.key.position.set(F.x - 3.5, 7, F.z - 2.5); s.lights.key.target.position.copy(F);
+    if (s.dof) s.dof.uniforms['focus'].value = s.camera.position.distanceTo(s.target);
+    dust.update(t);
+
+    // 01 map
+    for (let i = 0; i < N; i++) {
+      const [x, z] = DOTS[i], k = pr(t, Math.max(0, (x + 2.2) * 0.06 + (z + 2.2) * 0.05) - 0.05, 0.3);
+      dp.set(x, 0.011, z); ds.setScalar(Math.max(k, 0.0001)); dmx.compose(dp, dq, ds); dm.setMatrixAt(i, dmx);
+    }
+    dm.instanceMatrix.needsUpdate = true;
+    const grow = pr(t, P[4] - 0.6, 0.6, K.ease.inOut);
+    pins.forEach((p, i) => {
+      const k = pr(t, P[i] - 0.44, 0.42, K.ease.out), H = (1.0 + 0.7 * grow) * k;
+      p.g.visible = k > 0.002; p.needle.scale.y = Math.max(H, 0.001); p.head.position.y = H;
+      p.head.scale.setScalar(0.4 + 0.6 * k); p.ring.scale.setScalar(0.3 + 0.7 * k + 0.25 * grow);
+      p.ring.material.opacity = k;
+    });
+    const tk = pr(t, P[5] - 0.5, 0.45);
+    town.g.visible = tk > 0.002; town.needle.scale.y = Math.max(0.5 * tk, 0.001); town.head.position.y = 0.5 * tk;
+    town.head.scale.setScalar(0.4 + 0.6 * tk); town.ring.material.opacity = tk;
+    arcs.forEach((a, i) => {
+      draw(a, pr(t, P[3] - 0.6 + i * 0.2, 0.55, K.ease.inOut));
+      const on = pr(t, P[3] + 0.1, 0.3), u = (t * 0.45 + i * 0.5) % 1;
+      arcBeads[i].visible = on > 0.01; arcBeads[i].position.copy(a.userData.curve.getPoint(u)); arcBeads[i].scale.setScalar(on);
+    });
+
+    // 02 projects
+    K.enter(phone, pr(t, P[7] - 0.8, 0.75, K.ease.out), { y: -0.5, scale: 0.9, rotY: 0.25 });
+    bob(phone, t, 0.025);
+    paint(pr(t, P[8] - 0.5, 0.5), pr(t, P[9] - 0.3, 3.2, K.ease.inOut));
+    phone.updateWorldMatrix(true, false); screen.getWorldPosition(phoneScreenW); S2.worldToLocal(phoneScreenW);
+    const uon = env(t, P[9] - 0.4, P[12] - 0.7, 0.5, 0.4);
+    ub.forEach((b, i) => {
+      const u = (((t - P[9]) * 0.3 + i / NB) % 1 + 1) % 1, w = 1 - u;
+      b.visible = uon > 0.01 && t > P[9] - 0.4;
+      b.position.set(w * w * b.userData.s.x + 2 * w * u * b.userData.c.x + u * u * phoneScreenW.x,
+                     w * w * b.userData.s.y + 2 * w * u * b.userData.c.y + u * u * phoneScreenW.y,
+                     w * w * b.userData.s.z + 2 * w * u * b.userData.c.z + u * u * phoneScreenW.z);
+      b.scale.setScalar(uon * Math.min(1, u * 5, w * 4));
+    });
+    const step = pr(t, P[10] - 0.45, 0.5, K.ease.inOut);
+    cards.forEach((g, i) => {
+      K.enter(g, pr(t, P[10] - 1.3 + i * 0.09, 0.45), { y: -0.3, scale: 0.9 });
+      if (g === mine) { g.position.z += 1.0 * step; g.position.y += 0.12 * step; g.userData.edge.material.opacity = 0.75 * step; }
+      else g.traverse(o => { if (o.material) { o.material.transparent = true; o.material.opacity *= 1 - 0.55 * step; } });
+    });
+    K.enter(brief, pr(t, P[11] - 0.5, 0.5, K.ease.pop), { y: -0.35, scale: 0.5 });
+    bob(brief, t, 0.03, 1);
+
+    // 03 skills
+    K.enter(tAnd, pr(t, P[13] - 0.5, 0.5, K.ease.pop), { y: -0.4, scale: 0.6 });
+    K.enter(plus, pr(t, P[14] - 0.6, 0.45, K.ease.out), { y: 0, scale: 0.4 });
+    K.enter(tK, pr(t, P[14] - 0.5, 0.5, K.ease.pop), { y: -0.4, scale: 0.6 });
+    K.enter(tI, pr(t, P[15] - 0.5, 0.5, K.ease.pop), { x: 0.4, y: 0, scale: 0.6 });
+    draw(link, pr(t, P[15] - 0.35, 0.4));
+    const lk = pr(t, P[15], 0.3), lu = (t * 0.7) % 1;
+    lb[0].visible = lb[1].visible = lk > 0.01;
+    lb[0].position.copy(link.userData.curve.getPoint(lu)); lb[1].position.copy(link.userData.curve.getPoint(1 - lu));
+    lb[0].scale.setScalar(lk); lb[1].scale.setScalar(lk);
+    const pk = pr(t, P[16] - 0.6, 0.8, K.ease.inOut);
+    ped.visible = pk > 0.001; ped.position.y = -0.2 + 0.38 * pk; pedEdge.material.opacity = 0.6 * pk;
+    trio.position.y = 0.36 * pk;
+    [tAnd, tK, tI].forEach((o, i) => bob(o, t, 0.025, i * 1.3));
+    K.enter(lone, pr(t, P[17] - 0.5, 0.5, K.ease.out), { y: -0.2, scale: 0.85 });
+
+    // HTML
+    heads.forEach(([h, sub], k) => {
+      const [a, b, sa] = HEAD[k], ki = pr(t, a, 0.7), ko = pr(t, b, 0.45, K.ease.inOut);
+      h.style.opacity = ki * (1 - ko); h.style.transform = `translateY(${(1 - ki) * 16 - ko * 10}px)`;
+      h.style.filter = `blur(${(1 - ki) * 6 + ko * 4}px)`;
+      const ks = pr(t, sa - 0.4, 0.5); sub.style.opacity = ks; sub.style.transform = `translateY(${(1 - ks) * 10}px)`;
+    });
+    for (const [k, [obj, off, a, b]] of Object.entries(TAG)) {
+      const el = tagEl[k], v = env(t, a - 0.4, b, 0.45, 0.4);
+      el.style.opacity = v; el.style.setProperty('--k', v); el.style.filter = `blur(${(1 - v) * 4}px)`;
+      if (v > 0.001) K.pin(el, obj, s, { offset: off });
+    }
+    const bo = env(t, P[6] - 0.45, P[7] - 1.9, 0.5, 0.4);
+    both.style.opacity = bo;
+    bp.forEach((p, i) => { const k = pr(t, [P[6] - 0.4, P[6] + 0.55][i], 0.45); p.style.opacity = k; p.style.transform = `translateY(${(1 - k) * 10}px)`; });
+    route.style.opacity = pr(t, 0.4, 0.8);
+    rbar[0].style.width = `${56 * pr(t, P[7] - 1.6, 1.8, K.ease.inOut)}px`;
+    rbar[1].style.width = `${56 * pr(t, P[12] - 0.5, 1.6, K.ease.inOut)}px`;
+    const act = t < P[7] - 0.8 ? 0 : t < P[12] + 0.3 ? 1 : 2;
+    rs.forEach((r, i) => { r.style.color = i === act ? '#F5F5F7' : i < act ? '#8E8E93' : '#5d5d62'; });
+  });
+})();
+</script>
+
+<script>lucide.createIcons();</script>
+<script></script>
+</body></html>
