@@ -1,0 +1,490 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="layout" content="card">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@400..900&family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=block" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<title>One Google ecosystem</title>
+<style>
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: Inter, sans-serif; }
+
+
+body { background: #050506; margin: 0; }
+.ge-eye { position: absolute; left: 120px; top: 104px; font: 500 16px/1 'Geist Mono', monospace; letter-spacing: .2em;
+  color: #A1A1A6; white-space: nowrap; }
+.ge-title { position: absolute; left: 120px; top: 134px; font: 700 64px/1.04 'Inter Tight', sans-serif;
+  letter-spacing: -.028em; color: #F5F5F7; white-space: nowrap; }
+.ge-sub { position: absolute; left: 120px; top: 218px; font: 500 28px/1.2 'Inter', sans-serif; color: #8E8E93;
+  white-space: nowrap; letter-spacing: -.005em; }
+.ge-sub b { color: #F5F5F7; font-weight: 600; }
+.ge-lab { position: absolute; transform: translateX(-50%); font: 600 22px/1 'Inter Tight', sans-serif;
+  letter-spacing: -.01em; color: #F5F5F7; white-space: nowrap; padding: 7px 13px; border-radius: 999px;
+  background: rgba(10,10,12,.78); border: 1px solid rgba(255,255,255,.08); }
+.ge-tag { position: absolute; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 9px;
+  padding: 9px 15px 9px 12px; border-radius: 999px; background: rgba(18,19,22,.86); border: 1px solid rgba(255,255,255,.16);
+  box-shadow: 0 10px 28px rgba(0,0,0,.5); font: 500 15px/1 'Geist Mono', monospace; letter-spacing: .06em;
+  color: #F5F5F7; white-space: nowrap; }
+.ge-tag i { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(135deg, #7F52FF, #C711E1 60%, #E44857); }
+.ge-tag em { font-style: normal; color: #A1A1A6; }
+
+</style></head>
+<body>
+<link rel="ave-asset" id="ge-kmp" href="../../assets/3d8c078f63c4.svg">
+<link rel="ave-asset" id="ge-g" href="../../assets/0bdf3dfcd2b4.svg">
+<div class="ge-eye" id="ge-eye">GOOGLE &middot; 2024</div>
+<div class="ge-title" id="ge-t1">Official KMP support</div>
+<div class="ge-title" id="ge-t2">One Google ecosystem</div>
+<div class="ge-sub" id="ge-s1">Share <b>business logic</b>: Android + iOS</div>
+<div class="ge-sub" id="ge-s2">Native + KMP: <b>not rivals</b></div>
+<div class="ge-sub" id="ge-s3">KMP: <b>Android's next step</b></div>
+<div class="ge-sub" id="ge-s4">Flutter: <b>also from Google</b></div>
+<div class="ge-sub" id="ge-s5">Native &middot; KMP &middot; Flutter</div>
+<div class="ge-lab" id="ge-ln">Native Android</div>
+<div class="ge-lab" id="ge-lk">KMP</div>
+<div class="ge-lab" id="ge-lf">Flutter</div>
+<div class="ge-tag" id="ge-tag"><i></i>2024 <em>&middot;</em> OFFICIAL SUPPORT</div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "ave/": "https://cdn.jsdelivr.net/npm/three@0.187.0/ave/" } }
+</script>
+<script type="module">
+import * as K from 'ave/kit.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
+const THREE = K.THREE;
+// obs_world.js: shared parts of google-ecosystem, laptop-barrier, resources (cine3d CONTRACT, palette A
+// "Obsidian + Titanium"). Inlined into each spec's module (the spec strips `export`). Needs K, THREE, Reflector,
+// SVGLoader, toCreasedNormals in scope. Every frame is a pure function of t (no clock, no unseeded random).
+// Premium look: softbox studio reflections (own PMREM scene, no neon), glossy dark floor with real reflections,
+// low bloom, brand colour only in the logos and as soft light.
+
+const OB = { android: 0x3DDC84, kotlin: 0x7F52FF, flutter: 0x54C5F8, flutterDeep: 0x027DFD,
+  kmp: [0x7F52FF, 0xC711E1, 0xE44857], silver: 0xC7C7CC, white: 0xF5F5F7,
+  google: [0x4285F4, 0xEA4335, 0xFBBC05, 0x34A853] };
+
+// ---- world: obsidian void, softbox reflections, glossy dark titanium floor, dust, haze. o.view = [dx, dy] px
+// shifts the picture (card layout: scene centre moved left into x 120-1220)
+function obWorld(o = {}) {
+  const s = K.stage({ bg: '#050506', fov: o.fov ?? 34, cam: o.cam, target: o.target, floor: false,
+    fogNear: o.fogNear ?? 11, fogFar: o.fogFar ?? 36, bloomStrength: o.bloom ?? 0.3, env: 1,
+    keyPos: [-7, 10, 6], key: o.key ?? 2.1, front: o.front ?? 0.35, rim: o.rim ?? 0.8, rimColor: 0xc8d8ff,
+    shadowBox: o.shadowBox ?? 10 });
+  const c = o.center ?? [0, 0, 0];
+  s.lights.key.position.set(c[0] - 7, 10, c[2] + 6);
+  s.lights.key.target.position.set(...c);
+  s.scene.add(s.lights.key.target);
+  s.lights.rim.position.set(c[0] + 5, 9, c[2] - 6);
+  // studio softboxes for the reflections (long soft highlights on titanium, not a busy room)
+  const es = new THREE.Scene();
+  es.background = new THREE.Color(0x040405);
+  const box = (w, h, p, col, k) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({
+      color: new THREE.Color(col).multiplyScalar(k), side: THREE.DoubleSide }));
+    m.position.set(...p); m.lookAt(0, 1, 0); es.add(m);
+  };
+  box(7, 4.5, [-7, 8, 6], 0xffffff, 1.25);      // key softbox, top-left front
+  box(1.3, 9, [8, 3, -6], 0xcfdcff, 0.75);      // cool rim strip, back right
+  box(12, 1.3, [0, 10, -3], 0xffffff, 0.55);    // overhead strip
+  box(1.0, 7, [-9, 3, -5], 0xffffff, 0.35);     // left back strip
+  box(16, 1.0, [0, 0.5, 10], 0xffffff, 0.14);  // low front bounce
+  const pm = new THREE.PMREMGenerator(s.renderer);
+  s.scene.environment = pm.fromScene(es, 0.02).texture;
+  s.scene.environmentIntensity = o.env ?? 1.0;
+  if (o.view) s.camera.setViewOffset(s.W, s.H, o.view[0], o.view[1], s.W, s.H);
+  const mirror = new Reflector(new THREE.PlaneGeometry(2000, 2000), {
+    textureWidth: 960, textureHeight: 540, color: 0xb8b9bd, multisample: 0 });
+  mirror.rotation.x = -Math.PI / 2;
+  mirror.position.y = -0.003;
+  const skin = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshStandardMaterial({
+    color: 0x0b0c0f, roughness: 0.5, metalness: 0.5, transparent: true, opacity: o.gloss ?? 0.84, envMapIntensity: 0.06 }));
+  skin.rotation.x = -Math.PI / 2;
+  skin.receiveShadow = true;
+  s.scene.add(mirror, skin);
+  const dust = K.dust({ count: o.dust ?? 360, spread: [30, 7, 30], color: 0xdfe3ea, size: 0.02, opacity: 0.26, seed: 23 });
+  dust.points.position.set(c[0], 0, c[2]);
+  s.scene.add(dust.points);
+  const haze = (o.haze ?? []).map(([x, y, z, r, a]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(r, r), new THREE.MeshBasicMaterial({ map: obRadial(),
+      color: 0xb8c4d8, transparent: true, opacity: a, blending: THREE.AdditiveBlending, depthWrite: false }));
+    m.position.set(x, y, z); m.renderOrder = 5;
+    s.scene.add(m);
+    return m;
+  });
+  return { s, dust, update(t) {
+    dust.update(t);
+    for (const h of haze) h.quaternion.copy(s.camera.quaternion);
+  } };
+}
+
+let obRadialTex = null;
+function obRadial() {
+  return obRadialTex ??= obCanvasTex(256, 256, x => {
+    const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+    g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(255,255,255,.45)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  });
+}
+function obCanvasTex(w, h, draw) {
+  const cv = document.createElement('canvas');
+  cv.width = w; cv.height = h;
+  draw(cv.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  t.userData.canvas = cv;
+  return t;
+}
+function obRR(x, X, Y, w, h, r) {
+  x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r);
+  x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath();
+}
+
+// ---- materials (a new one per call so opacity can differ)
+const obMat = {
+  ti: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x9a9da3, metalness: 1, roughness: o.roughness ?? 0.3,
+    anisotropy: 0.6, envMapIntensity: o.env ?? 1.0 }),
+  tiDark: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x2c2e33, metalness: 0.9, roughness: o.roughness ?? 0.34,
+    anisotropy: 0.5, envMapIntensity: o.env ?? 0.9 }),
+  alu: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0xc6c9ce, metalness: 1, roughness: o.roughness ?? 0.38,
+    envMapIntensity: o.env ?? 1.0 }),
+  glass: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x141518, metalness: 0.3, roughness: 0.2, clearcoat: 1,
+    clearcoatRoughness: 0.06, envMapIntensity: 0.8 }),
+  glow: (c, k = 2) => new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), transparent: true }),
+  // glossy enamel logo; vertex colours also drive a soft self-light so the brand colour reads as light
+  enamel: (c, o = {}) => {
+    const m = new THREE.MeshPhysicalMaterial({ color: o.vertex ? 0xffffff : c, vertexColors: !!o.vertex, metalness: 0.05,
+      roughness: 0.38, clearcoat: 0.5, clearcoatRoughness: 0.12, envMapIntensity: 0.8,
+      emissive: o.vertex ? 0xffffff : c, emissiveIntensity: o.glow ?? 0.3 });
+    if (o.vertex) m.onBeforeCompile = sh => { sh.fragmentShader = sh.fragmentShader.replace('#include emissivemap_fragment',
+      '#include emissivemap_fragment\n totalEmissiveRadiance *= vColor.rgb;'); };
+    return m;
+  },
+};
+
+// ---- floor light pool (brand colour as light only)
+function obPool(color, r) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(r * 2, r * 2), new THREE.MeshBasicMaterial({ map: obRadial(), color,
+    transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2;
+  m.position.y = 0.006;
+  return m;
+}
+
+// ---- assets: SVG text (XHR, works on file:// with the render flag) and an untainted Image for canvas drawing
+function obSvgText(id) {
+  const el = document.getElementById(id), href = el && (el.href || el.getAttribute('href') || el.src);
+  return new Promise(res => { try { const x = new XMLHttpRequest(); x.open('GET', href); x.onload = () => res(x.responseText || '');
+    x.onerror = () => res(''); x.send(); } catch (e) { res(''); } });
+}
+async function obImg(id) {
+  let txt = await obSvgText(id);
+  const vb = /viewBox\s*=\s*["']\s*([-\d.]+)[\s,]+([-\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(txt);
+  if (vb && !/<svg[^>]*\swidth\s*=/i.test(txt)) txt = txt.replace(/<svg/i, `<svg width="${vb[3]}" height="${vb[4]}"`);
+  const im = new Image();
+  im.src = URL.createObjectURL(new Blob([txt], { type: 'image/svg+xml' }));
+  await im.decode();
+  return im;
+}
+
+// ---- extruded SVG logo (real brand mark, bevelled, glossy). o.size = longest side, o.grad(x, y) -> THREE.Color in
+// SVG units for a gradient, else each path keeps its own fill colour. Centred, facing +z.
+function obLogo(svg, o = {}) {
+  const data = new SVGLoader().parse(svg), parts = [];
+  for (const p of data.paths) {
+    const fill = p.userData && p.userData.style && p.userData.style.fill;
+    if (fill === 'none' || (fill === undefined && !o.grad)) continue;
+    for (const sh of SVGLoader.createShapes(p)) parts.push({ sh, color: p.color.clone() });
+  }
+  const bb = new THREE.Box2();
+  for (const { sh } of parts) for (const v of sh.getPoints(16)) bb.expandByPoint(v);
+  const w = bb.max.x - bb.min.x, h = bb.max.y - bb.min.y, L = Math.max(w, h), sc = (o.size ?? 1) / L;
+  const cx = (bb.min.x + bb.max.x) / 2, cy = (bb.min.y + bb.max.y) / 2, d = L * (o.depth ?? 0.09), bev = L * (o.bevel ?? 0.018);
+  const grp = new THREE.Group();
+  for (const { sh, color } of parts) {
+    let g = new THREE.ExtrudeGeometry(sh, { depth: d, curveSegments: 28, bevelEnabled: true, bevelThickness: bev,
+      bevelSize: bev * 0.85, bevelSegments: 5 });
+    g.translate(-cx, -cy, -d / 2);
+    if (o.grad) {
+      const pos = g.attributes.position, col = new Float32Array(pos.count * 3);
+      for (let i = 0; i < pos.count; i++) o.grad(pos.getX(i) + cx, pos.getY(i) + cy).toArray(col, i * 3);
+      g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    }
+    g.rotateX(Math.PI);
+    g.scale(sc, sc, sc);
+    g = toCreasedNormals(g, Math.PI / 5);
+    const m = new THREE.Mesh(g, o.material ? o.material() : obMat.enamel(color, { vertex: !!o.grad, glow: o.glow }));
+    m.castShadow = true; m.receiveShadow = true;
+    grp.add(m);
+  }
+  grp.userData.half = (d / 2 + bev) * sc;
+  grp.userData.w = w * sc; grp.userData.h = h * sc;
+  return grp;
+}
+
+// ---- tile: titanium frame + dark glass face + the logo floating just in front (o.size, o.logoScale)
+function obTile(logo, o = {}) {
+  const sz = o.size ?? 1, d = sz * 0.16, g = new THREE.Group();
+  g.add(K.slab(sz, sz, { depth: d, radius: sz * 0.24, material: obMat.ti({ roughness: 0.26, color: 0x8d9097 }) }));
+  const face = K.slab(sz * 0.9, sz * 0.9, { depth: d * 0.5, radius: sz * 0.2, material: obMat.glass() });
+  face.position.z = d / 2 - d * 0.2;
+  g.add(face);
+  if (logo) { logo.position.z = d / 2 + d * 0.05 + (logo.userData.half ?? 0.03) + sz * 0.02; g.add(logo); }
+  g.userData.front = d / 2;
+  return g;
+}
+
+// ---- tube that draws itself along a path: set(k) 0..1 (from the start), glow(intensity, opacity)
+function obTube(pts, o = {}) {
+  const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)), !!o.closed, 'centripetal');
+  const seg = o.seg ?? Math.max(64, pts.length * 24), rad = o.radial ?? 8;
+  const g = new THREE.TubeGeometry(curve, seg, o.width ?? 0.012, rad, !!o.closed);
+  if (o.colors) {   // colour along the path: list of hex, evenly spread
+    const list = o.colors.map(c => new THREE.Color(c)), pos = g.attributes.position, col = new Float32Array(pos.count * 3);
+    const cc = new THREE.Color();
+    for (let i = 0; i < pos.count; i++) {
+      const f = (Math.floor(i / (rad + 1)) / seg) * list.length, a = Math.min(Math.floor(f), list.length - 1);
+      const b = o.closed ? (a + 1) % list.length : Math.min(a + 1, list.length - 1), u = o.hard ? 0 : f - Math.floor(f);
+      cc.copy(list[a]).lerp(list[b], Math.min(u, 1)).toArray(col, i * 3);
+    }
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  }
+  const base = new THREE.Color(o.colors ? 0xffffff : (o.color ?? 0xffffff));
+  const m = o.material ?? new THREE.MeshBasicMaterial({ color: base.clone().multiplyScalar(o.intensity ?? 2),
+    vertexColors: !!o.colors, transparent: true });
+  const mesh = new THREE.Mesh(g, m);
+  return { mesh, curve,
+    set(k, from = 0) {
+      const a = Math.floor(K.clamp01(from) * seg), b = Math.floor(K.clamp01(k) * seg);
+      g.setDrawRange(a * rad * 6, Math.max(0, b - a) * rad * 6); mesh.visible = b > a;
+    },
+    glow(i, op = 1) { if (!o.material) { m.color.copy(base).multiplyScalar(i); m.opacity = op; } } };
+}
+// points on a flat circle arc (angles in degrees, a: x = R cos a, z = R sin a, so 90 = front)
+function obArc(R, y, a0, a1, n = 48) {
+  const out = [];
+  for (let i = 0; i <= n; i++) { const a = THREE.MathUtils.degToRad(a0 + (a1 - a0) * i / n); out.push([R * Math.cos(a), y, R * Math.sin(a)]); }
+  return out;
+}
+
+// ---- smooth camera path in time (cubic Hermite, Catmull-Rom tangents): keys [t, px,py,pz, tx,ty,tz]
+function obCamPath(keys) {
+  const n = keys.length;
+  const tan = (i, c) => (i === 0 || i === n - 1) ? 0 : (keys[i + 1][c] - keys[i - 1][c]) / (keys[i + 1][0] - keys[i - 1][0]);
+  return (s, t) => {
+    let i = 0;
+    while (i < n - 2 && t > keys[i + 1][0]) i++;
+    const a = keys[i], b = keys[i + 1], dt = b[0] - a[0], u = K.clamp01((t - a[0]) / dt);
+    const h00 = 2 * u ** 3 - 3 * u ** 2 + 1, h10 = u ** 3 - 2 * u ** 2 + u, h01 = -2 * u ** 3 + 3 * u ** 2, h11 = u ** 3 - u ** 2;
+    const v = c => h00 * a[c] + h10 * dt * tan(i, c) + h01 * b[c] + h11 * dt * tan(i + 1, c);
+    s.camera.position.set(v(1), v(2), v(3));
+    s.target.set(v(4), v(5), v(6));
+  };
+}
+
+// ---- HTML: fade + rise by k; k of an element that appears at a and leaves at b (b optional)
+function obShow(el, k, rise = 14) {
+  el.style.opacity = k.toFixed(3);
+  el.style.visibility = k > 0.001 ? 'visible' : 'hidden';
+  el.style.translate = `0 ${((1 - k) * rise).toFixed(1)}px`;
+}
+function obK(t, a, b, din = 0.5, dout = 0.4) {
+  return K.prog(t, a, din) * (b == null ? 1 : 1 - K.prog(t, b, dout, K.ease.inOut));
+}
+function obPin(el, obj, s, o) { K.pin(el, obj, s, o); }
+
+// ---- laptop: rounded base with keys + trackpad, lid on a hinge, live screen (canvas). o.material (body),
+// o.draw(ctx, w, h, state) paints the screen; call lap.screen(state) every frame (repaints only on change).
+function obLaptop(o = {}) {
+  const W = o.w ?? 3.2, D = o.d ?? 2.15, T = o.t ?? 0.11, H = W * 0.64, bodyMat = o.material ?? (() => obMat.tiDark());
+  const grp = new THREE.Group();
+  const base = K.box(W, T, D, { radius: T * 0.45, material: bodyMat() });
+  base.position.y = T / 2;
+  grp.add(base);
+  const deck = obCanvasTex(1024, 688, (x, w, h) => {   // keyboard well + keys + trackpad, matte
+    x.fillStyle = o.deck ?? '#1b1c20'; x.fillRect(0, 0, w, h);
+    const kx = 70, ky = 46, kw = w - 140, rows = 5, cols = 14, gap = 7, cw = (kw - gap * (cols - 1)) / cols, ch = 44;
+    x.fillStyle = o.well ?? '#0e0f12'; obRR(x, kx - 12, ky - 12, kw + 24, rows * (ch + gap) + 18, 14); x.fill();
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      x.fillStyle = o.key ?? '#24262b'; obRR(x, kx + c * (cw + gap), ky + r * (ch + gap), cw, ch, 7); x.fill();
+    }
+    x.fillStyle = o.key ?? '#24262b'; obRR(x, kx + 3 * (cw + gap), ky + rows * (ch + gap) + 4, 7 * cw, 34, 7); x.fill();
+    const tw = 330, th = 200;
+    x.fillStyle = o.pad ?? '#202226'; obRR(x, (w - tw) / 2, h - th - 40, tw, th, 18); x.fill();
+    x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2; x.stroke();
+  });
+  const top = new THREE.Mesh(new THREE.PlaneGeometry(W * 0.94, D * 0.92), new THREE.MeshStandardMaterial({ map: deck,
+    roughness: 0.6, metalness: 0.2, transparent: true }));
+  top.rotation.x = -Math.PI / 2;
+  top.position.set(0, T + 0.002, 0.02);
+  top.receiveShadow = true;
+  grp.add(top);
+  const hinge = new THREE.Group();
+  hinge.position.set(0, T, -D / 2 + 0.04);
+  grp.add(hinge);
+  const lid = K.box(W, H, 0.07, { radius: 0.03, material: bodyMat() });
+  lid.position.set(0, H / 2, -0.035);
+  hinge.add(lid);
+  const bez = new THREE.Mesh(new THREE.PlaneGeometry(W * 0.97, H * 0.955), new THREE.MeshPhysicalMaterial({ color: 0x050506,
+    roughness: 0.12, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.04, transparent: true }));
+  bez.position.set(0, H / 2, 0.0005);
+  hinge.add(bez);
+  const SW = 1024, SH = Math.round(1024 * (H * 0.86) / (W * 0.92));
+  const tex = obCanvasTex(SW, SH, x => { x.fillStyle = '#000'; x.fillRect(0, 0, SW, SH); });
+  const scr = new THREE.Mesh(new THREE.PlaneGeometry(W * 0.92, H * 0.86), new THREE.MeshBasicMaterial({ map: tex,
+    transparent: true, toneMapped: false, color: new THREE.Color(0.92, 0.92, 0.92) }));
+  scr.position.set(0, H / 2 + H * 0.01, 0.001);
+  hinge.add(scr);
+  let last = null;
+  return { group: grp, hinge, lid, base, scr, W, D, H, T,
+    open(k) { hinge.rotation.x = THREE.MathUtils.lerp(Math.PI / 2 - 0.02, -0.3, k); },
+    screen(state, bright = 1) {
+      scr.material.color.setScalar(0.92 * bright);
+      const key = JSON.stringify(state);
+      if (key === last) return;
+      last = key;
+      const x = tex.userData.canvas.getContext('2d');
+      x.save(); x.fillStyle = '#000'; x.fillRect(0, 0, SW, SH);
+      if (o.draw) o.draw(x, SW, SH, state);
+      x.restore();
+      tex.needsUpdate = true;
+    } };
+}
+
+const FLUTTER_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">'
+  + '<path d="M639.9 20.7h319.5l-679 679.1L120.6 540z" fill="#54C5F8"/>'
+  + '<path d="M360.3 779.7L520 939.5 959.4 500H639.9z" fill="#54C5F8"/>'
+  + '<path d="M520 939.5l119.9 119.8h319.5L679.8 779.7z" fill="#01579B"/></svg>';
+
+window.renderReady = (async () => {
+  await document.fonts.ready;
+  const T = { p0: 0.900, p1: 4.800, p2: 7.300, p3: 8.600, p4: 11.100, p5: 14.200, p6: 16.567, p7: 18.767,
+              p8: 22.167, end: 23.667 };
+  const W = obWorld({ cam: [0, 2.4, 15.5], target: [0, 1.0, 0], fov: 34, view: [290, -60],
+    haze: [[0, 1.9, -4.5, 13, 0.05]], dust: 300 });
+  const s = W.s, io = K.ease.inOut;
+  const R = 2.05, RY = 0.42, TS = 1.0, TY = RY + 0.05 + TS / 2;
+
+  // ---- orbit ring: brushed titanium tube that sweeps in from the Native slot
+  const ring = obTube(obArc(R, RY, 180, -180, 160), { width: 0.045, radial: 16, seg: 320,
+    material: obMat.ti({ roughness: 0.56, color: 0x74777d }) });
+  ring.mesh.castShadow = true; ring.mesh.receiveShadow = true;
+  s.add(ring.mesh);
+
+  // ---- hub: titanium coin with the real 4-colour Google G
+  const hub = new THREE.Group();
+  hub.add(K.slab(1.2, 1.2, { depth: 0.16, radius: 0.6, material: obMat.ti({ roughness: 0.24 }) }));
+  const hubFace = K.slab(1.04, 1.04, { depth: 0.08, radius: 0.52, material: obMat.glass() });
+  hubFace.position.z = 0.05;
+  hub.add(hubFace);
+  const gLogo = obLogo(await obSvgText('ge-g'), { size: 0.6, depth: 0.12, bevel: 0.02, glow: 0.12 });
+  gLogo.position.z = 0.09 + gLogo.userData.half + 0.012;
+  hub.add(gLogo);
+  hub.position.set(0, 2.08, 0);
+  s.add(hub);
+
+  // ---- tiles (real logos), resting on the ring and turned to the camera
+  const kmpLogo = obLogo(await obSvgText('ge-kmp'), { size: 0.5, depth: 0.12, glow: 0.42, grad: (x, y) => {
+    const d = Math.hypot(x - 43.5, y - 4.5) / 61.5, c = new THREE.Color();
+    return d < 0.58 ? c.set(0x37BCFD).lerp(new THREE.Color(0x7F52FF), d / 0.58)
+                    : c.set(0x7F52FF).lerp(new THREE.Color(0xC711E1), (d - 0.58) / 0.42);
+  } });
+  const flLogo = obLogo(FLUTTER_SVG, { size: 0.52, depth: 0.1, glow: 0.34 });
+  const anLogo = await K.icon('android-logo', { size: 0.6, color: OB.android });
+  const tK = obTile(kmpLogo, { size: TS }), tN = obTile(anLogo, { size: TS }), tF = obTile(flLogo, { size: TS });
+  tK.position.set(0, TY, R);
+  tN.position.set(-R, TY, 0); tN.rotation.y = 0.2;
+  tF.position.set(R, TY, 0); tF.rotation.y = -0.2;
+  s.add(tK, tN, tF);
+  const pools = [[tN, OB.android], [tK, OB.kotlin], [tF, OB.flutter]].map(([t, c]) => {
+    const p = obPool(c, 1.1); p.position.x = t.position.x; p.position.z = t.position.z; s.add(p); return p;
+  });
+
+  // ---- light traces on top of the ring (brand colour only as light)
+  const LY = RY + 0.047;
+  const nk = obTube(obArc(R, LY, 180, 90, 40), { width: 0.011, colors: [OB.android, OB.kotlin], intensity: 1.7 });
+  const kf = obTube(obArc(R, LY, 90, 0, 40), { width: 0.011, colors: [OB.kotlin, OB.flutter], intensity: 1.7 });
+  s.add(nk.mesh, kf.mesh);
+  const gq = OB.google.map((c, i) => {            // four Google quarters, small gaps, for "ecosystem"
+    const a0 = 180 - i * 90 - 4, a1 = a0 - 82;
+    const q = obTube(obArc(R, LY, a0, a1, 30), { width: 0.012, color: c, intensity: 1.5 });
+    s.add(q.mesh); return q;
+  });
+  const spokes = [[-R * 0.93, TY + 0.5, 0], [0, TY + 0.5, R * 0.95], [R * 0.93, TY + 0.5, 0]].map(p => {
+    const from = [p[0] * 0.2, 1.62, p[2] * 0.12];
+    const sp = obTube([from, [(from[0] + p[0]) / 2, (from[1] + p[1]) / 2 + 0.06, (from[2] + p[2]) / 2], p],
+      { width: 0.005, color: 0xffffff, intensity: 1.1, seg: 48 });
+    s.add(sp.mesh); return sp;
+  });
+  const bead = new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 12), obMat.glow(0xffffff, 3));
+  const beadHalo = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.7), new THREE.MeshBasicMaterial({ map: obRadial(),
+    color: new THREE.Color(0xd9d2ff).multiplyScalar(0.9), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+  s.add(bead, beadHalo);
+
+  const camPath = obCamPath([
+    [0, 0, 2.4, 15.5, 0, 1.0, 0],
+    [T.p0, 0, 3.0, 10.6, 0, 1.0, 0],
+    [T.p3, 0.25, 3.05, 10.0, 0, 1.0, 0],
+    [T.p5, -0.3, 3.1, 9.8, -0.12, 1.0, 0],
+    [T.p6, -0.15, 3.15, 9.7, -0.08, 1.0, 0],
+    [T.p7, 0.2, 3.2, 9.8, 0.05, 1.0, 0],
+    [T.p8, 0.05, 3.9, 10.0, 0, 0.95, 0],
+    [T.end, 0, 4.3, 10.3, 0, 0.92, 0],
+  ]);
+  const el = id => document.getElementById(id);
+  const H = { eye: el('ge-eye'), t1: el('ge-t1'), t2: el('ge-t2'), s1: el('ge-s1'), s2: el('ge-s2'), s3: el('ge-s3'),
+              s4: el('ge-s4'), s5: el('ge-s5'), ln: el('ge-ln'), lk: el('ge-lk'), lf: el('ge-lf'), tag: el('ge-tag') };
+
+  K.run(s, t => {
+    camPath(s, t);
+    W.update(t);
+    // ring + hub
+    ring.set(K.prog(t, 0.05, Math.max(T.p0 - 0.05, 0.6), io));
+    const kh = K.prog(t, Math.max(T.p0 - 0.7, 0), 0.7);
+    K.enter(hub, kh, { y: 0.5, scale: 0.8 });
+    hub.position.y = 2.08 - 0.5 * (1 - kh) + Math.sin(t * 0.9) * 0.03;
+    hub.rotation.y = Math.sin(t * 0.45) * 0.14;
+    // tiles dock
+    const kK = K.prog(t, T.p2 - 0.85, 0.85), kN = K.prog(t, T.p4 - 0.85, 0.85), kF = K.prog(t, T.p7 - 0.9, 0.9);
+    K.enter(tK, kK, { y: 2.2, scale: 0.9, rotY: 0.6 });
+    K.enter(tN, kN, { x: -2.4, y: 0.5, scale: 0.9, rotY: -0.7 });
+    K.enter(tF, kF, { x: 2.4, y: 0.5, scale: 0.9, rotY: 0.7 });
+    const pulseK = K.prog(t, T.p6 + 0.25, 0.3) * (1 - K.prog(t, T.p6 + 0.6, 0.9, io));
+    pools[0].material.opacity = 0.2 * kN + 0.08 * K.prog(t, T.p5 - 0.5, 0.5) * (1 - K.prog(t, T.p8, 0.6));
+    pools[1].material.opacity = 0.22 * kK + 0.25 * pulseK;
+    pools[2].material.opacity = 0.2 * kF;
+    // links
+    const kNK = K.prog(t, T.p5 - 0.75, 0.75, io), kKF = K.prog(t, T.p7 - 0.55, 0.55, io), kG = K.prog(t, T.p8 - 0.5, 0.6);
+    nk.set(kNK); kf.set(kKF);
+    nk.glow(1.7 + 1.0 * pulseK, 1 - kG); kf.glow(1.7, 1 - kG);
+    gq.forEach((q, i) => { const k = K.prog(t, T.p8 - 0.85 + i * 0.16, 0.55, io); q.set(k); });
+    spokes.forEach((sp, i) => { sp.set(K.prog(t, T.p8 - 0.4 + i * 0.1, 0.6, io)); sp.glow(1.1, 0.55); });
+    // pulse Native -> KMP ("next step")
+    const u = K.prog(t, T.p6 - 0.9, 1.1, io), on = u > 0 && u < 1 ? 1 : 0;
+    nk.curve.getPointAt(Math.min(u, 0.999), bead.position);
+    beadHalo.position.copy(bead.position);
+    beadHalo.quaternion.copy(s.camera.quaternion);
+    bead.visible = beadHalo.visible = !!on;
+    beadHalo.material.opacity = Math.sin(Math.PI * u);
+    // HTML
+    obShow(H.eye, obK(t, Math.max(T.p0 - 0.6, 0.05), null));
+    obShow(H.t1, obK(t, Math.max(T.p0 - 0.5, 0.1), T.p8 - 0.55));
+    obShow(H.t2, obK(t, T.p8 - 0.3, null));
+    obShow(H.s1, obK(t, T.p1 - 0.45, T.p5 - 0.75));
+    obShow(H.s2, obK(t, T.p5 - 0.4, T.p6 - 0.75));
+    obShow(H.s3, obK(t, T.p6 - 0.4, T.p7 - 0.75));
+    obShow(H.s4, obK(t, T.p7 - 0.4, T.p8 - 0.6));
+    obShow(H.s5, obK(t, T.p8 - 0.2, null));
+    s.camera.updateMatrixWorld();
+    obPin(H.lk, tK, s, { offset: [0, -0.6, 0], dy: 12 }); obShow(H.lk, K.prog(t, T.p2 - 0.35, 0.4), 8);
+    obPin(H.ln, tN, s, { offset: [0, -0.6, 0], dy: 12 }); obShow(H.ln, K.prog(t, T.p4 - 0.35, 0.4), 8);
+    obPin(H.lf, tF, s, { offset: [0, -0.6, 0], dy: 12 }); obShow(H.lf, K.prog(t, T.p7 - 0.35, 0.4), 8);
+    obPin(H.tag, tK, s, { offset: [0.5, 0.5, 0] }); obShow(H.tag, K.prog(t, T.p3 - 0.5, 0.5), 10);
+  });
+})();
+</script>
+
+<script>lucide.createIcons();</script>
+<script></script>
+</body></html>
