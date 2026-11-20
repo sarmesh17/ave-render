@@ -1,0 +1,490 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="layout" content="card">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Inter+Tight:wght@400..900&family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=block" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<title>Build projects, then network</title>
+<style>
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: Inter, sans-serif; }
+
+
+body { background: #050506; }
+#pn-root { position: absolute; inset: 0; pointer-events: none; }
+.pn-vig { position: absolute; inset: 0; background: radial-gradient(120% 110% at 35% 45%, transparent 55%, rgba(0,0,0,.5) 100%); }
+.pn-eb { font: 500 17px/1 "Geist Mono", monospace; letter-spacing: .16em; text-transform: uppercase; color: #A1A1A6;
+         display: flex; align-items: center; gap: 12px; }
+.pn-head { position: absolute; left: 120px; top: 100px; opacity: 0; }
+.pn-head .pn-eb::before { content: ""; width: 28px; height: 1px; background: rgba(255,255,255,.35); }
+.pn-h1 { font: 700 64px/1.02 "Inter Tight", sans-serif; letter-spacing: -.025em; color: #F5F5F7; margin-top: 16px; }
+.pn-note { font: 500 28px/1.2 Inter, sans-serif; color: #8E8E93; margin-top: 16px; opacity: 0; }
+.pn-lab { position: absolute; opacity: 0; white-space: nowrap; text-shadow: 0 2px 16px rgba(0,0,0,.75); }
+.pn-mc { transform: translate(-50%, -50%); text-align: center; }
+.pn-mc .pn-eb, .pn-tc .pn-eb { justify-content: center; }
+.pn-tc { transform: translate(-50%, 0); text-align: center; }
+.pn-r { transform: translate(0, -50%); }
+.pn-lab .pn-eb { font-size: 15px; }
+.pn-st { font: 700 30px/1.05 "Inter Tight", sans-serif; letter-spacing: -.015em; color: #F5F5F7; margin-top: 8px; }
+.pn-nd { font: 600 27px/1.05 "Inter Tight", sans-serif; letter-spacing: -.01em; color: #F5F5F7; }
+.pn-tt { font: 700 44px/1.04 "Inter Tight", sans-serif; letter-spacing: -.02em; color: #F5F5F7; margin-top: 10px; }
+.pn-g { color: #3DDC84; }
+
+</style></head>
+<body>
+<link rel="ave-asset" id="pn-play" href="../../assets/4a10d30772e6.svg">
+<div id="pn-root">
+  <div class="pn-vig"></div>
+  <div class="pn-head" id="pn-ha"><div class="pn-eb">Advice 1</div><div class="pn-h1">Build projects</div>
+    <div class="pn-note" id="pn-note">Learn what no tutorial teaches</div></div>
+  <div class="pn-head" id="pn-hb"><div class="pn-eb">Advice 2</div><div class="pn-h1">Networking</div></div>
+  <div class="pn-lab pn-mc" id="pn-s0"><div class="pn-eb">Step 01</div><div class="pn-st">Note app</div></div>
+  <div class="pn-lab pn-mc" id="pn-s1"><div class="pn-eb">Step 02</div><div class="pn-st">API app</div></div>
+  <div class="pn-lab pn-mc" id="pn-s2"><div class="pn-eb">Step 03</div><div class="pn-st">On Play Store</div></div>
+  <div class="pn-lab pn-mc" id="pn-sk"><div class="pn-eb">Level 0 &middot; Must</div><div class="pn-tt">Skills</div></div>
+  <div class="pn-lab pn-tc" id="pn-n0"><div class="pn-nd">LinkedIn</div></div>
+  <div class="pn-lab pn-tc" id="pn-n1"><div class="pn-nd">Communities</div></div>
+  <div class="pn-lab pn-tc" id="pn-n2"><div class="pn-nd">Meetups</div></div>
+  <div class="pn-lab pn-tc" id="pn-n3"><div class="pn-nd">Seniors</div></div>
+  <div class="pn-lab pn-r" id="pn-ref"><div class="pn-eb pn-g">Opens doors</div><div class="pn-tt">Referral</div></div>
+  <div class="pn-lab pn-r" id="pn-iv"><div class="pn-eb">Next step</div><div class="pn-tt">Interview</div></div>
+</div>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "ave/": "https://cdn.jsdelivr.net/npm/three@0.187.0/ave/" } }
+</script>
+<script type="module">
+import * as K from 'ave/kit.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+const THREE = K.THREE;
+// vp_kit.js: shared parts of verdict-path + projects-network (cine3d CONTRACT, palette A "Obsidian + Titanium").
+// Inlined into the spec's module (specs strip `export`); needs K, THREE, Reflector in scope. Pure functions of t.
+
+const VP_COL = { base: 0x050506, android: 0x3DDC84, kotlin: 0x7F52FF, flutter: 0x54C5F8, flutterDeep: 0x027DFD,
+                 kmp: [0x7F52FF, 0xC711E1, 0xE44857], silver: 0xC7C7CC, white: 0xF5F5F7 };
+
+// ---- world: obsidian void, glossy dark titanium floor with real (soft) reflections, key top-left, cool rim
+function vpWorld(o = {}) {
+  const s = K.stage({ bg: '#050506', fov: o.fov ?? 36, cam: o.cam, target: o.target, floor: false,
+    fogNear: o.fogNear ?? 9, fogFar: o.fogFar ?? 34, bloomStrength: o.bloom ?? 0.42, env: o.env ?? 0.5,
+    keyPos: [-7, 10, 6], key: 2.3, front: 0.35, rim: o.rim ?? 1.1, rimColor: 0xc4d6ff, shadowBox: o.shadowBox ?? 12,
+    dof: o.dof ? { focus: 10, aperture: o.dof.aperture ?? 0.0005, maxblur: o.dof.maxblur ?? 0.004 } : undefined });
+  const c = o.center ?? [0, 0, 0];
+  s.lights.key.position.set(c[0] - 7, 10, c[2] + 6);
+  s.lights.key.target.position.set(...c);
+  s.scene.add(s.lights.key.target);
+  const mirror = new Reflector(new THREE.PlaneGeometry(220, 220), {
+    textureWidth: 960, textureHeight: 540, color: 0x808080, multisample: 0 });
+  mirror.rotation.x = -Math.PI / 2;
+  mirror.position.y = -0.003;
+  const skin = new THREE.Mesh(new THREE.PlaneGeometry(220, 220), new THREE.MeshStandardMaterial({
+    color: 0x07080a, roughness: 0.5, metalness: 0.25, transparent: true, opacity: o.gloss ?? 0.86, envMapIntensity: 0.06 }));
+  skin.rotation.x = -Math.PI / 2;
+  skin.receiveShadow = true;
+  s.scene.add(mirror, skin);
+  const dust = K.dust({ count: 420, spread: [34, 7, 34], color: 0xdfe3ea, size: 0.02, opacity: 0.28, seed: 11 });
+  dust.points.position.set(c[0], 0, c[2]);
+  s.scene.add(dust.points);
+  const haze = (o.haze ?? []).map(([x, y, z, r, a]) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(r, r), new THREE.MeshBasicMaterial({ map: vpRadial(), color: 0xb8c4d8,
+      transparent: true, opacity: a, blending: THREE.AdditiveBlending, depthWrite: false }));
+    m.position.set(x, y, z);
+    s.scene.add(m);
+    return m;
+  });
+  return { s, dust, update(t) {
+    dust.update(t);
+    for (const h of haze) h.quaternion.copy(s.camera.quaternion);
+    if (s.dof && s.dof.uniforms && s.dof.uniforms.focus) s.dof.uniforms.focus.value = s.camera.position.distanceTo(s.target);
+  } };
+}
+
+let vpRadialTex = null;
+function vpRadial() {
+  return vpRadialTex ??= vpCanvasTex(256, 256, x => {
+    const g = x.createRadialGradient(128, 128, 0, 128, 128, 128);
+    g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(255,255,255,.45)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  });
+}
+function vpCanvasTex(w, h, draw) {
+  const cv = document.createElement('canvas');
+  cv.width = w; cv.height = h;
+  draw(cv.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+function vpRoundRect(x, X, Y, w, h, r) {
+  x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r);
+  x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath();
+}
+
+// ---- materials
+const vpMat = {
+  titanium: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x9a9da3, metalness: 1, roughness: o.roughness ?? 0.32,
+    anisotropy: 0.7, envMapIntensity: o.env ?? 1.0 }),
+  darkTi: (o = {}) => new THREE.MeshPhysicalMaterial({ color: o.color ?? 0x2c2e33, metalness: 0.9, roughness: o.roughness ?? 0.36,
+    anisotropy: 0.5, envMapIntensity: o.env ?? 0.9 }),
+  glass: () => new THREE.MeshPhysicalMaterial({ color: 0x16171b, metalness: 0.35, roughness: 0.24, clearcoat: 1,
+    clearcoatRoughness: 0.08, envMapIntensity: 0.8 }),
+  glow: (color, k = 2.2) => new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(k), transparent: true }),
+};
+
+// ---- floor light pool (brand colour as light only)
+function vpPool(color, r) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(r * 2, r * 2), new THREE.MeshBasicMaterial({ map: vpRadial(), color,
+    transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2;
+  m.position.y = 0.006;
+  return m;
+}
+
+// ---- glowing tube that draws itself: set(k) 0..1, glow(intensity)
+function vpTube(pts, o = {}) {
+  const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)), false, 'centripetal');
+  const seg = o.seg ?? Math.max(48, pts.length * 40), rad = 8;
+  const g = new THREE.TubeGeometry(curve, seg, o.width ?? 0.012, rad, false);
+  const base = new THREE.Color(o.color ?? 0xffffff);
+  const m = new THREE.MeshBasicMaterial({ color: base.clone().multiplyScalar(o.intensity ?? 2), transparent: true });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.userData.curve = curve;
+  return { mesh, curve,
+    set(k) { const n = Math.floor(K.clamp01(k) * seg); g.setDrawRange(0, n * rad * 6); mesh.visible = n > 0; },
+    glow(i, op = 1) { m.color.copy(base).multiplyScalar(i); m.opacity = op; } };
+}
+
+// ---- ring (flat), one colour or a gradient around it (KMP)
+function vpRing(r, colors, o = {}) {
+  const g = new THREE.TorusGeometry(r, o.tube ?? 0.022, 12, 160);
+  const list = (Array.isArray(colors) ? colors : [colors]).map(c => new THREE.Color(c));
+  const pos = g.attributes.position, col = new Float32Array(pos.count * 3), cc = new THREE.Color();
+  for (let i = 0; i < pos.count; i++) {
+    const a = (Math.atan2(pos.getY(i), pos.getX(i)) / (2 * Math.PI) + 1) % 1, f = a * list.length;
+    cc.copy(list[Math.floor(f) % list.length]).lerp(list[(Math.floor(f) + 1) % list.length], f % 1).toArray(col, i * 3);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const m = new THREE.MeshBasicMaterial({ vertexColors: true, color: new THREE.Color(1, 1, 1), transparent: true });
+  const mesh = new THREE.Mesh(g, m);
+  mesh.rotation.x = Math.PI / 2;
+  return { mesh, glow(i, op = 1) { m.color.setScalar(i); m.opacity = op; } };
+}
+
+// ---- dark tile with a real logo (SVG file) as a lit, softly glowing decal
+async function vpImg(id) {
+  const img = new Image();
+  img.src = document.getElementById(id).href;
+  await img.decode();
+  return img;
+}
+async function vpLogoTile(id, o = {}) {
+  const size = o.size ?? 1, d = size * 0.17, img = await vpImg(id), asp = o.aspect ?? 1;
+  const tex = vpCanvasTex(512, 512, (x, w) => {
+    const p = w * (o.pad ?? 0.22), bw = w - 2 * p, bh = bw / asp;
+    x.drawImage(img, p, (w - bh) / 2, bw, bh);
+  });
+  const grp = new THREE.Group();
+  grp.add(K.slab(size, size, { depth: d, radius: size * 0.24, material: vpMat.glass() }));
+  if (o.halo !== false) {
+    const h = new THREE.Mesh(new THREE.PlaneGeometry(size * 0.95, size * 0.95), new THREE.MeshBasicMaterial({ map: vpRadial(),
+      color: new THREE.Color(o.haloColor ?? 0xffffff).multiplyScalar(o.halo ?? 0.18), transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false }));
+    h.position.z = d / 2 + 0.002;
+    grp.add(h);
+  }
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(size, size), new THREE.MeshStandardMaterial({ map: tex, transparent: true,
+    roughness: 0.35, metalness: 0, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: o.glow ?? 0.55, depthWrite: false }));
+  face.position.z = d / 2 + 0.006;
+  grp.add(face);
+  return grp;
+}
+
+// ---- 3D tag: dark glass slab, printed text (mono number + Inter Tight), hairline edge
+function vpTag(num, text, o = {}) {
+  const w = o.w ?? 3.2, h = o.h ?? 0.64, PX = 400, cw = Math.round(w * PX), ch = Math.round(h * PX);
+  const tex = vpCanvasTex(cw, ch, x => {
+    vpRoundRect(x, 3, 3, cw - 6, ch - 6, ch * 0.24);
+    x.strokeStyle = 'rgba(255,255,255,.16)'; x.lineWidth = 3; x.stroke();
+    const hi = x.createLinearGradient(0, 0, 0, ch);
+    hi.addColorStop(0, 'rgba(255,255,255,.07)'); hi.addColorStop(0.5, 'rgba(255,255,255,0)');
+    x.fillStyle = hi; x.fill();
+    x.textBaseline = 'middle';
+    let fx = ch * 0.34;
+    if (num) {
+      x.font = `500 ${Math.round(ch * 0.2)}px "Geist Mono"`;
+      x.fillStyle = o.accent ?? 'rgba(161,161,166,1)';
+      x.fillText(num, fx, ch / 2 + 2);
+      fx += x.measureText(num).width + ch * 0.26;
+    }
+    let fs = Math.round(ch * 0.34);
+    do { x.font = `600 ${fs}px "Inter Tight"`; fs -= 2; } while (x.measureText(text).width > cw - fx - ch * 0.34 && fs > 20);
+    x.fillStyle = '#F5F5F7';
+    x.fillText(text, fx, ch / 2 + 3);
+  });
+  const grp = new THREE.Group();
+  grp.add(K.slab(w, h, { depth: 0.07, radius: h * 0.24, material: vpMat.glass() }));
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true,
+    depthWrite: false }));
+  face.position.z = 0.04;
+  grp.add(face);
+  return grp;
+}
+
+// ---- smooth camera path in time (cubic Hermite, Catmull-Rom tangents): keys [t, px,py,pz, tx,ty,tz]
+function vpCamPath(keys) {
+  const n = keys.length;
+  const tan = (i, c) => (i === 0 || i === n - 1) ? 0
+    : (keys[i + 1][c] - keys[i - 1][c]) / (keys[i + 1][0] - keys[i - 1][0]);
+  return (s, t) => {
+    let i = 0;
+    while (i < n - 2 && t > keys[i + 1][0]) i++;
+    const a = keys[i], b = keys[i + 1], dt = b[0] - a[0], u = K.clamp01((t - a[0]) / dt);
+    const h00 = 2 * u ** 3 - 3 * u ** 2 + 1, h10 = u ** 3 - 2 * u ** 2 + u, h01 = -2 * u ** 3 + 3 * u ** 2, h11 = u ** 3 - u ** 2;
+    const v = c => h00 * a[c] + h10 * dt * tan(i, c) + h01 * b[c] + h11 * dt * tan(i + 1, c);
+    s.camera.position.set(v(1), v(2), v(3));
+    s.target.set(v(4), v(5), v(6));
+  };
+}
+
+// ---- HTML: fade + rise by k; pin to an object
+function vpShow(el, k, rise = 14) {
+  el.style.opacity = k.toFixed(3);
+  el.style.visibility = k > 0.001 ? 'visible' : 'hidden';
+  el.style.translate = `0 ${((1 - k) * rise).toFixed(1)}px`;
+}
+// k of an element that appears at a and leaves at b (b optional)
+function vpK(t, a, b, din = 0.5, dout = 0.45) {
+  return K.prog(t, a, din) * (b == null ? 1 : 1 - K.prog(t, b, dout, K.ease.inOut));
+}
+
+// ---- phone screens (canvas UI, 360x752)
+function pnScreen(draw) {
+  return vpCanvasTex(360, 752, (x, w, h) => {
+    vpRoundRect(x, 0, 0, w, h, 34); x.save(); x.clip();
+    x.fillStyle = '#0d0e11'; x.fillRect(0, 0, w, h);
+    x.textBaseline = 'middle';
+    x.fillStyle = 'rgba(245,245,247,.6)'; x.font = '500 17px "Geist Mono"'; x.fillText('9:41', 28, 30);
+    vpRoundRect(x, w - 60, 23, 32, 14, 4); x.fill();
+    draw(x, w, h);
+    x.restore();
+  });
+}
+const pnBar = (x, X, Y, w, hh, c) => { vpRoundRect(x, X, Y, w, hh, hh / 2); x.fillStyle = c; x.fill(); };
+const pnTitle = (x, t) => { x.fillStyle = '#F5F5F7'; x.font = '700 40px "Inter Tight"'; x.fillText(t, 26, 92); };
+function pnNotes() {
+  return pnScreen((x, w, h) => {
+    pnTitle(x, 'Notes');
+    ['Groceries', 'Ideas', 'Exam plan'].forEach((n, i) => {
+      const y = 140 + i * 150;
+      vpRoundRect(x, 22, y, w - 44, 128, 20); x.fillStyle = '#1a1b1f'; x.fill();
+      x.fillStyle = '#F5F5F7'; x.font = '600 25px "Inter Tight"'; x.fillText(n, 44, y + 38);
+      pnBar(x, 44, y + 68, w - 120, 11, '#3a3b41'); pnBar(x, 44, y + 92, w - 180, 11, '#2c2d32');
+    });
+    x.beginPath(); x.arc(w - 68, h - 74, 38, 0, Math.PI * 2); x.fillStyle = '#3DDC84'; x.fill();
+    x.fillStyle = '#0b2a18'; x.fillRect(w - 81, h - 77, 26, 6); x.fillRect(w - 71, h - 87, 6, 26);
+  });
+}
+function pnApi() {
+  return pnScreen((x, w, h) => {
+    pnTitle(x, 'Feed');
+    // cloud + arrow (data comes from an API)
+    x.strokeStyle = '#8E8E93'; x.lineWidth = 3.5; x.beginPath();
+    x.arc(w - 82, 88, 15, Math.PI * 0.9, Math.PI * 1.9); x.arc(w - 60, 84, 19, Math.PI * 1.2, Math.PI * 0.1);
+    x.lineTo(w - 96, 103); x.closePath(); x.stroke();
+    vpRoundRect(x, 26, 128, 150, 36, 18); x.fillStyle = 'rgba(61,220,132,.14)'; x.fill();
+    x.fillStyle = '#3DDC84'; x.font = '500 17px "Geist Mono"'; x.fillText('GET /api', 44, 147);
+    x.fillStyle = '#8E8E93'; x.fillText('200 OK', w - 104, 147);
+    for (let i = 0; i < 4; i++) {
+      const y = 196 + i * 128;
+      const gr = x.createLinearGradient(30, y + 16, 82, y + 68); gr.addColorStop(0, '#5a5c63'); gr.addColorStop(1, '#25262b');
+      x.beginPath(); x.arc(56, y + 42, 27, 0, Math.PI * 2); x.fillStyle = gr; x.fill();
+      pnBar(x, 98, y + 26, 170 - i * 14, 13, 'rgba(245,245,247,.85)'); pnBar(x, 98, y + 52, 130 + i * 10, 11, '#3a3b41');
+      x.fillStyle = '#1d1e22'; x.fillRect(26, y + 100, w - 52, 2);
+    }
+  });
+}
+function pnPlay(img) {
+  return pnScreen((x, w, h) => {
+    const lh = 150, lw = lh * 0.936;
+    x.drawImage(img, (w - lw) / 2, 120, lw, lh);
+    x.textAlign = 'center';
+    x.fillStyle = '#F5F5F7'; x.font = '700 38px "Inter Tight"'; x.fillText('My App', w / 2, 330);
+    x.fillStyle = '#F5F5F7';
+    for (let i = 0; i < 5; i++) {
+      const cx = w / 2 + (i - 2) * 38, cy = 384, r = 14;
+      x.beginPath();
+      for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, rr = k % 2 ? r * 0.45 : r; x.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr); }
+      x.closePath(); x.fill();
+    }
+    vpRoundRect(x, w / 2 - 66, 430, 132, 48, 24); x.fillStyle = 'rgba(61,220,132,.16)'; x.fill();
+    x.strokeStyle = 'rgba(61,220,132,.8)'; x.lineWidth = 2; x.stroke();
+    x.beginPath(); x.arc(w / 2 - 34, 454, 6, 0, Math.PI * 2); x.fillStyle = '#3DDC84'; x.fill();
+    x.font = '600 24px "Inter Tight"'; x.fillText('Live', w / 2 + 12, 455);
+    x.fillStyle = '#8E8E93'; x.font = '500 21px Inter'; x.fillText('1K+ downloads', w / 2, 528);
+    vpRoundRect(x, 30, h - 124, w - 60, 64, 32); x.fillStyle = '#3DDC84'; x.fill();
+    x.fillStyle = '#0b2a18'; x.font = '700 25px "Inter Tight"'; x.fillText('Open', w / 2, h - 91);
+    x.textAlign = 'left';
+  });
+}
+
+window.renderReady = (async () => {
+  await Promise.all(['700 40px "Inter Tight"', '600 25px "Inter Tight"', '500 17px "Geist Mono"', '500 21px Inter']
+    .map(f => document.fonts.load(f)));
+  const P = [1.000, 3.900, 6.200, 10.300, 12.867, 19.667, 22.400, 27.933, 30.433, 32.033, 33.033, 35.133, 38.867];
+  const END = 41.667, TR = P[5] - 2.4, G = [8.5, 0, -3];
+  const W = vpWorld({ cam: [-1.2, 4.6, 14.5], target: [0, 1.4, 0], center: [4.2, 0, -1.5], fogNear: 11, fogFar: 34,
+    shadowBox: 14, dof: {}, rim: 0.55, haze: [[-2.5, 2.2, -5.5, 10, 0.028], [G[0] + 1, 2.6, G[2] - 6, 12, 0.025]] });
+  const s = W.s, E = K.ease;
+  s.camera.setViewOffset(s.W, s.H, Math.round(s.W * 0.151), 0, s.W, s.H);   // content centre -> screen x ~670 (card)
+  s.camera.updateProjectionMatrix();
+
+  // ================= 1) staircase of projects
+  const STEP = [[-1.5, 0.55], [0, 1.1], [1.5, 1.65]];
+  const stepMat = vpMat.titanium({ color: 0x55585e, roughness: 0.42, env: 0.45 });
+  const blocks = STEP.map(([x, h]) => {
+    const b = K.box(1.5, h, 1.4, { radius: 0.035, material: stepMat });
+    b.geometry.translate(0, h / 2, 0);
+    b.position.set(x, 0, 0); b.receiveShadow = true;
+    s.add(b);
+    return b;
+  });
+  // hairline of light along the stair edge (thirds = steps)
+  const SL = [[-2.25, 0, 0.705], [-2.25, 0.555, 0.705], [-0.75, 0.555, 0.705], [-0.75, 1.105, 0.705], [0.75, 1.105, 0.705],
+              [0.75, 1.655, 0.705], [2.25, 1.655, 0.705]];
+  const path = new THREE.CurvePath();
+  for (let i = 0; i < SL.length - 1; i++) path.add(new THREE.LineCurve3(new THREE.Vector3(...SL[i]), new THREE.Vector3(...SL[i + 1])));
+  const slG = new THREE.TubeGeometry(path, 420, 0.011, 8, false);
+  const slM = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.1, 2.1, 2.1), transparent: true });
+  const stairLine = new THREE.Mesh(slG, slM); s.add(stairLine);
+  const play = await vpImg('pn-play');
+  const SCR = [pnNotes(), pnApi(), pnPlay(play)];
+  const phones = STEP.map(([x, h], i) => {
+    const g = new THREE.Group();
+    const body = K.slab(0.72, 1.44, { depth: 0.07, radius: 0.12, material: vpMat.darkTi() });
+    const sm = new THREE.MeshBasicMaterial({ map: SCR[i], transparent: true, color: new THREE.Color(0.03, 0.03, 0.03) });
+    const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.66, 1.38), sm);
+    scr.position.z = 0.038;
+    g.add(body, scr);
+    g.position.set(x, h + 0.74, -0.15); g.rotation.set(-0.05, -0.1, 0);
+    s.add(g);
+    return { g, sm };
+  });
+  const riser = STEP.map(([x, h]) => { const o = new THREE.Object3D(); o.position.set(x, h / 2, 0.71); s.add(o); return o; });
+
+  // ================= 2) networking graph
+  const GG = new THREE.Group(); GG.position.set(...G); s.add(GG);
+  const disc = new THREE.Group(); GG.add(disc);
+  const dm = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.54, 0.16, 128), vpMat.titanium({ color: 0x4a4d53, roughness: 0.4, env: 0.4 }));
+  dm.position.y = 0.08; dm.castShadow = dm.receiveShadow = true;
+  const dRing = vpRing(2.51, 0xffffff, { tube: 0.008 }); dRing.mesh.position.y = 0.162;
+  const dIn = vpRing(1.55, 0xffffff, { tube: 0.005 }); dIn.mesh.position.y = 0.162;
+  const dPool = vpPool(new THREE.Color(0xdfe6f0), 6.5);
+  disc.add(dm, dRing.mesh, dIn.mesh, dPool);
+  const skAnchor = new THREE.Object3D(); skAnchor.position.set(0, 0.17, 1.9); GG.add(skAnchor);
+
+  const HUB = [0, 2.75, -0.5];
+  const NODES = [['linkedin-logo', -2.0, -0.1, 0x3d8fe0], ['users', -0.68, 0.35, 0xd6d8de],
+                 ['calendar', 0.68, 0.35, 0xd6d8de], ['chalkboard-teacher', 2.0, -0.1, 0xd6d8de]];
+  const nodes = [];
+  for (const [icon, x, z, c] of NODES) {
+    const g = new THREE.Group(); g.position.set(x, 1.0, z); GG.add(g);
+    const tile = await K.iconTile(icon, { size: 0.8, color: c, haloIntensity: 0.25 });
+    const stem = vpTube([[0, -0.42, 0], [0, -0.835, 0]], { width: 0.004, intensity: 0.8, seg: 6 });
+    const foot = vpRing(0.16, 0xffffff, { tube: 0.006 }); foot.mesh.position.y = -0.835; foot.glow(0.9);
+    g.add(tile, stem.mesh, foot.mesh);
+    const line = vpTube([[x, 1.43, z], [x * 0.8, 1.78, z * 0.6 - 0.1], [x * 0.3, 2.02, -0.4], [0, 2.13, HUB[2]]],
+      { width: 0.007, intensity: 1.6, seg: 64 });
+    GG.add(line.mesh);
+    const pulse = new THREE.Mesh(new THREE.SphereGeometry(0.03, 16, 12), vpMat.glow(0xffffff, 2.6));
+    GG.add(pulse);
+    nodes.push({ g, tile, line, pulse, anchor: tile });
+  }
+  const hub = new THREE.Group(); hub.position.set(...HUB); GG.add(hub);
+  const hRing = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.045, 32, 160), vpMat.titanium({ color: 0x6d7076, roughness: 0.55, env: 0.5 }));
+  hRing.castShadow = true;
+  const hGlow = vpRing(0.565, VP_COL.android, { tube: 0.011 }); hGlow.mesh.rotation.x = 0;
+  const keyT = await K.iconTile('key', { size: 0.66, color: VP_COL.android, haloIntensity: 0.4, icon: { inlay: 'glow', inlayGlow: 1.1 } });
+  hub.add(hRing, hGlow.mesh, keyT);
+  const hubPool = vpPool(new THREE.Color(VP_COL.android), 3.2); hubPool.position.set(0, 0.17, HUB[2]); GG.add(hubPool);
+  const iv = new THREE.Group(); iv.position.set(0, 4.25, HUB[2]); GG.add(iv);
+  const ivTile = await K.iconTile('briefcase', { size: 0.6, color: 0xe8e9ec, haloIntensity: 0.3 });
+  iv.add(ivTile);
+  const ivLine = vpTube([[0, 3.42, HUB[2]], [0, 3.94, HUB[2]]], { width: 0.007, intensity: 1.6, seg: 16 });
+  GG.add(ivLine.mesh);
+
+  // ================= camera: A (stairs) -> truck right -> B (graph), slow crane at the end
+  const camA = vpCamPath([[0, -1.2, 4.6, 14.5, 0, 1.4, 0], [1.9, 0.2, 3.5, 9.6, 0, 1.35, 0],
+                          [P[3], 0.8, 3.4, 9.1, 0.1, 1.35, 0], [TR, 1.3, 3.4, 8.9, 0.2, 1.35, 0]]);
+  const camB = vpCamPath([[TR, G[0] + 0.6, 4.4, G[2] + 10.5, G[0], 1.6, G[2]], [P[5] + 0.2, G[0] + 0.6, 4.4, G[2] + 10.5, G[0], 1.6, G[2]],
+                          [P[11] - 0.6, G[0] - 0.4, 4.4, G[2] + 10.2, G[0], 1.7, G[2]],
+                          [P[12] + 0.5, G[0] + 0.1, 5.2, G[2] + 10.2, G[0], 2.5, G[2]],
+                          [END, G[0] + 0.2, 5.3, G[2] + 9.5, G[0], 2.6, G[2]]]);
+  const pA = new THREE.Vector3(), tA = new THREE.Vector3();
+  function cam(t) {
+    const k = K.prog(t, TR, 2.6, E.inOut);
+    camA(s, t); pA.copy(s.camera.position); tA.copy(s.target);
+    if (k <= 0) return;
+    camB(s, t);
+    s.camera.position.lerpVectors(pA, s.camera.position.clone(), k); s.camera.position.y += Math.sin(Math.PI * k) * 0.5;
+    s.target.lerpVectors(tA, s.target.clone(), k);
+  }
+  const LK = [[P[1] - 0.3, 0], [P[1] + 0.6, 1 / 3], [P[2] - 0.3, 1 / 3], [P[2] + 0.6, 2 / 3], [P[3] - 0.3, 2 / 3], [P[3] + 0.6, 1]];
+  const keyed = (t, ks) => {
+    if (t <= ks[0][0]) return ks[0][1];
+    for (let i = 0; i < ks.length - 1; i++) if (t < ks[i + 1][0])
+      return THREE.MathUtils.lerp(ks[i][1], ks[i + 1][1], E.inOut((t - ks[i][0]) / (ks[i + 1][0] - ks[i][0])));
+    return ks[ks.length - 1][1];
+  };
+
+  const $ = id => document.getElementById(id);
+  const L = { ha: $('pn-ha'), hb: $('pn-hb'), note: $('pn-note'), sk: $('pn-sk'), ref: $('pn-ref'), iv: $('pn-iv'),
+              s: [0, 1, 2].map(i => $('pn-s' + i)), n: [0, 1, 2, 3].map(i => $('pn-n' + i)) };
+  const ATN = [P[7], P[8], P[9], P[10]];
+
+  K.run(s, t => {
+    cam(t);
+    W.update(t);
+    // stairs rise, phones drop in on their words and power on, edge light climbs
+    blocks.forEach((b, i) => { const k = K.prog(t, 0.2 + 0.18 * i, 1.1, E.inOut); b.scale.y = Math.max(0.001, k); b.visible = k > 0.001; });
+    const sl = keyed(t, LK) + 0.035 * K.prog(t, P[4] - 0.2, 0.6) * (1 - K.prog(t, P[4] + 0.8, 0.8));
+    slG.setDrawRange(0, Math.floor(K.clamp01(sl) * 420) * 48); stairLine.visible = sl > 0.001;
+    phones.forEach((p, i) => {
+      K.enter(p.g, K.prog(t, P[1 + i] - 0.4, 0.75, E.pop), { y: 0.45, scale: 0.88 });
+      p.sm.color.setScalar(0.03 + 0.97 * K.prog(t, P[1 + i] - 0.05, 0.55, E.inOut));
+    });
+    // graph
+    K.enter(disc, K.prog(t, P[5] - 0.9, 1.0, E.inOut), { y: -0.1, scale: 0.94 });
+    const sk = K.prog(t, P[6] - 0.3, 0.8, E.inOut);
+    dRing.glow(0.35 + 1.0 * sk); dIn.glow(0.12 + 0.3 * sk); dPool.material.opacity = 0.05 + 0.06 * sk;
+    nodes.forEach((n, i) => {
+      K.enter(n.g, K.prog(t, ATN[i] - 0.35, 0.7, E.pop), { y: -0.35, scale: 0.6 });
+      K.float(n.tile, t, { amp: 0.035, phase: i * 1.3 });
+      n.line.set(K.prog(t, P[11] - 0.8 + i * 0.07, 0.75, E.inOut));
+      const u = (t - P[11] - 0.2 - i * 0.37) / 1.7, f = u - Math.floor(u);
+      n.pulse.visible = u > 0;
+      n.pulse.position.copy(n.line.curve.getPointAt(f));
+      n.pulse.material.opacity = Math.sin(Math.PI * f);
+    });
+    K.enter(hub, K.prog(t, P[11] - 0.45, 0.7, E.pop), { y: -0.3, scale: 0.6 });
+    const hk = K.prog(t, P[11] - 0.1, 0.7);
+    hGlow.glow(0.3 + 1.3 * hk); hubPool.material.opacity = 0.14 * hk;
+    K.float(keyT, t, { amp: 0.03, phase: 2 });
+    ivLine.set(K.prog(t, P[12] - 0.7, 0.5, E.inOut));
+    K.enter(iv, K.prog(t, P[12] - 0.4, 0.7, E.pop), { y: -0.3, scale: 0.6 });
+    // HTML
+    vpShow(L.ha, vpK(t, P[0] - 0.2, TR));
+    vpShow(L.note, K.prog(t, P[4] - 0.1, 0.5), 10);
+    L.s.forEach((el, i) => { K.pin(el, riser[i], s); vpShow(el, vpK(t, P[1 + i] - 0.1, TR), 8); });
+    vpShow(L.hb, vpK(t, P[5] - 0.2));
+    K.pin(L.sk, skAnchor, s); vpShow(L.sk, vpK(t, P[6] - 0.1, P[12] - 0.5), 8);
+    L.n.forEach((el, i) => { K.pin(el, nodes[i].g, s, { offset: [0, -0.5, 0] }); vpShow(el, vpK(t, ATN[i] - 0.1), 8); });
+    K.pin(L.ref, hub, s, { offset: [0.82, 0, 0] }); vpShow(L.ref, vpK(t, P[11] - 0.1));
+    K.pin(L.iv, iv, s, { offset: [0.52, 0, 0] }); vpShow(L.iv, vpK(t, P[12] - 0.1));
+  });
+})();
+</script>
+
+<script>lucide.createIcons();</script>
+<script></script>
+</body></html>
