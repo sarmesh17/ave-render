@@ -1,0 +1,93 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="layout" content="overlay">
+<!-- coin-flip pop-up: a small 3D titanium coin (left of the speaker) spins in, settles on side A, then flips
+     to side B when the second side is said. Faces carry the words. Fields: A1 A2 (side A lines), B1 B2, FLIP (s),
+     DUR (s), EYEBROW. Alpha overlay, window.setTime(t), fades itself out. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500&display=block">
+<style>
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: transparent; }
+.cf-eye { position: absolute; transform: translate(-50%, -100%); white-space: nowrap; opacity: 0;
+          font: 500 22px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: 0.42em; text-indent: 0.42em; color: #A1A1A6; }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/",
+    "ave/": "https://cdn.jsdelivr.net/npm/three@0.187.0/ave/" } }
+</script>
+</head><body>
+<div class="cf-eye" id="cf-eye"></div>
+<script id="cf-data" type="application/json">{"A1": "FEWER", "A2": "POSTINGS", "B1": "LESS", "B2": "COMPETITION", "FLIP": 6.75, "DUR": 9.0, "EYEBROW": "TWO SIDES"}</script>
+<script type="module">
+import * as K from 'ave/kit.js';
+const { THREE } = K;
+const D = JSON.parse(document.getElementById('cf-data').textContent);
+const eye = document.getElementById('cf-eye');
+eye.textContent = D.EYEBROW;
+
+const R = 0.95, T = 0.14, TI = 0xBFC3C9;
+function radialTex(stops) {
+  const c = document.createElement('canvas'); c.width = c.height = 256;
+  const g = c.getContext('2d'), gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  for (const [p, css] of stops) gr.addColorStop(p, css);
+  g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+  const tx = new THREE.CanvasTexture(c); tx.colorSpace = THREE.SRGBColorSpace; return tx;
+}
+async function face(l1, l2, back) {          // dark inlay + hairline ring + two bright titanium lines
+  const g = new THREE.Group();
+  const inlay = new THREE.Mesh(new THREE.CircleGeometry(R - 0.13, 128), K.mat.ink(0x0E0F12, { roughness: 0.4 }));
+  inlay.position.z = 0.002;
+  const hair = K.ring(R - 0.2, { tube: 0.007, flat: false, material: K.mat.metal(TI, { roughness: 0.25 }) });
+  hair.position.z = 0.004;
+  g.add(inlay, hair);
+  const words = new THREE.Group();
+  let w = 0;
+  for (const [i, s] of [l1, l2].filter(Boolean).entries()) {
+    const m = await K.text3d(s, { size: 0.19, weight: 700, depth: 0.025, material: K.mat.metal(0xE4E6EA, { roughness: 0.2 }) });
+    m.geometry.computeBoundingBox();
+    w = Math.max(w, m.geometry.boundingBox.max.x - m.geometry.boundingBox.min.x);
+    m.position.y = -i * 0.27;
+    words.add(m);
+  }
+  const n = words.children.length;
+  words.scale.setScalar(Math.min(1, 1.2 / w));
+  words.position.set(0, (n > 1 ? 0.135 : 0) * words.scale.x - 0.07 * words.scale.x, 0.016);
+  g.add(words);
+  g.position.z = T / 2;
+  if (back) { g.rotation.x = Math.PI; g.position.z = -T / 2; }
+  return g;
+}
+
+window.renderReady = (async () => {
+  await document.fonts.ready;
+  const s = K.stage({ alpha: true, cam: [0, 0, 10], target: [0, 0, 0], fov: 32, shadows: false,
+    exposure: 1.05, env: 0.7, key: 2.0, keyPos: [-4, 5, 6], front: 0.5, rimColor: 0xdfe6f0, rim: 1.2 });
+  const holder = new THREE.Group(), coin = new THREE.Group();
+  holder.position.set(-2.95, 0.3, 0);                 // screen ~x 400, y 485: left of the speaker, clear of the mic
+  const plate = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 4.6), new THREE.MeshBasicMaterial({ color: 0x000000,
+    transparent: true, depthWrite: false, map: radialTex([[0, 'rgba(0,0,0,0.42)'], [0.55, 'rgba(0,0,0,0.2)'], [1, 'rgba(0,0,0,0)']]) }));
+  plate.position.z = -1.2; plate.renderOrder = -1;
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(R, R, T, 160, 1), K.mat.metal(TI, { roughness: 0.34 }));
+  body.rotation.x = Math.PI / 2;
+  const lipF = K.ring(R - 0.06, { tube: 0.05, flat: false, material: K.mat.metal(TI, { roughness: 0.22 }) });
+  const lipB = lipF.clone(); lipF.position.z = T / 2; lipB.position.z = -T / 2;
+  coin.add(body, lipF, lipB, await face(D.A1, D.A2, false), await face(D.B1, D.B2, true));
+  holder.add(plate, coin);
+  s.add(holder);
+
+  K.run(s, t => {
+    const kin = K.prog(t, 0, 0.7, K.ease.out), kout = K.prog(t, D.DUR - 0.5, 0.45, K.ease.inOut);
+    K.enter(holder, Math.min(kin, 1 - kout), { y: -0.35, scale: 0.6, fade: true });
+    // spin in through both sides, settle on side A; flip to side B on cue (with a small hop)
+    const spin = -3 * Math.PI * (1 - K.prog(t, 0, 1.0, K.ease.out));
+    const flip = K.prog(t, D.FLIP - 0.3, 0.6, K.ease.inOut);
+    coin.rotation.x = spin + Math.PI * flip;
+    coin.rotation.y = 0.16 * Math.sin(t * 0.9);
+    coin.position.y = 0.04 * Math.sin(t * 1.3) + 0.3 * Math.sin(Math.PI * flip);
+    const ev = K.prog(t, 0.35, 0.4) * (1 - kout);
+    eye.style.opacity = ev.toFixed(3);
+    K.pin(eye, holder, s, { offset: [0, R + 0.1, 0], dy: -26 });
+  });
+})();
+</script>
+</body></html>
